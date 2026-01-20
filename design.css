@@ -841,3 +841,89 @@ button.btn { cursor: pointer; }
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Team/Advisors grid: centered for 3, 4, 5... ===== */
+.founders-container{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 280px));
+  gap: 20px;
+  justify-content: center;   /* ✅ centers leftover space */
+  justify-items: center;
+  align-items: stretch;
+}
+
+.founder{
+  width: 100%;
+  max-width: 280px;
+}
+
+.founder{
+  width: 100%;          /* take the grid column width */
+  max-width: 280px;     /* keeps your nice card size */
+}
+
+/* Optional: make sure the Team section content has enough width */
+#founders .container{
+  max-width: 1200px;
+}
+
+/* Responsive: 2 per row on tablets, 1 per row on phones */
+@media (max-width: 1100px){
+  .founders-container{ grid-template-columns: repeat(2, minmax(220px, 1fr)); }
+}
+@media (max-width: 640px){
+  .founders-container{ grid-template-columns: 1fr; }
+  .founder{ max-width: 360px; }
+}
+
+/* Base: 4 columns on desktop */
+.founders-container{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(220px, 280px));
+  gap: 20px;
+  justify-content: center;   /* keeps whole grid centered */
+  justify-items: center;
+}
+
+/* If there are ONLY 3 cards (no 4th), make it 3 columns so it centers perfectly */
+.founders-container:not(:has(.founder:nth-child(4))){
+  grid-template-columns: repeat(3, minmax(220px, 280px));
+}
+
+/* Responsive */
+@media (max-width: 1100px){
+  .founders-container{ grid-template-columns: repeat(2, minmax(220px, 280px)); }
+}
+@media (max-width: 640px){
+  .founders-container{ grid-template-columns: 1fr; }
+  .founder{ max-width: 360px; width: 100%; }
+}
+
+/* =========================
+   App (better spacing)
+========================= */
+#app { background:#fff; padding:70px 0; }
+
+.app-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;     /* ✅ don’t push them together */
+  gap: 72px;                   /* ✅ bigger space between text and phone */
+  flex-wrap: wrap;
+}
+
+.app-text{
+  flex: 1 1 520px;             /* ✅ gives text more room */
+  max-width: 560px;
+}
+
+.app-image{
+  flex: 0 1 420px;
+  text-align: center;
+}
+
+.app-image img{
+  width: 100%;
+  max-width: 430px;            /* slightly bigger but controlled */
+  margin-left: 12px;           /* small extra breathing room */
+}
