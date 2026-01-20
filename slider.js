@@ -389,3 +389,50 @@ document.addEventListener('DOMContentLoaded', () => {
   capexCur.textContent = ' ' + sym[state.currency];
   recalc();
 })();
+/* ===== CARBON CREDITS COUNTER ANIMATION ===== */
+(() => {
+  const counters = document.querySelectorAll('.counter');
+  let animated = false;
+
+  const animateCounter = (counter) => {
+    const target = parseInt(counter.getAttribute('data-target'));
+    const duration = 2000;
+    const start = 0;
+    const increment = target / (duration / 16);
+    let current = 0;
+
+    const updateCounter = () => {
+      current += increment;
+      if (current < target) {
+        counter.textContent = Math.floor(current);
+        requestAnimationFrame(updateCounter);
+      } else {
+        counter.textContent = target;
+      }
+    };
+
+    updateCounter();
+  };
+
+  const observerOptions = {
+    threshold: 0.5,
+    rootMargin: '0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !animated) {
+        animated = true;
+        counters.forEach(counter => {
+          animateCounter(counter);
+        });
+        observer.disconnect();
+      }
+    });
+  }, observerOptions);
+
+  const carbonSection = document.getElementById('carbon-credits');
+  if (carbonSection) {
+    observer.observe(carbonSection);
+  }
+})();
