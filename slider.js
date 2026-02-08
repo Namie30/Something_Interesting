@@ -2,44 +2,64 @@
 document.addEventListener('DOMContentLoaded', () => {
   /* ===== Team/Advisors toggle (accessible + animated) ===== */
   const teamTitle = document.getElementById('teamTitle');
+  const tabFounders = document.getElementById('tab-founders');
   const tabTeam = document.getElementById('tab-team');
   const tabAdvisors = document.getElementById('tab-advisors');
+  const panelFounders = document.getElementById('panel-founders');
   const panelTeam = document.getElementById('panel-team');
   const panelAdvisors = document.getElementById('panel-advisors');
  
   function activateTab(target) {
+    const isFounders = target === 'founders';
     const isTeam = target === 'team';
+    const isAdvisors = target === 'advisors';
  
+    tabFounders?.classList.toggle('is-active', isFounders);
     tabTeam?.classList.toggle('is-active', isTeam);
-    tabAdvisors?.classList.toggle('is-active', !isTeam);
+    tabAdvisors?.classList.toggle('is-active', isAdvisors);
  
+    tabFounders?.setAttribute('aria-selected', String(isFounders));
     tabTeam?.setAttribute('aria-selected', String(isTeam));
-    tabAdvisors?.setAttribute('aria-selected', String(!isTeam));
+    tabAdvisors?.setAttribute('aria-selected', String(isAdvisors));
  
-    if (isTeam) {
-      panelAdvisors?.setAttribute('hidden', '');
-      panelAdvisors?.classList.remove('show');
+    // Hide all panels first
+    panelFounders?.setAttribute('hidden', '');
+    panelFounders?.classList.remove('show');
+    panelTeam?.setAttribute('hidden', '');
+    panelTeam?.classList.remove('show');
+    panelAdvisors?.setAttribute('hidden', '');
+    panelAdvisors?.classList.remove('show');
+    
+    // Show the selected panel
+    if (isFounders) {
+      panelFounders?.removeAttribute('hidden');
+      requestAnimationFrame(() => panelFounders?.classList.add('show'));
+      if (teamTitle) teamTitle.textContent = 'Founders';
+    } else if (isTeam) {
       panelTeam?.removeAttribute('hidden');
       requestAnimationFrame(() => panelTeam?.classList.add('show'));
-      if (teamTitle) teamTitle.textContent = 'Team';
-    } else {
-      panelTeam?.setAttribute('hidden', '');
-      panelTeam?.classList.remove('show');
+      if (teamTitle) teamTitle.textContent = 'Core Team';
+    } else if (isAdvisors) {
       panelAdvisors?.removeAttribute('hidden');
       requestAnimationFrame(() => panelAdvisors?.classList.add('show'));
       if (teamTitle) teamTitle.textContent = 'Advisors';
     }
   }
  
+  tabFounders?.addEventListener('click', () => activateTab('founders'));
   tabTeam?.addEventListener('click', () => activateTab('team'));
   tabAdvisors?.addEventListener('click', () => activateTab('advisors'));
  
-  [tabTeam, tabAdvisors].forEach(btn => {
+  [tabFounders, tabTeam, tabAdvisors].forEach((btn, idx, arr) => {
     btn?.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        const next = btn === tabTeam ? tabAdvisors : tabTeam;
-        next?.focus();
-        next?.click();
+      if (e.key === 'ArrowRight') {
+        const nextIdx = (idx + 1) % arr.length;
+        arr[nextIdx]?.focus();
+        arr[nextIdx]?.click();
+      } else if (e.key === 'ArrowLeft') {
+        const prevIdx = (idx - 1 + arr.length) % arr.length;
+        arr[prevIdx]?.focus();
+        arr[prevIdx]?.click();
       }
     });
   });
@@ -64,67 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
   animateValue(document.getElementById('kpi-elec'), 240);  // kWh/day
   animateValue(document.getElementById('kpi-fert'), 500);  // liters/day
  
-  /* =========================================================
-     Achievements modal/expand logic (NOT NEEDED) — COMMENTED
-     Reason: it referenced dialog/achCards while variables were
-     commented out, causing JS crash and breaking "See more".
-  ========================================================= */
-
-  /*
-  const dialog = document.getElementById('achDialog');
-  const dialogImg = document.getElementById('achDialogImg');
-  const dialogTitle = document.getElementById('achDialogTitle');
-  const dialogText = document.getElementById('achDialogText');
-  const dialogOpen = document.getElementById('achDialogOpen');
-  const dialogClose = dialog?.querySelector('.ach-close');
-  const achCards = document.querySelectorAll('.ach-card');
-
-  // "Show less" click
-  document.addEventListener('click', (e) => {
-    if (e.target.classList.contains('ach-less')) {
-      e.stopPropagation();
-      const card = e.target.closest('.ach-card');
-      card?.classList.remove('is-open');
-    }
-  });
-
-  function openAchievement(card) {
-    if (!dialog || !dialogImg || !dialogTitle || !dialogText || !dialogOpen) return;
-
-    const imgSrc = card.getAttribute('data-img') || card.getAttribute('href') || '';
-    const title = card.getAttribute('data-title') || '';
-    const text = card.getAttribute('data-text') || '';
-
-    dialogImg.src = imgSrc;
-    dialogImg.alt = title ? `${title} image` : 'Achievement image';
-    dialogTitle.textContent = title;
-    dialogText.textContent = text;
-    dialogOpen.href = imgSrc;
-
-    if (typeof dialog.showModal === 'function') dialog.showModal();
-    else dialog.setAttribute('open', '');
-  }
-
-  function closeAchievement() {
-    if (!dialog) return;
-    if (typeof dialog.close === 'function') dialog.close();
-    else dialog.removeAttribute('open');
-  }
-
-  achCards.forEach((card) => {
-    card.addEventListener('click', (e) => {
-      if (!dialog) return;
-      e.preventDefault();
-      openAchievement(card);
-    });
-  });
-
-  dialogClose?.addEventListener('click', closeAchievement);
-  dialog?.addEventListener('click', (e) => {
-    if (e.target === dialog) closeAchievement();
-  });
-  */
-
   /* ============= See more / show less (Achievements + Blog) ============= */
   function setupSeeMore({ gridId, itemSelector, buttonId, initialCount, moreText, lessText }) {
     const grid = document.getElementById(gridId);
@@ -163,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     apply();
   }
  
-  // Achievements: show 4 first, then reveal the rest
+  // Achievements: show 8 first, then reveal the rest
   setupSeeMore({
     gridId: 'achievementsGrid',
     itemSelector: '.ach-card',
@@ -173,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lessText: 'Show less'
   });
  
-  // Blog: show 3 first by default (if you add more later, button will work)
+  // Blog: show 3 first by default
   setupSeeMore({
     gridId: 'blogGrid',
     itemSelector: '.blog-card',
@@ -199,9 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
  
-// 2) (Achievements slider removed; cards are tap-friendly by default)
- 
-// 3) Fix mobile 100vh (address bar) for hero height
+// 2) Fix mobile 100vh (address bar) for hero height
 (() => {
   const setVH = () => {
     const vh = window.innerHeight * 0.01;
@@ -209,8 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   setVH();
   window.addEventListener('resize', setVH);
-  // You can use var(--vh) in CSS:
-  // e.g., #hero { min-height: calc(var(--vh) * 100); }
 })();
  
 /* ===== Simple-first Calculator ===== */
@@ -388,51 +343,4 @@ document.addEventListener('DOMContentLoaded', () => {
   saveCur.textContent = ' ' + sym[state.currency];
   capexCur.textContent = ' ' + sym[state.currency];
   recalc();
-})();
-/* ===== CARBON CREDITS COUNTER ANIMATION ===== */
-(() => {
-  const counters = document.querySelectorAll('.counter');
-  let animated = false;
-
-  const animateCounter = (counter) => {
-    const target = parseInt(counter.getAttribute('data-target'));
-    const duration = 2000;
-    const start = 0;
-    const increment = target / (duration / 16);
-    let current = 0;
-
-    const updateCounter = () => {
-      current += increment;
-      if (current < target) {
-        counter.textContent = Math.floor(current);
-        requestAnimationFrame(updateCounter);
-      } else {
-        counter.textContent = target;
-      }
-    };
-
-    updateCounter();
-  };
-
-  const observerOptions = {
-    threshold: 0.5,
-    rootMargin: '0px'
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !animated) {
-        animated = true;
-        counters.forEach(counter => {
-          animateCounter(counter);
-        });
-        observer.disconnect();
-      }
-    });
-  }, observerOptions);
-
-  const carbonSection = document.getElementById('carbon-credits');
-  if (carbonSection) {
-    observer.observe(carbonSection);
-  }
 })();
