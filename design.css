@@ -518,9 +518,7 @@ nav ul li a:hover { color:#28a745; }
   justify-content: center;
   justify-items: center;
 }
-#panel-founders .founders-container { grid-template-columns: repeat(2, minmax(220px, 280px)); }
-#panel-team     .founders-container { grid-template-columns: repeat(3, minmax(220px, 280px)); }
-#panel-advisors .founders-container { grid-template-columns: repeat(2, minmax(220px, 280px)); }
+
 
 .founder {
   display:flex; flex-direction:column; align-items:center; background:#f9f9f9;
