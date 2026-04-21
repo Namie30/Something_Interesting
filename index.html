@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BioNova - From Waste to Energy</title>
 
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X9Y5JSMLPN"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X9Y5JSMLPN');
+</script>
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet"/>
 
@@ -254,16 +264,6 @@
           </div>
           <div class="plan-cards">
             <article class="plan">
-              <div class="plan-title"><h4>15-ton Digester</h4><span class="pill">App included</span></div>
-              <div class="price-line"><span class="price">$7,900</span></div>
-              <ul class="plan-list">
-                <li><i class="fa-solid fa-check"></i> Fast, modular install</li>
-                <li><i class="fa-solid fa-check"></i> Remote monitoring app</li>
-                <li><i class="fa-solid fa-check"></i> Full ownership</li>
-              </ul>
-              <a href="#contact" class="btn plan-btn">Choose plan</a>
-            </article>
-            <article class="plan">
               <div class="plan-title"><h4>30-ton Digester</h4><span class="pill">Most popular</span></div>
               <div class="price-line"><span class="price">$12,500</span></div>
               <ul class="plan-list">
@@ -273,15 +273,22 @@
               </ul>
               <a href="#contact" class="btn plan-btn">Choose plan</a>
             </article>
-            <article class="plan">
-              <div class="plan-title"><h4>50-ton Digester</h4><span class="pill">For larger farms</span></div>
-              <div class="price-line"><span class="price">$17,500</span></div>
-              <ul class="plan-list">
-                <li><i class="fa-solid fa-check"></i> Maximum output</li>
+
+            <!-- 50-ton Coming Soon teaser -->
+            <article class="plan plan-coming-soon">
+              <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> In Development</div>
+              <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted">Coming Soon</span></div>
+              <div class="price-line">
+                <span class="price price-tbd">~$17,500</span>
+                <span class="price-est-label">estimated</span>
+              </div>
+              <ul class="plan-list plan-list-muted">
+                <li><i class="fa-solid fa-check"></i> Maximum output for large farms</li>
                 <li><i class="fa-solid fa-check"></i> Remote monitoring app</li>
                 <li><i class="fa-solid fa-check"></i> Full ownership</li>
+                <li><i class="fa-solid fa-flask"></i> Actively prototyping now</li>
               </ul>
-              <a href="#contact" class="btn plan-btn">Choose plan</a>
+              <a href="#contact" class="btn plan-btn plan-btn-outline">Notify me</a>
             </article>
           </div>
         </div>
@@ -293,17 +300,6 @@
             <p>Pay only 50%. Share revenue: <strong>15% electricity</strong> & <strong>45% fertilizer</strong>.</p>
           </div>
           <div class="plan-cards">
-            <article class="plan partner-plan">
-              <div class="discount-ribbon">50% OFF</div>
-              <div class="plan-title"><h4>15-ton Digester</h4></div>
-              <div class="price-line"><span class="price-old">$7,900</span><span class="price-now">$3,900</span></div>
-              <ul class="plan-list">
-                <li><i class="fa-solid fa-check"></i> Same hardware & app</li>
-                <li><i class="fa-solid fa-handshake-angle"></i> Share 15% electricity</li>
-                <li><i class="fa-solid fa-seedling"></i> Share 45% fertilizer</li>
-              </ul>
-              <a href="#contact" class="btn plan-btn">Partner with us</a>
-            </article>
             <article class="plan partner-plan popular">
               <div class="discount-ribbon">50% OFF</div>
               <div class="plan-title"><h4>30-ton Digester</h4></div>
@@ -315,22 +311,36 @@
               </ul>
               <a href="#contact" class="btn plan-btn">Partner with us</a>
             </article>
-            <article class="plan partner-plan">
-              <div class="discount-ribbon">50% OFF</div>
-              <div class="plan-title"><h4>50-ton Digester</h4></div>
-              <div class="price-line"><span class="price-old">$17,500</span><span class="price-now">$8,750</span></div>
-              <ul class="plan-list">
+
+            <!-- 50-ton Partner Coming Soon teaser -->
+            <article class="plan partner-plan plan-coming-soon">
+              <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> In Development</div>
+              <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted">Coming Soon</span></div>
+              <div class="price-line">
+                <span class="price-old price-tbd-old">~$17,500</span>
+                <span class="price-now price-tbd">~$8,750</span>
+                <span class="price-est-label">estimated</span>
+              </div>
+              <ul class="plan-list plan-list-muted">
                 <li><i class="fa-solid fa-check"></i> Same hardware & app</li>
                 <li><i class="fa-solid fa-handshake-angle"></i> Share 15% electricity</li>
                 <li><i class="fa-solid fa-seedling"></i> Share 45% fertilizer</li>
+                <li><i class="fa-solid fa-flask"></i> Actively prototyping now</li>
               </ul>
-              <a href="#contact" class="btn plan-btn">Partner with us</a>
+              <a href="#contact" class="btn plan-btn plan-btn-outline">Notify me</a>
             </article>
           </div>
           <p class="fineprint">*Revenue share applies to net revenue from electricity sales and fertilizer sales. Exact terms (tenor, metering, service) are finalized during contracting.</p>
         </div>
 
       </div>
+
+      <!-- Roadmap hint banner -->
+      <div class="pricing-roadmap-hint">
+        <i class="fa-solid fa-road"></i>
+        <span>We're scaling up. The 50-ton digester is currently in active prototyping — <a href="#contact">get in touch</a> to stay updated or discuss larger custom installations.</span>
+      </div>
+
     </div>
   </section>
 
