@@ -337,7 +337,8 @@ nav ul li a:hover { color:#28a745; }
 .plan-title { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:8px; }
 .plan-title h4 { font-size:1.2rem; color:#1f2937; }
 .pill { background:#e9f7ee; color:#2c643a; border-radius:999px; padding:6px 10px; font-size:.8rem; font-weight:700; }
-.price-line { display:flex; align-items:baseline; gap:10px; margin:8px 0 12px; }
+.pill-muted { background:#f1f5f9; color:#64748b; }
+.price-line { display:flex; align-items:baseline; gap:10px; margin:8px 0 12px; flex-wrap: wrap; }
 .price { font-size:1.8rem; font-weight:800; color:#0f7a2a; }
 .price-old { text-decoration:line-through; color:#9ca3af; font-weight:700; }
 .price-now { font-size:1.8rem; font-weight:900; color:#b91c1c; }
@@ -355,6 +356,76 @@ nav ul li a:hover { color:#28a745; }
   z-index: 10; border-radius: 999px;
 }
 .fineprint { color:#6b7280; font-size:.85rem; margin-top:10px; }
+
+/* =========================
+   Coming Soon plan card
+========================= */
+.plan-coming-soon {
+  background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%);
+  border: 2px dashed #86efac !important;
+  opacity: 0.88;
+  position: relative;
+}
+.plan-coming-soon:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(40,167,69,.10);
+}
+.coming-soon-ribbon {
+  position: absolute; top: 12px; right: 12px;
+  background: linear-gradient(135deg, #166534, #15803d);
+  color: #fff; padding: 5px 10px;
+  font-weight: 700; font-size: 0.78rem;
+  box-shadow: 0 3px 8px rgba(22,101,52,.28);
+  z-index: 10; border-radius: 999px;
+  display: flex; align-items: center; gap: 5px;
+}
+.plan-list-muted li { color: #94a3b8; }
+.plan-list-muted i { color: #86efac; }
+.price-tbd { color: #64748b !important; }
+.price-tbd-old { color: #cbd5e1 !important; }
+.price-est-label {
+  font-size: 0.75rem; font-weight: 600;
+  color: #94a3b8; align-self: center;
+  background: #f1f5f9; padding: 3px 8px;
+  border-radius: 999px; white-space: nowrap;
+}
+.plan-btn-outline {
+  background: transparent !important;
+  border: 2px solid #28a745;
+  color: #28a745 !important;
+}
+.plan-btn-outline:hover {
+  background: #28a745 !important;
+  color: #fff !important;
+}
+
+/* Roadmap hint banner */
+.pricing-roadmap-hint {
+  margin-top: 24px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+  border: 1px solid #bbf7d0;
+  border-radius: 14px;
+  padding: 16px 20px;
+  font-size: 0.95rem;
+  color: #166534;
+  line-height: 1.6;
+}
+.pricing-roadmap-hint i {
+  font-size: 1.1rem;
+  color: #22c55e;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.pricing-roadmap-hint a {
+  color: #15803d;
+  font-weight: 700;
+  text-decoration: underline;
+}
+.pricing-roadmap-hint a:hover { color: #166534; }
 
 /* =========================
    Savings Calculator
@@ -388,6 +459,18 @@ nav ul li a:hover { color:#28a745; }
 .result2 h4 { color:#1f2937; margin-bottom:6px; }
 .result2 .big { font-size:1.6rem; font-weight:900; color:#0f7a2a; }
 .result2 .u { font-size:1rem; font-weight:700; color:#15723a; margin-left:6px; }
+
+/* Coming-soon digester result highlight */
+.result2.reco-coming-soon .big { color: #64748b; }
+.result2.reco-coming-soon { background: linear-gradient(135deg, #f8fafc, #f0fdf4); border: 1px dashed #86efac; }
+.reco-coming-tag {
+  display: inline-block;
+  background: #dcfce7; color: #166534;
+  font-size: 0.72rem; font-weight: 800;
+  padding: 2px 8px; border-radius: 999px;
+  margin-top: 4px;
+}
+
 .advanced {
   max-width:1100px; margin:18px auto 0;
   border:1px dashed #cbd5e1; border-radius:12px; padding:10px 12px; background:#fbfdfc;
@@ -724,6 +807,8 @@ button.btn { cursor: pointer; }
   .carbon-card-footer { flex-direction:column; }
   .carbon-btn { width:100%; }
   .carbon-info-box { flex-direction:column; }
+
+  .pricing-roadmap-hint { flex-direction: column; }
 }
 
 @media (max-width: 640px) {

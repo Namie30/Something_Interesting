@@ -187,6 +187,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* ══════════════════════════════════════════════════
    SAVINGS CALCULATOR
+   ─────────────────────────────────────────────────
+   Digester tiers (no 15-ton — starts at 30-ton):
+     30-ton  → up to ~250 animals  — available now
+     50-ton  → up to ~450 animals  — in development (coming soon)
+     100-ton → 450+ animals        — future roadmap (notify me)
 ══════════════════════════════════════════════════ */
 (() => {
   const animalBtns = document.querySelectorAll('.segmented [data-animal]');
@@ -207,6 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const capexOut   = document.getElementById('capexOut');
   const capexCur   = document.getElementById('capexCur');
   const paybackOut = document.getElementById('paybackOut');
+  const recoResult = document.getElementById('calcResults2')
+    ? document.getElementById('calcResults2').querySelectorAll('.result2')[3]
+    : null;
 
   if (!herdEl || !tariffEl) return;
 
@@ -216,11 +224,48 @@ document.addEventListener('DOMContentLoaded', () => {
     pig:     { manure: 6,   yield: 0.05 },
     mixed:   { manure: 20,  yield: 0.038 },
   };
+
+  /*
+   * Digester catalogue — only 30-ton is currently available.
+   * 50-ton is in active prototyping (comingSoon: true).
+   * 100-ton is future roadmap (comingSoon: true, future: true).
+   *
+   * herdMin / herdMax define the recommended range for each unit.
+   * For the calculator we size purely on manure load:
+   *   30-ton digester handles ≤ ~250 animals (cows) comfortably.
+   *   50-ton handles ≤ ~450 animals.
+   *   Beyond that we point to future 100-ton option.
+   */
   const digesters = [
-    { name: '15-ton', price: 7900,  herdMax: 120 },
-    { name: '30-ton', price: 12500, herdMax: 250 },
-    { name: '50-ton', price: 17500, herdMax: 9999 },
+    {
+      name:       '30-ton',
+      label:      '30-ton digester',
+      price:      12500,
+      herdMax:    250,
+      comingSoon: false,
+      future:     false,
+      hint:       'Handles up to ~250 animals. Available now.',
+    },
+    {
+      name:       '50-ton',
+      label:      '50-ton digester',
+      price:      17500,   // estimated
+      herdMax:    450,
+      comingSoon: true,
+      future:     false,
+      hint:       'In development — estimated launch soon. Contact us to reserve.',
+    },
+    {
+      name:       '100-ton+',
+      label:      '100-ton+ digester',
+      price:      null,    // price TBD
+      herdMax:    Infinity,
+      comingSoon: true,
+      future:     true,
+      hint:       'Large-scale unit on our roadmap. Get in touch for a custom quote.',
+    },
   ];
+
   const sym = { USD: 'USD', GEL: 'GEL', EUR: 'EUR' };
 
   let state = {
@@ -282,7 +327,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function recommendDigester(herd) {
-    for (const d of digesters) { if (herd <= d.herdMax) return d; }
+    for (const d of digesters) {
+      if (herd <= d.herdMax) return d;
+    }
     return digesters[digesters.length - 1];
   }
 
@@ -292,19 +339,64 @@ document.addEventListener('DOMContentLoaded', () => {
     const kwh        = biogas * state.kwhPerM3;
     const savingsDay = kwh * state.tariff;
     const d          = recommendDigester(state.herd);
-    const upfront    = state.model === 'partner' ? d.price * 0.5 : d.price;
-    const annual     = savingsDay * 365;
-    const payback    = annual > 0 ? upfront / annual : Infinity;
 
-    biogasOut.textContent   = biogas.toFixed(1);
-    kwhOut.textContent      = Math.round(kwh).toString();
-    saveOut.textContent     = savingsDay.toFixed(2);
-    saveCur.textContent     = ' ' + sym[state.currency];
-    recoModel.textContent   = `${d.name} digester`;
-    recoHint.textContent    = `Good for up to ~${d.herdMax} animals.`;
-    capexOut.textContent    = upfront.toLocaleString(undefined, { maximumFractionDigits: 0 });
-    capexCur.textContent    = ' ' + sym[state.currency];
-    paybackOut.textContent  = isFinite(payback) ? payback.toFixed(1) : '–';
+    // Upfront cost calculation
+    let upfront = null;
+    if (d.price !== null) {
+      upfront = state.model === 'partner' ? d.price * 0.5 : d.price;
+    }
+    const annual  = savingsDay * 365;
+    const payback = (upfront !== null && annual > 0) ? upfront / annual : Infinity;
+
+    // Output fields
+    biogasOut.textContent  = biogas.toFixed(1);
+    kwhOut.textContent     = Math.round(kwh).toString();
+    saveOut.textContent    = savingsDay.toFixed(2);
+    saveCur.textContent    = ' ' + sym[state.currency];
+
+    // Recommended digester box — apply coming-soon styling if needed
+    if (recoResult) {
+      recoResult.classList.toggle('reco-coming-soon', d.comingSoon);
+
+      // Remove old tag if any
+      const oldTag = recoResult.querySelector('.reco-coming-tag');
+      if (oldTag) oldTag.remove();
+
+      recoModel.textContent = d.label;
+
+      if (d.comingSoon) {
+        const tag = document.createElement('span');
+        tag.className = 'reco-coming-tag';
+        tag.textContent = d.future ? '🔮 Future roadmap' : '🔬 In development';
+        recoModel.insertAdjacentElement('afterend', tag);
+      }
+    } else {
+      recoModel.textContent = d.label;
+    }
+
+    recoHint.textContent = d.hint;
+
+    // Upfront cost
+    if (upfront !== null) {
+      capexOut.textContent = upfront.toLocaleString(undefined, { maximumFractionDigits: 0 });
+      capexCur.textContent = ' ' + sym[state.currency];
+      if (d.comingSoon) {
+        capexOut.textContent = '~' + upfront.toLocaleString(undefined, { maximumFractionDigits: 0 });
+        capexCur.textContent = ' ' + sym[state.currency] + ' (est.)';
+      }
+    } else {
+      capexOut.textContent = 'TBD';
+      capexCur.textContent = '';
+    }
+
+    // Payback
+    if (!isFinite(payback) || upfront === null) {
+      paybackOut.textContent = '–';
+    } else if (d.comingSoon) {
+      paybackOut.textContent = '~' + payback.toFixed(1);
+    } else {
+      paybackOut.textContent = payback.toFixed(1);
+    }
   }
 
   // Seed advanced fields
