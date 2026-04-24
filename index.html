@@ -61,23 +61,14 @@
 
   <!-- ═══ HERO — Cinematic dark forest + particles ═══ -->
   <section id="hero" class="hero-sdgs" aria-label="BioNova hero">
-    <!-- Background layers -->
     <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
-
-    <!-- Cinematic atmospheric FX -->
     <div class="hero-grain"     aria-hidden="true"></div>
     <div class="hero-scanlines" aria-hidden="true"></div>
-
-
-<div class="hero-topfx" aria-hidden="true">
-  <img class="hero-top-image" src="Images/smartDigesters.png" alt="" />
-
-  <!-- Firefly particle canvas -->
-  <canvas class="hero-particles" id="heroParticles"></canvas>
-</div>
-
-    <!-- Main hero content -->
+    <div class="hero-topfx" aria-hidden="true">
+      <img class="hero-top-image" src="Images/smartDigesters.png" alt="" />
+      <canvas class="hero-particles" id="heroParticles"></canvas>
+    </div>
     <div class="hero-content">
       <h2>Welcome to BioNova</h2>
       <p class="slogan">Farm-ready biodigesters with real-time control.</p>
@@ -89,8 +80,6 @@
         <i class="fas fa-chevron-down"></i>
       </a>
     </div>
-
-    <!-- SDG orbit (6 nodes) -->
     <ul class="sdg-orbit" aria-label="SDGs supported by BioNova">
       <li class="sdg-node" style="--i:0" data-sdg="SDG 7: Affordable &amp; Clean Energy" title="SDG 7: Affordable &amp; Clean Energy" tabindex="0">
         <img src="Images/SDG - 7.jpg" alt="SDG 7: Affordable & Clean Energy"/>
@@ -117,23 +106,54 @@
   <section id="about">
     <div class="container about-container">
       <div class="about-text">
+        <div class="about-eyebrow">
+          <span class="about-eyebrow-dot"></span>
+          Our Mission
+        </div>
         <h2>What We Do</h2>
         <p>
-          BioNova builds modular, farm-ready biodigesters that convert manure and food waste into biogas, electricity,
+          BioNova builds modular, smart, farm-ready biodigesters that convert manure and food waste into biogas, electricity,
           and high-value bio-fertilizer. Our compact systems are built from smart, durable materials and come with an
           IoT app so farmers can monitor output, savings, and system health from anywhere.
         </p>
-        <p>
-          In short: <strong>Clean energy + new revenue + remote control</strong> — purpose-built for farms.
-        </p>
+        <div class="about-tagline">
+          In short: <strong>Clean energy + new revenue + remote control</strong> Purpose-built for farms.
+        </div>
         <div class="about-badges">
           <span class="chip"><i class="fa-solid fa-leaf"></i> Renewable Energy</span>
           <span class="chip"><i class="fa-solid fa-tractor"></i> Farm-Ready</span>
           <span class="chip"><i class="fa-solid fa-mobile-screen"></i> App Included</span>
+          <span class="chip"><i class="fa-solid fa-wifi"></i> IoT Monitored</span>
+        </div>
+        <div class="about-stats">
+          <div class="about-stat">
+            <span class="about-stat-num" id="stat-af">3×</span>
+            <span class="about-stat-label">More affordable<br>vs competitors</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-num" id="stat-rv">3</span>
+            <span class="about-stat-label">Revenue<br>streams</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-num" id="stat-mon">24/7</span>
+            <span class="about-stat-label">Remote<br>monitoring</span>
+          </div>
         </div>
       </div>
       <div class="about-image">
-        <img src="Images/DigesterV2.png" alt="BioNova modular biodigester render"/>
+        <div class="about-img-card">
+          <div class="about-img-topbar"></div>
+          <img src="Images/DigesterV2.png" alt="BioNova modular biodigester render"/>
+          <div class="about-output-pills">
+            <span class="about-out-pill pill-gas"><i class="fa-solid fa-fire-flame-curved"></i> Biogas</span>
+            <span class="about-out-pill pill-elec"><i class="fa-solid fa-bolt"></i> Electricity</span>
+            <span class="about-out-pill pill-fert"><i class="fa-solid fa-seedling"></i> Bio-Fertilizer</span>
+          </div>
+          <div class="about-iot-badge">
+            <span class="about-iot-dot"></span>
+            <span class="about-iot-text">Live monitoring active</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -178,7 +198,7 @@
     <div class="container app-container">
       <div class="app-text">
         <h2>The BioNova App</h2>
-        <p>Every BioNova unit ships with our monitoring & analytics app. Farmers see real-time production, savings, and uptime — and can share reports with co-ops, banks, and partners.</p>
+        <p>Every BioNova unit ships with our monitoring & analytics app. Farmers see real-time production, savings, uptime and can share reports with co-ops, banks, and partners.</p>
         <ul class="app-list">
           <li><i class="fa-solid fa-gas-pump"></i> Biogas, electricity & fertilizer dashboards</li>
           <li><i class="fa-solid fa-bell"></i> Smart alerts for pH, temperature & feed rate</li>
@@ -227,25 +247,111 @@
     </div>
   </section>
 
-  <!-- ═══ HOW IT WORKS ═══ -->
+  <!-- ═══ HOW IT WORKS — REDESIGNED ═══ -->
   <section id="how-it-works">
-    <div class="container how-container">
-      <h2>How Does It Work?</h2>
-      <div class="flow-diagram" role="list">
-        <div class="flow-step" role="listitem">
-          <img src="Images/Cow - Poop.png" alt="Manure from cows" class="step-image"/>
-          <p>Manure from Cows</p>
-        </div>
-        <img src="Images/GreenArrow.png" alt="Process arrow" class="flow-arrow"/>
-        <div class="flow-step" role="listitem">
-          <img src="Images/DigesterV2.png" alt="BioNova Digester" class="step-image"/>
-        </div>
-        <img src="Images/GreenArrow.png" alt="Process arrow" class="flow-arrow"/>
-        <div class="flow-step" role="listitem">
-          <img src="Images/Electricity.png" alt="Electricity output" class="step-image"/>
-          <p>Gas &amp; Electricity</p>
-        </div>
+    <div class="container hiw-container">
+
+      <div class="hiw-header">
+        <span class="hiw-badge"><i class="fa-solid fa-circle-nodes"></i> The Process</span>
+        <h2>How Does It Work?</h2>
+        <p class="hiw-sub">From farm waste to clean energy in three simple stages.</p>
       </div>
+
+      <div class="hiw-flow">
+
+        <!-- Step 1 -->
+        <div class="hiw-step" data-step="1">
+          <div class="hiw-step-inner">
+            <div class="hiw-step-num">01</div>
+            <div class="hiw-image-wrap">
+              <div class="hiw-icon-badge hiw-icon-waste">
+                <i class="fa-solid fa-cow"></i>
+              </div>
+              <img src="Images/Cow - Poop.png" alt="Manure from cows" class="hiw-img"/>
+            </div>
+            <div class="hiw-step-body">
+              <h3>Organic Waste Input</h3>
+              <p>Manure and food waste collected daily from your livestock</p>
+              <div class="hiw-stat-row">
+                <span class="hiw-stat"><i class="fa-solid fa-weight-scale"></i> 20–30 kg/animal/day</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 1 -->
+        <div class="hiw-arrow-wrap" aria-hidden="true">
+          <div class="hiw-arrow">
+            <svg viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path class="hiw-arrow-path" d="M2 12 H70" stroke="#28a745" stroke-width="2.5" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <path d="M62 5 L76 12 L62 19" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <span class="hiw-arrow-label">feeds into</span>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="hiw-step hiw-step-center" data-step="2">
+          <div class="hiw-step-inner">
+            <div class="hiw-step-num">02</div>
+            <div class="hiw-image-wrap">
+              <div class="hiw-icon-badge hiw-icon-digester">
+                <i class="fa-solid fa-droplet"></i>
+              </div>
+              <img src="Images/DigesterV2.png" alt="BioNova Digester" class="hiw-img hiw-img-digester"/>
+            </div>
+            <div class="hiw-step-body">
+              <h3>BioNova Digester</h3>
+              <p>Smart anaerobic digestion installed directly on your farm, which converts waste into energy. Monitored 24/7 via our app</p>
+              <div class="hiw-stat-row">
+                <span class="hiw-stat"><i class="fa-solid fa-gauge-high"></i> 30-ton capacity</span>
+                <span class="hiw-stat"><i class="fa-solid fa-mobile-screen"></i> IoT monitored</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow 2 -->
+        <div class="hiw-arrow-wrap" aria-hidden="true">
+          <div class="hiw-arrow">
+            <svg viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path class="hiw-arrow-path" d="M2 12 H70" stroke="#28a745" stroke-width="2.5" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <path d="M62 5 L76 12 L62 19" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <span class="hiw-arrow-label">produces</span>
+        </div>
+
+        <!-- Step 3 — split outputs -->
+        <div class="hiw-step hiw-step-outputs" data-step="3">
+
+          <div class="hiw-outputs-grid">
+
+            <div class="hiw-output-card hiw-output-energy">
+              <div class="hiw-output-icon"><i class="fa-solid fa-bolt"></i></div>
+              <div class="hiw-output-img-wrap">
+                <img src="Images/Electricity.png" alt="Electricity output" class="hiw-output-img"/>
+              </div>
+              <h4>Gas &amp; Electricity</h4>
+            </div>
+
+            <div class="hiw-output-card hiw-output-fertilizer">
+              <div class="hiw-output-icon"><i class="fa-solid fa-seedling"></i></div>
+              <div class="hiw-output-img-wrap hiw-output-img-placeholder">
+                <i class="fa-solid fa-flask hiw-fert-icon"></i>
+              </div>
+              <h4>Bio-Fertilizer</h4>
+            </div>
+
+          </div>
+          <div class="hiw-step-body hiw-outputs-body">
+            <h3>3 Revenue Streams</h3>
+            <p>Every unit generates clean energy <em>and</em> high-value liquid fertilizer simultaneously</p>
+          </div>
+        </div>
+
+      </div><!-- /.hiw-flow -->
+
     </div>
   </section>
 
@@ -256,7 +362,6 @@
       <p class="pricing-sub">Choose the model that fits your cash flow today.</p>
       <div class="pricing-grid">
 
-        <!-- Buy Outright -->
         <div class="pricing-column">
           <div class="pricing-header">
             <h3>Buy Outright</h3>
@@ -273,8 +378,6 @@
               </ul>
               <a href="#contact" class="btn plan-btn">Choose plan</a>
             </article>
-
-            <!-- 50-ton Coming Soon teaser -->
             <article class="plan plan-coming-soon">
               <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> In Development</div>
               <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted">Coming Soon</span></div>
@@ -293,7 +396,6 @@
           </div>
         </div>
 
-        <!-- Partner With BioNova -->
         <div class="pricing-column">
           <div class="pricing-header partner">
             <h3>Partner With BioNova</h3>
@@ -311,8 +413,6 @@
               </ul>
               <a href="#contact" class="btn plan-btn">Partner with us</a>
             </article>
-
-            <!-- 50-ton Partner Coming Soon teaser -->
             <article class="plan partner-plan plan-coming-soon">
               <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> In Development</div>
               <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted">Coming Soon</span></div>
@@ -335,7 +435,6 @@
 
       </div>
 
-      <!-- Roadmap hint banner -->
       <div class="pricing-roadmap-hint">
         <i class="fa-solid fa-road"></i>
         <span>We're scaling up. The 50-ton digester is currently in active prototyping — <a href="#contact">get in touch</a> to stay updated or discuss larger custom installations.</span>
@@ -519,6 +618,14 @@
           <div class="ach-media"><img src="Images/ZCA_logo.png" alt="ZCA Cleantech Awards"/></div>
           <div class="ach-body"><h3>ZCA Cleantech Awards 2025 (UK)</h3><p>Nominated as Rising Star in cleantech innovation</p></div>
         </a>
+        <a class="ach-card" target="_blank" data-img="Images/YES_BioNova.jpg" data-title="Young Entrepreneur Summit 2026 (YES)" data-text="Global winners out of 100+ startups from 29+ countries.">
+          <div class="ach-media"><img src="Images/YES_BioNova.jpg" alt="Young Entrepreneur Summit 2026"/></div>
+          <div class="ach-body"><h3>Young Entrepreneur Summit 2026 (YES)</h3><p>Global winners out of 100+ startups from 29+ countries.</p></div>
+        </a>
+        <a class="ach-card" target="_blank" data-img="Images/SBC_BioNova.jpg" data-title="Startubootcamp Georgia - MVP Program" data-text="Selected among 650+ startups; secured ₾50,000 funding and mentorship to scale our MVP.">
+          <div class="ach-media"><img src="Images/SBC_BioNova.jpg" alt="Startubootcamp Georgia"/></div>
+          <div class="ach-body"><h3>Startubootcamp Georgia - MVP Program</h3><p>Selected among 650+ startups; secured ₾50,000 funding and mentorship to scale our MVP.</p></div>
+        </a>
       </div>
       <div class="see-more-wrap">
         <button type="button" class="btn see-more-btn" id="achSeeMore" aria-expanded="false" aria-controls="achievementsGrid">See more awards</button>
@@ -546,12 +653,34 @@
       <p class="blog-sub">Articles, updates, pilots, and behind-the-scenes engineering.</p>
       <div class="blog-grid" id="blogGrid">
         <article class="blog-card">
-          <a class="blog-link" href="https://cbw.ge/startup/winners-of-the-2024-social-impact-award-announced" target="_blank">
-            <div class="blog-thumb"><img src="Images/Social_impact_BLOG.png" alt="BioNova wins the 2024 Social Impact Award"></div>
+          <a class="blog-link" href="https://www.youtube.com/watch?v=2R72a9i5R1I" target="_blank">
+            <div class="blog-thumb"><img src="Images/BioNova_EU_VID.png" alt=""></div>
             <div class="blog-body">
-              <div class="blog-meta">October 2024</div>
-              <h3 class="blog-title">BioNova Wins the 2024 Social Impact Award</h3>
-              <p class="blog-excerpt">BioNova was named a winner of the 2024 Social Impact Award, recognizing our solution for turning organic waste into clean energy and biofertilizer while supporting sustainable agriculture.</p>
+               <div class="blog-meta">April 2026 • Video</div>
+              <h3 class="blog-title">BioNova Featured by EU: Turning Waste into Energy</h3>
+              <p class="blog-excerpt">BioNova was featured in an official EU video, highlighting our mission to turn livestock waste into energy and revenue, with support from the EU and its partner programs.</p>
+              <span class="blog-cta">Watch video →</span>
+            </div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a class="blog-link" href="https://www.linkedin.com/feed/update/urn:li:activity:7447593658373292032" target="_blank">
+            <div class="blog-thumb"><img src="Images/dena_Blog.jpg" alt=""></div>
+            <div class="blog-body">
+               <div class="blog-meta">March 2026 • Events</div>
+              <h3 class="blog-title">BioNova at SET Tech Festival Berlin: From Local Farms to Global Stage</h3>
+              <p class="blog-excerpt">Invited by our partner dena(German Energy Agency), BioNova showcased its waste-to-energy solution at SET Tech Festival, engaging with leading institutions and exploring expansion opportunities across the EU energy market.</p>
+              <span class="blog-cta">Read article →</span>
+            </div>
+          </a>
+        </article>
+        <article class="blog-card">
+          <a class="blog-link" href="https://euneighbourseast.eu/news/stories/bionova-turning-waste-into-clean-energy-in-georgia/" target="_blank">
+            <div class="blog-thumb"><img src="Images/Slush_Blog.png" alt="BioNova featured by EU Neighbours East"></div>
+            <div class="blog-body">
+              <div class="blog-meta">November 2025 • Press</div>
+              <h3 class="blog-title">From Idea to Impact: BioNova Featured by EU Neighbours East</h3>
+              <p class="blog-excerpt">BioNova was featured by EU Neighbours East, highlighting how farmer interviews and early prototypes evolved into a scalable waste-to-energy solution supported by EU4Youth and international partners.</p>
               <span class="blog-cta">Read article →</span>
             </div>
           </a>
@@ -568,12 +697,12 @@
           </a>
         </article>
         <article class="blog-card">
-          <a class="blog-link" href="https://euneighbourseast.eu/news/stories/bionova-turning-waste-into-clean-energy-in-georgia/" target="_blank">
-            <div class="blog-thumb"><img src="Images/Slush_Blog.png" alt="BioNova featured by EU Neighbours East"></div>
+          <a class="blog-link" href="https://cbw.ge/startup/winners-of-the-2024-social-impact-award-announced" target="_blank">
+            <div class="blog-thumb"><img src="Images/Social_impact_BLOG.png" alt="BioNova wins the 2024 Social Impact Award"></div>
             <div class="blog-body">
-              <div class="blog-meta">November 2025 • Press</div>
-              <h3 class="blog-title">From Idea to Impact: BioNova Featured by EU Neighbours East</h3>
-              <p class="blog-excerpt">BioNova was featured by EU Neighbours East, highlighting how farmer interviews and early prototypes evolved into a scalable waste-to-energy solution supported by EU4Youth and international partners.</p>
+              <div class="blog-meta">October 2024</div>
+              <h3 class="blog-title">BioNova Wins the 2024 Social Impact Award</h3>
+              <p class="blog-excerpt">BioNova was named a winner of the 2024 Social Impact Award, recognizing our solution for turning organic waste into clean energy and biofertilizer while supporting sustainable agriculture.</p>
               <span class="blog-cta">Read article →</span>
             </div>
           </a>
@@ -619,25 +748,66 @@
     </div>
   </section>
 
-  <!-- PARTNERS -->
+  <!-- ═══ PARTNERS ═══ -->
   <section id="partners">
-    <div class="container">
-      <h2>Our Partners</h2>
+    <div class="container partners-header">
+      <div class="partners-badge">
+        <span class="partners-badge-dot"></span>
+        Trusted by leaders
+      </div>
+      <h2>Our <span class="partners-title-accent">Partners</span></h2>
       <p class="partner-sub">Organizations supporting BioNova's mission.</p>
-      <div class="partner-grid" aria-label="Partners logos">
+      <div class="partners-stats">
+        <div class="partners-stat">
+          <span class="partners-stat-num">14</span>
+          <span class="partners-stat-label">partner orgs</span>
+        </div>
+        <div class="partners-stat-divider"></div>
+        <div class="partners-stat">
+          <span class="partners-stat-num">4+</span>
+          <span class="partners-stat-label">countries</span>
+        </div>
+        <div class="partners-stat-divider"></div>
+        <div class="partners-stat">
+          <span class="partners-stat-num">$50K+</span>
+          <span class="partners-stat-label">in grants secured</span>
+        </div>
+      </div>
+    </div>
+    <div class="partner-track-wrap">
+      <div class="partner-track" id="partnerRow1" aria-label="Partners logos row 1">
         <div class="partner-item"><img src="Images/Cu-Logo-Color.png" alt="Caucasus University"/></div>
-        <div class="partner-item"><img src="Images/JA-Europe.png" alt="JA-Europe"/></div>
+        <div class="partner-item"><img src="Images/JA-Europe.png" alt="JA Europe"/></div>
         <div class="partner-item"><img src="Images/Social Impact - Logo-picaai.png" alt="Social Impact Award"/></div>
         <div class="partner-item"><img src="Images/JA - Logo (2).png" alt="Junior Achievement"/></div>
-        <div class="partner-item"><img src="Images/Danish - Logo (2).png" alt="Danish Embassy"/></div>
+        <div class="partner-item"><img src="Images/Danish - Logo (2).png" alt="Danish Refugee Council"/></div>
         <div class="partner-item"><img src="Images/GITA - Logo.png" alt="GITA"/></div>
         <div class="partner-item"><img src="Images/Rethink - Logo.png" alt="Rethink"/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/Cu-Logo-Color.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/JA-Europe.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/Social Impact - Logo-picaai.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/JA - Logo (2).png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/Danish - Logo (2).png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/GITA - Logo.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/Rethink - Logo.png" alt=""/></div>
+      </div>
+    </div>
+    <div class="partner-track-wrap">
+      <div class="partner-track partner-track-reverse" id="partnerRow2" aria-label="Partners logos row 2">
         <div class="partner-item"><img src="Images/Future Agro - Logo.png" alt="Future Agro Challenge"/></div>
         <div class="partner-item"><img src="Images/Seed Kaspi - Logo.png" alt="SEED Kaspi"/></div>
         <div class="partner-item"><img src="Images/SA - Logo.png" alt="Social Entrepreneurship Summit"/></div>
         <div class="partner-item"><img src="Images/Parp - Logo.png" alt="PARP"/></div>
         <div class="partner-item"><img src="Images/ITU_Logo1.png" alt="ITU SEEDs"/></div>
         <div class="partner-item"><img src="Images/denaNewLogo.png" alt="Dena"/></div>
+        <div class="partner-item"><img src="Images/GFA_logo.png" alt="GFA"/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/Future Agro - Logo.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/Seed Kaspi - Logo.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/SA - Logo.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/Parp - Logo.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/ITU_Logo1.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/denaNewLogo.png" alt=""/></div>
+        <div class="partner-item" aria-hidden="true"><img src="Images/GFA_logo.png" alt=""/></div>
       </div>
     </div>
   </section>
@@ -652,7 +822,7 @@
         <div class="contact-item"><i class="fas fa-envelope" aria-hidden="true"></i><div><p>bionovainfo1@gmail.com</p></div></div>
       </div>
       <div class="contact-social">
-        <a href="https://www.youtube.com/@BioNovaLLC" target="_blank" aria-label="BioNova on Youtube"><img src="Images/YT_Logo.png" alt="Facebook icon"/></a>
+        <a href="https://www.youtube.com/@BioNovaLLC" target="_blank" aria-label="BioNova on Youtube"><img src="Images/YT_Logo.png" alt="Youtube icon"/></a>
         <a href="https://www.linkedin.com/company/bionovatech/" target="_blank" aria-label="BioNova on LinkedIn"><img src="Images/Linkedin.png" alt="LinkedIn icon"/></a>
       </div>
     </div>
