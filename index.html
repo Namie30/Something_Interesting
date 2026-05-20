@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BioNova - From Waste to Energy</title>
+  <meta name="description" content="BioNova builds smart, farm-ready biodigesters that convert manure and food waste into biogas, electricity, and bio-fertilizer — up to 3× more affordable than competitors, with full IoT monitoring." />
+  <meta property="og:title" content="BioNova – From Waste to Energy" />
+  <meta property="og:description" content="Farm-ready biodigesters with real-time IoT control. Convert organic waste into clean energy, electricity, and bio-fertilizer." />
+  <meta property="og:image" content="Images/bionova-logo.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-X9Y5JSMLPN"></script>
@@ -25,8 +31,12 @@
 
   <!-- Main stylesheet -->
   <link rel="stylesheet" href="design.css"/>
+
 </head>
 <body>
+
+  <!-- Scroll progress bar -->
+  <div id="scrollProgress" aria-hidden="true"></div>
 
   <!-- ═══ HEADER ═══ -->
   <header>
@@ -44,18 +54,20 @@
 
       <nav>
         <ul>
-          <li><a href="#about">What We Do</a></li>
-          <li><a href="#why">Why BioNova</a></li>
-          <li><a href="#how-it-works">How It Works</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#calculator">Savings</a></li>
-          <li><a href="#achievements">Our Wins</a></li>
-          <li><a href="#blog">Blog</a></li>
-          <li><a href="#founders">Team</a></li>
-          <li><a href="#partners">Partners</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="#about"        data-i18n="nav.about">What We Do</a></li>
+          <li><a href="#why"          data-i18n="nav.why">Why BioNova</a></li>
+          <li><a href="#how-it-works" data-i18n="nav.how">How It Works</a></li>
+          <li><a href="#pricing"      data-i18n="nav.pricing">Pricing</a></li>
+          <li><a href="#calculator"   data-i18n="nav.savings">Savings</a></li>
+          <li><a href="#achievements" data-i18n="nav.wins">Our Wins</a></li>
+          <li><a href="#blog"         data-i18n="nav.blog">Blog</a></li>
+          <li><a href="#founders"     data-i18n="nav.team">Team</a></li>
+          <li><a href="#partners"     data-i18n="nav.partners">Partners</a></li>
+          <li><a href="#contact"      data-i18n="nav.contact">Contact</a></li>
         </ul>
       </nav>
+      <label class="nav-backdrop" for="nav-toggle" aria-hidden="true"></label>
+
     </div>
   </header>
 
@@ -70,11 +82,11 @@
       <canvas class="hero-particles" id="heroParticles"></canvas>
     </div>
     <div class="hero-content">
-      <h2>Welcome to BioNova</h2>
+      <h2 data-i18n="hero.title">Welcome to BioNova</h2>
       <p class="slogan">Farm-ready biodigesters with real-time control.</p>
       <div class="hero-cta">
-        <a href="#why" class="btn">Why we're different</a>
-        <a href="#pricing" class="btn btn-outline">See pricing</a>
+        <a href="#why" class="btn" data-i18n="hero.cta1">Why we're different</a>
+        <a href="#pricing" class="btn btn-outline" data-i18n="hero.cta2">See pricing</a>
       </div>
       <a href="#why" class="scroll-down" aria-label="Scroll down">
         <i class="fas fa-chevron-down"></i>
@@ -99,6 +111,9 @@
       <li class="sdg-node" style="--i:5" data-sdg="SDG 13: Climate Action" tabindex="0">
         <img src="Images/SDG - 13.png" alt="SDG 13: Climate Action"/>
       </li>
+      <li class="sdg-node" style="--i:6" data-sdg="SDG 14: Life Below Water" title="SDG 14: Life Below Water" tabindex="0">
+        <img src="Images/sdg-14.jpg" alt="SDG 14: Life Below Water"/>
+      </li>
     </ul>
   </section>
 
@@ -108,87 +123,134 @@
       <div class="about-text">
         <div class="about-eyebrow">
           <span class="about-eyebrow-dot"></span>
-          Our Mission
+          <span data-i18n="about.eyebrow">Our Mission</span>
         </div>
-        <h2>What We Do</h2>
-        <p>
+        <h2 data-i18n="about.h2">What We Do</h2>
+        <p data-i18n="about.p">
           BioNova builds modular, smart, farm-ready biodigesters that convert manure and food waste into biogas, electricity,
           and high-value bio-fertilizer. Our compact systems are built from smart, durable materials and come with an
           IoT app so farmers can monitor output, savings, and system health from anywhere.
         </p>
-        <div class="about-tagline">
+        <div class="about-tagline" data-i18n-html="about.tagline">
           In short: <strong>Clean energy + new revenue + remote control</strong> Purpose-built for farms.
         </div>
         <div class="about-badges">
-          <span class="chip"><i class="fa-solid fa-leaf"></i> Renewable Energy</span>
-          <span class="chip"><i class="fa-solid fa-tractor"></i> Farm-Ready</span>
-          <span class="chip"><i class="fa-solid fa-mobile-screen"></i> App Included</span>
-          <span class="chip"><i class="fa-solid fa-wifi"></i> IoT Monitored</span>
+          <span class="chip"><i class="fa-solid fa-leaf"></i> <span data-i18n="about.chip.renewable">Renewable Energy</span></span>
+          <span class="chip"><i class="fa-solid fa-tractor"></i> <span data-i18n="about.chip.farm">Farm-Ready</span></span>
+          <span class="chip"><i class="fa-solid fa-mobile-screen"></i> <span data-i18n="about.chip.app">App Included</span></span>
+          <span class="chip"><i class="fa-solid fa-wifi"></i> <span data-i18n="about.chip.iot">IoT Monitored</span></span>
         </div>
         <div class="about-stats">
           <div class="about-stat">
             <span class="about-stat-num" id="stat-af">3×</span>
-            <span class="about-stat-label">More affordable<br>vs competitors</span>
+            <span class="about-stat-label" data-i18n-html="about.stat.affordable">More affordable<br>vs competitors</span>
           </div>
           <div class="about-stat">
             <span class="about-stat-num" id="stat-rv">3</span>
-            <span class="about-stat-label">Revenue<br>streams</span>
+            <span class="about-stat-label" data-i18n-html="about.stat.revenue">Revenue<br>streams</span>
           </div>
           <div class="about-stat">
             <span class="about-stat-num" id="stat-mon">24/7</span>
-            <span class="about-stat-label">Remote<br>monitoring</span>
+            <span class="about-stat-label" data-i18n-html="about.stat.monitoring">Remote<br>monitoring</span>
           </div>
         </div>
       </div>
       <div class="about-image">
         <div class="about-img-card">
           <div class="about-img-topbar"></div>
-          <img src="Images/DigesterV2.png" alt="BioNova modular biodigester render"/>
+          <img src="Images/DigesterV2.png" alt="BioNova modular biodigester render" loading="lazy"/>
           <div class="about-output-pills">
-            <span class="about-out-pill pill-gas"><i class="fa-solid fa-fire-flame-curved"></i> Biogas</span>
-            <span class="about-out-pill pill-elec"><i class="fa-solid fa-bolt"></i> Electricity</span>
-            <span class="about-out-pill pill-fert"><i class="fa-solid fa-seedling"></i> Bio-Fertilizer</span>
+            <span class="about-out-pill pill-gas"><i class="fa-solid fa-fire-flame-curved"></i> <span data-i18n="about.pill.gas">Biogas</span></span>
+            <span class="about-out-pill pill-elec"><i class="fa-solid fa-bolt"></i> <span data-i18n="about.pill.elec">Electricity</span></span>
+            <span class="about-out-pill pill-fert"><i class="fa-solid fa-seedling"></i> <span data-i18n="about.pill.fert">Bio-Fertilizer</span></span>
           </div>
           <div class="about-iot-badge">
             <span class="about-iot-dot"></span>
-            <span class="about-iot-text">Live monitoring active</span>
+            <span class="about-iot-text" data-i18n="about.iot">Live monitoring active</span>
           </div>
         </div>
+        <button class="digester-eye-btn" id="digesterEyeBtn" aria-label="View digester details" style="display:none">
+          <i class="fa-solid fa-eye"></i>
+          <span>View Details</span>
+        </button>
       </div>
     </div>
   </section>
 
+  <!-- ═══ DIGESTER 3D VIEWER MODAL ═══ -->
+  <div class="dm-overlay" id="dmOverlay">
+    <div class="dm-modal" role="dialog" aria-modal="true" aria-label="BioNova Digester 3D Viewer">
+      <div class="dm-top-bar"></div>
+
+      <button class="dm-close" id="dmClose" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <!-- Canvas -->
+      <div class="dm-viewer-wrap">
+        <canvas id="dmCanvas" class="dm-canvas"></canvas>
+        <div id="dmSpinner" class="dm-spinner">Loading…</div>
+        <div class="dm-part-label" id="dmPartLabel"></div>
+        <div class="dm-viewer-hint">
+          <i class="fa-solid fa-rotate"></i> Drag to rotate &nbsp;·&nbsp;
+          <i class="fa-solid fa-hand-pointer"></i> Click a part to select it
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="dm-controls">
+        <button class="dm-wire-btn" id="dmWireframe">
+          <i class="fa-solid fa-border-none"></i> Wireframe
+        </button>
+        <div class="dm-color-group">
+          <span class="dm-color-lbl">Color</span>
+          <div class="dm-swatches">
+            <button class="dm-swatch dm-swatch-active" data-color="original" title="Reset"></button>
+            <button class="dm-swatch" data-color="#3b82f6" style="background:#3b82f6" title="Blue"></button>
+            <button class="dm-swatch" data-color="#ef4444" style="background:#ef4444" title="Red"></button>
+            <button class="dm-swatch" data-color="#f97316" style="background:#f97316" title="Orange"></button>
+            <button class="dm-swatch" data-color="#a855f7" style="background:#a855f7" title="Purple"></button>
+            <button class="dm-swatch" data-color="#facc15" style="background:#facc15" title="Gold"></button>
+            <button class="dm-swatch" data-color="#ffffff" style="background:#e5e5e5" title="White"></button>
+          </div>
+        </div>
+      </div>
+      <p class="dm-select-hint">Select a part first to recolor only that part, or paint the whole model at once</p>
+
+    </div>
+  </div>
+
   <!-- ═══ WHY BIONOVA ═══ -->
   <section id="why">
     <div class="container">
-      <h2>Why BioNova Is Different</h2>
+      <h2 data-i18n="why.h2">Why BioNova Is Different</h2>
       <div class="value-grid">
         <div class="value-card">
           <div class="value-icon"><i class="fa-solid fa-tractor"></i></div>
-          <h3>Designed for Farmers</h3>
-          <p>Compact footprint, manure-first design, and easy access to service points. Works on small and mid-size farms without civil-engineering headaches.</p>
+          <h3 data-i18n="why.c1.h3">Designed for Farmers</h3>
+          <p data-i18n="why.c1.p">Compact footprint, manure-first design, and easy access to service points. Works on small and mid-size farms without civil-engineering headaches.</p>
         </div>
         <div class="value-card">
           <div class="value-icon"><i class="fa-solid fa-coins"></i></div>
-          <h3>Up to <span class="highlight">3× more affordable</span></h3>
-          <p>We use cost-efficient, corrosion-resistant materials and optimized fabrication to cut CAPEX — without compromising durability.</p>
+          <h3 data-i18n-html="why.c2.h3">Up to <span class="highlight">3× more affordable</span></h3>
+          <p data-i18n="why.c2.p">We use cost-efficient, corrosion-resistant materials and optimized fabrication to cut CAPEX — without compromising durability.</p>
         </div>
         <div class="value-card">
           <div class="value-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
-          <h3>LEGO-Style Setup</h3>
-          <p>Ships as pre-fabricated modules with quick-connect piping and color-coded ports. Most installs are done in days, not weeks.</p>
+          <h3 data-i18n="why.c3.h3">LEGO-Style Setup</h3>
+          <p data-i18n="why.c3.p">Ships as pre-fabricated modules with quick-connect piping and color-coded ports. Most installs are done in days, not weeks.</p>
         </div>
         <div class="value-card">
           <div class="value-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
-          <h3>Full App Control</h3>
-          <p>Monitor gas, electricity, and fertilizer production, track savings, plan maintenance, and get alerts — from any device, anywhere.</p>
+          <h3 data-i18n="why.c4.h3">Full App Control</h3>
+          <p data-i18n="why.c4.p">Monitor gas, electricity, and fertilizer production, track savings, plan maintenance, and get alerts — from any device, anywhere.</p>
         </div>
       </div>
       <div class="mini-proof">
-        <div class="proof-pill"><i class="fa-solid fa-sack-dollar"></i> Lower up-front cost</div>
-        <div class="proof-pill"><i class="fa-solid fa-bolt"></i> Faster commissioning</div>
-        <div class="proof-pill"><i class="fa-solid fa-chart-line"></i> Data-driven ROI</div>
-        <div class="proof-pill"><i class="fa-solid fa-screwdriver-wrench"></i> Easy maintenance</div>
+        <div class="proof-pill"><i class="fa-solid fa-sack-dollar"></i> <span data-i18n="why.proof1">Lower up-front cost</span></div>
+        <div class="proof-pill"><i class="fa-solid fa-bolt"></i> <span data-i18n="why.proof2">Faster commissioning</span></div>
+        <div class="proof-pill"><i class="fa-solid fa-chart-line"></i> <span data-i18n="why.proof3">Data-driven ROI</span></div>
+        <div class="proof-pill"><i class="fa-solid fa-screwdriver-wrench"></i> <span data-i18n="why.proof4">Easy maintenance</span></div>
       </div>
     </div>
   </section>
@@ -197,23 +259,23 @@
   <section id="app">
     <div class="container app-container">
       <div class="app-text">
-        <h2>The BioNova App</h2>
-        <p>Every BioNova unit ships with our monitoring & analytics app. Farmers see real-time production, savings, uptime and can share reports with co-ops, banks, and partners.</p>
+        <h2 data-i18n="app.h2">The BioNova App</h2>
+        <p data-i18n="app.p">Every BioNova unit ships with our monitoring & analytics app. Farmers see real-time production, savings, uptime and can share reports with co-ops, banks, and partners.</p>
         <ul class="app-list">
-          <li><i class="fa-solid fa-gas-pump"></i> Biogas, electricity & fertilizer dashboards</li>
-          <li><i class="fa-solid fa-bell"></i> Smart alerts for pH, temperature & feed rate</li>
-          <li><i class="fa-solid fa-money-bill-trend-up"></i> Savings & revenue tracking</li>
-          <li><i class="fa-solid fa-cloud"></i> Secure cloud access from any device</li>
+          <li><i class="fa-solid fa-gas-pump"></i> <span data-i18n="app.li1">Biogas, electricity &amp; fertilizer dashboards</span></li>
+          <li><i class="fa-solid fa-bell"></i> <span data-i18n="app.li2">Smart alerts for pH, temperature &amp; feed rate</span></li>
+          <li><i class="fa-solid fa-money-bill-trend-up"></i> <span data-i18n="app.li3">Savings &amp; revenue tracking</span></li>
+          <li><i class="fa-solid fa-cloud"></i> <span data-i18n="app.li4">Secure cloud access from any device</span></li>
         </ul>
         <div class="kpi-wrap">
-          <div class="kpi"><span id="kpi-gas">0</span><small>m³ biogas / day</small></div>
-          <div class="kpi"><span id="kpi-elec">0</span><small>kWh electricity / day</small></div>
-          <div class="kpi"><span id="kpi-fert">0</span><small>liters fertilizer / day</small></div>
+          <div class="kpi"><span id="kpi-gas">0</span><small data-i18n="app.kpi.gas">m³ biogas / day</small></div>
+          <div class="kpi"><span id="kpi-elec">0</span><small data-i18n="app.kpi.elec">kWh electricity / day</small></div>
+          <div class="kpi"><span id="kpi-fert">0</span><small data-i18n="app.kpi.fert">liters fertilizer / day</small></div>
         </div>
-        <a href="#calculator" class="btn">Estimate your savings</a>
+        <a href="#calculator" class="btn" data-i18n="app.cta">Estimate your savings</a>
       </div>
       <div class="app-image">
-        <img src="Images/BioNova_App2.png" alt="BioNova App dashboard preview"/>
+        <img src="Images/BioNova_App2.png" alt="BioNova App dashboard preview" loading="lazy"/>
       </div>
     </div>
   </section>
@@ -221,27 +283,27 @@
   <!-- ═══ SETUP TIMELINE ═══ -->
   <section id="setup">
     <div class="container">
-      <h2>Setup in 4 Steps</h2>
+      <h2 data-i18n="setup.h2">Setup in 4 Steps</h2>
       <div class="steps">
         <div class="step">
           <div class="step-icon"><i class="fa-solid fa-box-open"></i></div>
-          <h4>1. Deliver</h4>
-          <p>Pre-fabricated modules arrive on site.</p>
+          <h4 data-i18n="setup.1.h4">1. Deliver</h4>
+          <p data-i18n="setup.1.p">Pre-fabricated modules arrive on site.</p>
         </div>
         <div class="step">
           <div class="step-icon"><i class="fa-solid fa-puzzle-piece"></i></div>
-          <h4>2. Connect</h4>
-          <p>Quick-connect pipes & color-coded ports.</p>
+          <h4 data-i18n="setup.2.h4">2. Connect</h4>
+          <p data-i18n="setup.2.p">Quick-connect pipes & color-coded ports.</p>
         </div>
         <div class="step">
           <div class="step-icon"><i class="fa-solid fa-gauge-high"></i></div>
-          <h4>3. Start Up</h4>
-          <p>Guided commissioning via the app.</p>
+          <h4 data-i18n="setup.3.h4">3. Start Up</h4>
+          <p data-i18n="setup.3.p">Guided commissioning via the app.</p>
         </div>
         <div class="step">
           <div class="step-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-          <h4>4. Monitor</h4>
-          <p>Track output, savings, and maintenance.</p>
+          <h4 data-i18n="setup.4.h4">4. Monitor</h4>
+          <p data-i18n="setup.4.p">Track output, savings, and maintenance.</p>
         </div>
       </div>
     </div>
@@ -252,9 +314,9 @@
     <div class="container hiw-container">
 
       <div class="hiw-header">
-        <span class="hiw-badge"><i class="fa-solid fa-circle-nodes"></i> The Process</span>
-        <h2>How Does It Work?</h2>
-        <p class="hiw-sub">From farm waste to clean energy in three simple stages.</p>
+        <span class="hiw-badge"><i class="fa-solid fa-circle-nodes"></i> <span data-i18n="hiw.badge">The Process</span></span>
+        <h2 data-i18n="hiw.h2">How Does It Work?</h2>
+        <p class="hiw-sub" data-i18n="hiw.sub">From farm waste to clean energy in three simple stages.</p>
       </div>
 
       <div class="hiw-flow">
@@ -267,13 +329,13 @@
               <div class="hiw-icon-badge hiw-icon-waste">
                 <i class="fa-solid fa-cow"></i>
               </div>
-              <img src="Images/Cow - Poop.png" alt="Manure from cows" class="hiw-img"/>
+              <img src="Images/Cow - Poop.png" alt="Manure from cows" class="hiw-img" loading="lazy"/>
             </div>
             <div class="hiw-step-body">
-              <h3>Organic Waste Input</h3>
-              <p>Manure and food waste collected daily from your livestock</p>
+              <h3 data-i18n="hiw.s1.h3">Organic Waste Input</h3>
+              <p data-i18n="hiw.s1.p">Manure and food waste collected daily from your livestock</p>
               <div class="hiw-stat-row">
-                <span class="hiw-stat"><i class="fa-solid fa-weight-scale"></i> 20–30 kg/animal/day</span>
+                <span class="hiw-stat"><i class="fa-solid fa-weight-scale"></i> <span data-i18n="hiw.s1.stat">20–30 kg/animal/day</span></span>
               </div>
             </div>
           </div>
@@ -287,7 +349,7 @@
               <path d="M62 5 L76 12 L62 19" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
             </svg>
           </div>
-          <span class="hiw-arrow-label">feeds into</span>
+          <span class="hiw-arrow-label" data-i18n="hiw.arrow1">feeds into</span>
         </div>
 
         <!-- Step 2 -->
@@ -298,14 +360,14 @@
               <div class="hiw-icon-badge hiw-icon-digester">
                 <i class="fa-solid fa-droplet"></i>
               </div>
-              <img src="Images/DigesterV2.png" alt="BioNova Digester" class="hiw-img hiw-img-digester"/>
+              <img src="Images/DigesterV2.png" alt="BioNova Digester" class="hiw-img hiw-img-digester" loading="lazy"/>
             </div>
             <div class="hiw-step-body">
-              <h3>BioNova Digester</h3>
-              <p>Smart anaerobic digestion installed directly on your farm, which converts waste into energy. Monitored 24/7 via our app</p>
+              <h3 data-i18n="hiw.s2.h3">BioNova Digester</h3>
+              <p data-i18n="hiw.s2.p">Smart anaerobic digestion installed directly on your farm, which converts waste into energy. Monitored 24/7 via our app</p>
               <div class="hiw-stat-row">
-                <span class="hiw-stat"><i class="fa-solid fa-gauge-high"></i> 30-ton capacity</span>
-                <span class="hiw-stat"><i class="fa-solid fa-mobile-screen"></i> IoT monitored</span>
+                <span class="hiw-stat"><i class="fa-solid fa-gauge-high"></i> <span data-i18n="hiw.s2.stat1">30-ton capacity</span></span>
+                <span class="hiw-stat"><i class="fa-solid fa-mobile-screen"></i> <span data-i18n="hiw.s2.stat2">IoT monitored</span></span>
               </div>
             </div>
           </div>
@@ -319,7 +381,7 @@
               <path d="M62 5 L76 12 L62 19" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
             </svg>
           </div>
-          <span class="hiw-arrow-label">produces</span>
+          <span class="hiw-arrow-label" data-i18n="hiw.arrow2">produces</span>
         </div>
 
         <!-- Step 3 — split outputs -->
@@ -330,9 +392,9 @@
             <div class="hiw-output-card hiw-output-energy">
               <div class="hiw-output-icon"><i class="fa-solid fa-bolt"></i></div>
               <div class="hiw-output-img-wrap">
-                <img src="Images/Electricity.png" alt="Electricity output" class="hiw-output-img"/>
+                <img src="Images/Electricity.png" alt="Electricity output" class="hiw-output-img" loading="lazy"/>
               </div>
-              <h4>Gas &amp; Electricity</h4>
+              <h4 data-i18n="hiw.out.elec">Gas & Electricity</h4>
             </div>
 
             <div class="hiw-output-card hiw-output-fertilizer">
@@ -340,13 +402,13 @@
               <div class="hiw-output-img-wrap hiw-output-img-placeholder">
                 <i class="fa-solid fa-flask hiw-fert-icon"></i>
               </div>
-              <h4>Bio-Fertilizer</h4>
+              <h4 data-i18n="hiw.out.fert">Bio-Fertilizer</h4>
             </div>
 
           </div>
           <div class="hiw-step-body hiw-outputs-body">
-            <h3>3 Revenue Streams</h3>
-            <p>Every unit generates clean energy <em>and</em> high-value liquid fertilizer simultaneously</p>
+            <h3 data-i18n="hiw.out.h3">3 Revenue Streams</h3>
+            <p data-i18n-html="hiw.out.p">Every unit generates clean energy <em>and</em> high-value liquid fertilizer simultaneously</p>
           </div>
         </div>
 
@@ -358,48 +420,48 @@
   <!-- ═══ PRICING ═══ -->
   <section id="pricing" aria-label="Pricing plans">
     <div class="container">
-      <h2>Pricing</h2>
-      <p class="pricing-sub">Choose the model that fits your cash flow today.</p>
+      <h2 data-i18n="price.h2">Pricing</h2>
+      <p class="pricing-sub" data-i18n="price.sub">Choose the model that fits your cash flow today.</p>
       <div class="pricing-grid">
 
         <div class="pricing-column">
           <div class="pricing-header">
-            <h3>Buy Outright</h3>
-            <p>Pay full price. Keep 100% of your electricity & fertilizer revenue.</p>
+            <h3 data-i18n="price.c1.h3">Buy Outright</h3>
+            <p data-i18n="price.c1.p">Pay full price. Keep 100% of your electricity & fertilizer revenue.</p>
           </div>
           <div class="plan-cards">
             <article class="plan">
-              <div class="plan-title"><h4>30-ton Digester</h4><span class="pill">Most popular</span></div>
+              <div class="plan-title"><h4>30-ton Digester</h4><span class="pill" data-i18n="price.popular">Most popular</span></div>
               <div class="price-line"><span class="price">$12,500</span></div>
               <ul class="plan-list">
-                <li><i class="fa-solid fa-check"></i> Higher output</li>
-                <li><i class="fa-solid fa-check"></i> Remote monitoring app</li>
-                <li><i class="fa-solid fa-check"></i> Full ownership</li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.output">Higher output</span></li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.app">Remote monitoring app</span></li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.own">Full ownership</span></li>
               </ul>
-              <a href="#contact" class="btn plan-btn">Choose plan</a>
+              <a href="#contact" class="btn plan-btn" data-i18n="price.btn.choose">Choose plan</a>
             </article>
             <article class="plan plan-coming-soon">
-              <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> In Development</div>
-              <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted">Coming Soon</span></div>
+              <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> <span data-i18n="price.indev">In Development</span></div>
+              <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted" data-i18n="price.soon">Coming Soon</span></div>
               <div class="price-line">
                 <span class="price price-tbd">~$17,500</span>
-                <span class="price-est-label">estimated</span>
+                <span class="price-est-label" data-i18n="price.est">estimated</span>
               </div>
               <ul class="plan-list plan-list-muted">
-                <li><i class="fa-solid fa-check"></i> Maximum output for large farms</li>
-                <li><i class="fa-solid fa-check"></i> Remote monitoring app</li>
-                <li><i class="fa-solid fa-check"></i> Full ownership</li>
-                <li><i class="fa-solid fa-flask"></i> Actively prototyping now</li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.maxout">Maximum output for large farms</span></li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.app">Remote monitoring app</span></li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.own">Full ownership</span></li>
+                <li><i class="fa-solid fa-flask"></i> <span data-i18n="price.li.proto">Actively prototyping now</span></li>
               </ul>
-              <a href="#contact" class="btn plan-btn plan-btn-outline">Notify me</a>
+              <a href="#contact" class="btn plan-btn plan-btn-outline" data-i18n="price.btn.notify">Notify me</a>
             </article>
           </div>
         </div>
 
         <div class="pricing-column">
           <div class="pricing-header partner">
-            <h3>Partner With BioNova</h3>
-            <p>Pay only 50%. Share revenue: <strong>15% electricity</strong> & <strong>45% fertilizer</strong>.</p>
+            <h3 data-i18n="price.c2.h3">Partner With BioNova</h3>
+            <p data-i18n-html="price.c2.p">Pay only 50%. Share revenue: <strong>15% electricity</strong> &amp; <strong>45% fertilizer</strong>.</p>
           </div>
           <div class="plan-cards">
             <article class="plan partner-plan popular">
@@ -407,27 +469,29 @@
               <div class="plan-title"><h4>30-ton Digester</h4></div>
               <div class="price-line"><span class="price-old">$12,500</span><span class="price-now">$6,250</span></div>
               <ul class="plan-list">
-                <li><i class="fa-solid fa-check"></i> Same hardware & app</li>
-                <li><i class="fa-solid fa-handshake-angle"></i> Share 15% electricity</li>
-                <li><i class="fa-solid fa-seedling"></i> Share 45% fertilizer</li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.same">Same hardware & app</span></li>
+                <li><i class="fa-solid fa-bolt"></i> <span data-i18n="price.li.elec15">Keep 100% of your electricity revenue</span></li>
+                <li><i class="fa-solid fa-seedling"></i> <span data-i18n="price.li.fert45">We collect & sell your bio-fertilizer</span></li>
+                <li><i class="fa-solid fa-coins"></i> <span data-i18n="price.li.fertearn">Earn a share of fertilizer sales</span></li>
               </ul>
-              <a href="#contact" class="btn plan-btn">Partner with us</a>
+              <a href="#contact" class="btn plan-btn" data-i18n="price.btn.partner">Partner with us</a>
             </article>
             <article class="plan partner-plan plan-coming-soon">
-              <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> In Development</div>
-              <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted">Coming Soon</span></div>
+              <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> <span data-i18n="price.indev">In Development</span></div>
+              <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted" data-i18n="price.soon">Coming Soon</span></div>
               <div class="price-line">
                 <span class="price-old price-tbd-old">~$17,500</span>
                 <span class="price-now price-tbd">~$8,750</span>
-                <span class="price-est-label">estimated</span>
+                <span class="price-est-label" data-i18n="price.est">estimated</span>
               </div>
               <ul class="plan-list plan-list-muted">
-                <li><i class="fa-solid fa-check"></i> Same hardware & app</li>
-                <li><i class="fa-solid fa-handshake-angle"></i> Share 15% electricity</li>
-                <li><i class="fa-solid fa-seedling"></i> Share 45% fertilizer</li>
-                <li><i class="fa-solid fa-flask"></i> Actively prototyping now</li>
+                <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.same">Same hardware & app</span></li>
+                <li><i class="fa-solid fa-bolt"></i> <span data-i18n="price.li.elec15">Keep 100% of your electricity revenue</span></li>
+                <li><i class="fa-solid fa-seedling"></i> <span data-i18n="price.li.fert45">We collect & sell your bio-fertilizer</span></li>
+                <li><i class="fa-solid fa-coins"></i> <span data-i18n="price.li.fertearn">Earn a share of fertilizer sales</span></li>
+                <li><i class="fa-solid fa-flask"></i> <span data-i18n="price.li.proto">Actively prototyping now</span></li>
               </ul>
-              <a href="#contact" class="btn plan-btn plan-btn-outline">Notify me</a>
+              <a href="#contact" class="btn plan-btn plan-btn-outline" data-i18n="price.btn.notify">Notify me</a>
             </article>
           </div>
           <p class="fineprint">*Revenue share applies to net revenue from electricity sales and fertilizer sales. Exact terms (tenor, metering, service) are finalized during contracting.</p>
@@ -437,7 +501,7 @@
 
       <div class="pricing-roadmap-hint">
         <i class="fa-solid fa-road"></i>
-        <span>We're scaling up. The 50-ton digester is currently in active prototyping — <a href="#contact">get in touch</a> to stay updated or discuss larger custom installations.</span>
+        <span data-i18n-html="price.roadmap">We're scaling up. The 50-ton digester is currently in active prototyping — <a href="#contact">get in touch</a> to stay updated or discuss larger custom installations.</span>
       </div>
 
     </div>
@@ -446,28 +510,28 @@
   <!-- ═══ SAVINGS CALCULATOR ═══ -->
   <section id="calculator" aria-label="Savings estimator">
     <div class="container">
-      <h2>Estimate Your Savings</h2>
-      <p class="calc-desc">Pick your herd size and tariff. We'll do the rest. (<a href="#" id="toggleAdvancedLink">Advanced</a> for engineers.)</p>
+      <h2 data-i18n="calc.h2">Estimate Your Savings</h2>
+      <p class="calc-desc" data-i18n-html="calc.desc">Pick your herd size and tariff. We'll do the rest. (<a href="#" id="toggleAdvancedLink">Advanced</a> for engineers.)</p>
 
       <div class="simple-grid" id="simpleGrid">
         <div class="simple-card">
-          <label class="lbl">Animal</label>
+          <label class="lbl" data-i18n="calc.lbl.animal">Animal</label>
           <div class="segmented" role="tablist" aria-label="Animal selector">
-            <button class="seg is-active" data-animal="cow"     role="tab" aria-selected="true">Cows</button>
-            <button class="seg"           data-animal="buffalo" role="tab" aria-selected="false">Buffalo</button>
-            <button class="seg"           data-animal="pig"     role="tab" aria-selected="false">Pigs</button>
-            <button class="seg"           data-animal="mixed"   role="tab" aria-selected="false">Mixed</button>
+            <button class="seg is-active" data-animal="cow"     role="tab" aria-selected="true"  data-i18n="calc.btn.cows">Cows</button>
+            <button class="seg"           data-animal="buffalo" role="tab" aria-selected="false" data-i18n="calc.btn.buffalo">Buffalo</button>
+            <button class="seg"           data-animal="pig"     role="tab" aria-selected="false" data-i18n="calc.btn.pigs">Pigs</button>
+            <button class="seg"           data-animal="mixed"   role="tab" aria-selected="false" data-i18n="calc.btn.mixed">Mixed</button>
           </div>
-          <small class="hint">We load typical manure & gas yields per animal.</small>
+          <small class="hint" data-i18n="calc.hint.animal">We load typical manure & gas yields per animal.</small>
         </div>
         <div class="simple-card">
-          <label for="herd" class="lbl">Herd size</label>
+          <label for="herd" class="lbl" data-i18n="calc.lbl.herd">Herd size</label>
           <input type="range" id="herd" min="10" max="500" step="5" value="100" />
-          <div class="range-readout"><span id="herdOut">100</span> animals</div>
-          <small class="hint">Drag to match your farm.</small>
+          <div class="range-readout"><span id="herdOut">100</span> <span data-i18n="calc.unit.animals">animals</span></div>
+          <small class="hint" data-i18n="calc.hint.herd">Drag to match your farm.</small>
         </div>
         <div class="simple-card">
-          <label for="tariff" class="lbl">Electricity price</label>
+          <label for="tariff" class="lbl" data-i18n="calc.lbl.tariff">Electricity price</label>
           <div class="inline">
             <select id="currency">
               <option value="USD" selected>USD</option>
@@ -475,48 +539,48 @@
               <option value="EUR">EUR</option>
             </select>
             <input type="number" id="tariff" min="0" step="0.01" value="0.20" />
-            <span class="unit">per kWh</span>
+            <span class="unit" data-i18n="calc.unit.kwh">per kWh</span>
           </div>
-          <small class="hint">Use your grid tariff or PPA price.</small>
+          <small class="hint" data-i18n="calc.hint.tariff">Use your grid tariff or PPA price.</small>
         </div>
         <div class="simple-card">
-          <label class="lbl">Model</label>
+          <label class="lbl" data-i18n="calc.lbl.model">Model</label>
           <div class="segmented" role="tablist" aria-label="Purchase model">
-            <button class="seg is-active" data-model="buy"     role="tab" aria-selected="true">Buy outright</button>
-            <button class="seg"           data-model="partner" role="tab" aria-selected="false">Partner with us</button>
+            <button class="seg is-active" data-model="buy"     role="tab" aria-selected="true"  data-i18n="calc.btn.buy">Buy outright</button>
+            <button class="seg"           data-model="partner" role="tab" aria-selected="false" data-i18n="calc.btn.partner">Partner with us</button>
           </div>
-          <small class="hint">Partner = 50% upfront, 15% electricity & 45% fertilizer share.</small>
+          <small class="hint" data-i18n="calc.hint.model">Partner = 50% upfront, 15% electricity & 45% fertilizer share.</small>
         </div>
       </div>
 
       <div class="calc-results2" id="calcResults2">
-        <div class="result2"><h4>Daily Biogas</h4><div class="big"><span id="biogasOut">0</span><span class="u"> m³</span></div></div>
-        <div class="result2"><h4>Daily Electricity</h4><div class="big"><span id="kwhOut">0</span><span class="u"> kWh</span></div></div>
-        <div class="result2"><h4>Daily Savings</h4><div class="big"><span id="saveOut">0</span><span class="u" id="saveCur"> USD</span></div></div>
-        <div class="result2"><h4>Recommended Digester</h4><div class="big"><span id="recoModel">–</span></div><small class="hint" id="recoHint">We size this from your herd.</small></div>
-        <div class="result2"><h4>Upfront Cost</h4><div class="big"><span id="capexOut">–</span><span class="u" id="capexCur"> USD</span></div><small class="hint">Partner model shows 50% upfront.</small></div>
-        <div class="result2"><h4>Payback (simple)</h4><div class="big"><span id="paybackOut">–</span><span class="u"> yrs</span></div><small class="hint">Based on energy savings only.</small></div>
+        <div class="result2"><h4 data-i18n="calc.res.biogas">Daily Biogas</h4><div class="big"><span id="biogasOut">0</span><span class="u"> m³</span></div></div>
+        <div class="result2"><h4 data-i18n="calc.res.elec">Daily Electricity</h4><div class="big"><span id="kwhOut">0</span><span class="u"> kWh</span></div></div>
+        <div class="result2"><h4 data-i18n="calc.res.save">Daily Savings</h4><div class="big"><span id="saveOut">0</span><span class="u" id="saveCur"> USD</span></div></div>
+        <div class="result2"><h4 data-i18n="calc.res.reco">Recommended Digester</h4><div class="big"><span id="recoModel">–</span></div><small class="hint" id="recoHint" data-i18n="calc.reco.hint">We size this from your herd.</small></div>
+        <div class="result2"><h4 data-i18n="calc.res.capex">Upfront Cost</h4><div class="big"><span id="capexOut">–</span><span class="u" id="capexCur"> USD</span></div><small class="hint" data-i18n="calc.capex.hint">Partner model shows 50% upfront.</small></div>
+        <div class="result2"><h4 data-i18n="calc.res.payback">Payback (simple)</h4><div class="big"><span id="paybackOut">–</span><span class="u"> yrs</span></div><small class="hint" data-i18n="calc.payback.hint">Based on energy savings only.</small></div>
       </div>
 
       <details id="advancedBox" class="advanced">
-        <summary>Advanced assumptions</summary>
+        <summary data-i18n="calc.adv.summary">Advanced assumptions</summary>
         <form class="adv-grid" id="advForm">
-          <div class="calc-field"><label for="manure">Manure per animal (kg/day)</label><input type="number" id="manure" min="0" step="0.1" value="25" /><small>Typical cows: 20–30</small></div>
-          <div class="calc-field"><label for="yield">Biogas yield (m³ per kg manure)</label><input type="number" id="yield" min="0" step="0.001" value="0.04" /><small>Rule of thumb: 0.04</small></div>
-          <div class="calc-field"><label for="kwhPerM3">Electricity (kWh per m³ biogas)</label><input type="number" id="kwhPerM3" min="0" step="0.1" value="2.0" /><small>Engine + conversion efficiency</small></div>
-          <div class="calc-field"><label for="fertilizerPerKg">Liquid fertilizer (L per kg manure)</label><input type="number" id="fertilizerPerKg" min="0" step="0.1" value="0.8" /><small>Rough average; varies by solids.</small></div>
+          <div class="calc-field"><label for="manure" data-i18n="calc.adv.m.lbl">Manure per animal (kg/day)</label><input type="number" id="manure" min="0" step="0.1" value="25" /><small data-i18n="calc.adv.m.small">Typical cows: 20–30</small></div>
+          <div class="calc-field"><label for="yield" data-i18n="calc.adv.y.lbl">Biogas yield (m³ per kg manure)</label><input type="number" id="yield" min="0" step="0.001" value="0.04" /><small data-i18n="calc.adv.y.small">Rule of thumb: 0.04</small></div>
+          <div class="calc-field"><label for="kwhPerM3" data-i18n="calc.adv.k.lbl">Electricity (kWh per m³ biogas)</label><input type="number" id="kwhPerM3" min="0" step="0.1" value="2.0" /><small data-i18n="calc.adv.k.small">Engine + conversion efficiency</small></div>
+          <div class="calc-field"><label for="fertilizerPerKg" data-i18n="calc.adv.f.lbl">Liquid fertilizer (L per kg manure)</label><input type="number" id="fertilizerPerKg" min="0" step="0.1" value="0.8" /><small data-i18n="calc.adv.f.small">Rough average; varies by solids.</small></div>
         </form>
       </details>
-      <p class="calc-note">*Quick estimate using typical assumptions. Real output depends on diet, temperature, retention time, and engine efficiency.</p>
+      <p class="calc-note" data-i18n="calc.note">*Quick estimate using typical assumptions. Real output depends on diet, temperature, retention time, and engine efficiency.</p>
     </div>
   </section>
 
   <!-- CARBON OFFSETTING -->
   <section id="carbon-credits" aria-label="Carbon offsetting certificates">
     <div class="container">
-      <div class="coming-soon-badge"><i class="fa-solid fa-rocket"></i> Future Plan</div>
-      <h2>Show Your Sustainability Commitment</h2>
-      <p class="carbon-subtitle">Offset your carbon footprint with verified carbon credits. Every tonne you offset supports clean energy projects and helps fight climate change.</p>
+      <div class="coming-soon-badge"><i class="fa-solid fa-rocket"></i> <span data-i18n="carbon.badge">Future Plan</span></div>
+      <h2 data-i18n="carbon.h2">Show Your Sustainability Commitment</h2>
+      <p class="carbon-subtitle" data-i18n="carbon.sub">Offset your carbon footprint with verified carbon credits. Every tonne you offset supports clean energy projects and helps fight climate change.</p>
 
       <div class="carbon-cards-grid">
         <div class="carbon-card">
@@ -530,7 +594,7 @@
               <div class="cert-standard">Verified according to the<br><strong>Gold Standard</strong><i class="fa-solid fa-certificate"></i></div>
             </div>
           </div>
-          <div class="carbon-card-content"><h3>Offset your Car rides</h3><div class="carbon-card-footer"><button class="carbon-btn">Buy now</button><span class="carbon-price">$30</span></div></div>
+          <div class="carbon-card-content"><h3 data-i18n="carbon.car">Offset your Car rides</h3><div class="carbon-card-footer"><button class="carbon-btn" data-i18n="carbon.buy">Buy now</button><span class="carbon-price">$30</span></div></div>
         </div>
 
         <div class="carbon-card">
@@ -544,7 +608,7 @@
               <div class="cert-standard">Verified according to the<br><strong>Gold Standard</strong><i class="fa-solid fa-certificate"></i></div>
             </div>
           </div>
-          <div class="carbon-card-content"><h3>Offset your Flights</h3><div class="carbon-card-footer"><button class="carbon-btn">Buy now</button><span class="carbon-price">$30</span></div></div>
+          <div class="carbon-card-content"><h3 data-i18n="carbon.flight">Offset your Flights</h3><div class="carbon-card-footer"><button class="carbon-btn" data-i18n="carbon.buy">Buy now</button><span class="carbon-price">$30</span></div></div>
         </div>
 
         <div class="carbon-card">
@@ -558,7 +622,7 @@
               <div class="cert-standard">Verified according to the<br><strong>Gold Standard</strong><i class="fa-solid fa-certificate"></i></div>
             </div>
           </div>
-          <div class="carbon-card-content"><h3>Offset your Electricity</h3><div class="carbon-card-footer"><button class="carbon-btn">Buy now</button><span class="carbon-price">$30</span></div></div>
+          <div class="carbon-card-content"><h3 data-i18n="carbon.elec">Offset your Electricity</h3><div class="carbon-card-footer"><button class="carbon-btn" data-i18n="carbon.buy">Buy now</button><span class="carbon-price">$30</span></div></div>
         </div>
       </div>
 
@@ -571,8 +635,8 @@
   <!-- ACHIEVEMENTS -->
   <section id="achievements">
     <div class="container">
-      <h2>Our Wins &amp; Awards</h2>
-      <p class="ach-sub">Click any award to see the story.</p>
+      <h2 data-i18n-html="ach.h2">Our Wins &amp; Awards</h2>
+      <p class="ach-sub" data-i18n="ach.sub">Click any award to see the story.</p>
       <div class="achievement-grid" id="achievementsGrid" aria-label="Awards and achievements">
         <a class="ach-card" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/cunicorn-tibisi/480650" data-img="Images/CUnicorn-3.jpg" target="_blank" data-title="CUnicorn Batch 3" data-text="BioNova emerged as the winner of CUnicorn Batch 3 at Caucasus University — fueling our drive to expand sustainable AgTech.">
           <div class="ach-media"><img src="Images/CUnicorn-3.jpg" alt="CUnicorn Batch 3 award"/></div>
@@ -628,7 +692,7 @@
         </a>
       </div>
       <div class="see-more-wrap">
-        <button type="button" class="btn see-more-btn" id="achSeeMore" aria-expanded="false" aria-controls="achievementsGrid">See more awards</button>
+        <button type="button" class="btn see-more-btn" id="achSeeMore" aria-expanded="false" aria-controls="achievementsGrid" data-i18n="ach.seemore">See more awards</button>
       </div>
     </div>
   </section>
@@ -649,8 +713,8 @@
   <!-- BLOG -->
   <section id="blog" aria-label="BioNova blog and articles">
     <div class="container">
-      <h2>Blog</h2>
-      <p class="blog-sub">Articles, updates, pilots, and behind-the-scenes engineering.</p>
+      <h2 data-i18n="blog.h2">Blog</h2>
+      <p class="blog-sub" data-i18n="blog.sub">Articles, updates, pilots, and behind-the-scenes engineering.</p>
       <div class="blog-grid" id="blogGrid">
         <article class="blog-card">
           <a class="blog-link" href="https://www.youtube.com/watch?v=2R72a9i5R1I" target="_blank">
@@ -709,7 +773,7 @@
         </article>
       </div>
       <div class="see-more-wrap">
-        <button type="button" class="btn see-more-btn" id="blogSeeMore" aria-expanded="false" aria-controls="blogGrid">See more articles</button>
+        <button type="button" class="btn see-more-btn" id="blogSeeMore" aria-expanded="false" aria-controls="blogGrid" data-i18n="blog.seemore">See more articles</button>
       </div>
     </div>
   </section>
@@ -719,29 +783,29 @@
     <div class="container">
       <h2><span id="teamTitle">Founders</span></h2>
       <div class="team-toggle" role="tablist" aria-label="People tabs">
-        <button class="toggle-btn is-active" id="tab-founders"  role="tab" aria-selected="true"  aria-controls="panel-founders">Founders</button>
-        <button class="toggle-btn"           id="tab-team"      role="tab" aria-selected="false" aria-controls="panel-team">Core Team</button>
-        <button class="toggle-btn"           id="tab-advisors"  role="tab" aria-selected="false" aria-controls="panel-advisors">Advisors</button>
+        <button class="toggle-btn is-active" id="tab-founders"  role="tab" aria-selected="true"  aria-controls="panel-founders" data-i18n="team.founders">Founders</button>
+        <button class="toggle-btn"           id="tab-team"      role="tab" aria-selected="false" aria-controls="panel-team"      data-i18n="team.core">Core Team</button>
+        <button class="toggle-btn"           id="tab-advisors"  role="tab" aria-selected="false" aria-controls="panel-advisors"  data-i18n="team.advisors">Advisors</button>
       </div>
       <div class="people-panels">
         <div class="panel show" id="panel-founders" role="tabpanel" aria-labelledby="tab-founders">
           <div class="founders-container">
-            <div class="founder"><img src="Images/CEO-Image2.jpeg" alt="Nikoloz Gongliashvili"/><h3>Nikoloz Gongliashvili</h3><p>CEO</p><div class="founder-social"><a href="https://www.linkedin.com/in/nikoloz-gongliashvili/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
-            <div class="founder"><img src="Images/CTO-Image.jpeg" alt="Nikoloz Chikhladze"/><h3>Nikoloz Chikhladze</h3><p>CTO</p><div class="founder-social"><a href="https://www.linkedin.com/in/nikoloz-chikhladze-901181271/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/CEO-Image2.jpeg" alt="Nikoloz Gongliashvili"/><h3 data-i18n="team.p1.name">Nikoloz Gongliashvili</h3><p data-i18n="team.p1.role">CEO</p><div class="founder-social"><a href="https://www.linkedin.com/in/nikoloz-gongliashvili/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/CTO-Image.jpeg" alt="Nikoloz Chikhladze"/><h3 data-i18n="team.p2.name">Nikoloz Chikhladze</h3><p data-i18n="team.p2.role">CTO</p><div class="founder-social"><a href="https://www.linkedin.com/in/nikoloz-chikhladze-901181271/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
           </div>
         </div>
         <div class="panel" id="panel-team" role="tabpanel" aria-labelledby="tab-team" hidden>
           <div class="founders-container">
-            <div class="founder"><img src="Images/CFO - Image.jpg" alt="Mariam Beltadze"/><h3>Mariam Beltadze</h3><p>CFO</p><div class="founder-social"><a href="https://www.linkedin.com/in/mariam-beltadze-538455353/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
-            <div class="founder"><img src="Images/CPO - Image-pica.png" alt="Abdul Rehman"/><h3>Abdul Rehman</h3><p>CPO</p><div class="founder-social"><a href="https://www.linkedin.com/in/engr-abdul-rehman-425235242/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
-            <div class="founder"><img src="Images/COO-Image.png" alt="Nino Nikoladze"/><h3>Nino Nikoladze</h3><p>COO</p><div class="founder-social"><a href="https://www.linkedin.com/in/nino-nikoladze-63b796293/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/CFO - Image.jpg" alt="Mariam Beltadze"/><h3 data-i18n="team.p3.name">Mariam Beltadze</h3><p data-i18n="team.p3.role">CFO</p><div class="founder-social"><a href="https://www.linkedin.com/in/mariam-beltadze-538455353/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/CPO - Image-pica.png" alt="Abdul Rehman"/><h3 data-i18n="team.p4.name">Abdul Rehman</h3><p data-i18n="team.p4.role">CPO</p><div class="founder-social"><a href="https://www.linkedin.com/in/engr-abdul-rehman-425235242/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/COO-Image.png" alt="Nino Nikoladze"/><h3 data-i18n="team.p5.name">Nino Nikoladze</h3><p data-i18n="team.p5.role">COO</p><div class="founder-social"><a href="https://www.linkedin.com/in/nino-nikoladze-63b796293/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
           </div>
         </div>
         <div class="panel" id="panel-advisors" role="tabpanel" aria-labelledby="tab-advisors" hidden>
           <div class="founders-container">
-            <div class="founder"><img src="Images/Advisor - Image.png" alt="Irakli Svanidze"/><h3>Irakli Svanidze</h3><p>Startup Mentor | Head of Innovation</p><div class="founder-social"><a href="https://www.linkedin.com/in/irakli-svanidze-b3a34914a/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
-            <div class="founder"><img src="Images/Mentor_Cecily Kovatch.jpg" alt="Cecily Kovatch"/><h3>Cecily Kovatch</h3><p>NJEDA Managing Director | Harvard Business School MBA</p><div class="founder-social"><a href="https://www.linkedin.com/in/cecilykovatch/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
-            <div class="founder"><img src="Images/Thomas-Mentor.jpg" alt="Thomas Wittig"/><h3>Thomas Wittig</h3><p>CEO @ WITTIGONIA | Digital Growth, Data Insights, Strategy & Optimization</p><div class="founder-social"><a href="https://www.linkedin.com/in/thomaswittig/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/Advisor - Image.png" alt="Irakli Svanidze"/><h3 data-i18n="team.p6.name">Irakli Svanidze</h3><p data-i18n="team.p6.role">Startup Mentor | Head of Innovation</p><div class="founder-social"><a href="https://www.linkedin.com/in/irakli-svanidze-b3a34914a/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/Mentor_Cecily Kovatch.jpg" alt="Cecily Kovatch"/><h3 data-i18n="team.p7.name">Cecily Kovatch</h3><p data-i18n="team.p7.role">NJEDA Managing Director | Harvard Business School MBA</p><div class="founder-social"><a href="https://www.linkedin.com/in/cecilykovatch/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
+            <div class="founder"><img src="Images/Thomas-Mentor.jpg" alt="Thomas Wittig"/><h3 data-i18n="team.p8.name">Thomas Wittig</h3><p data-i18n="team.p8.role">CEO @ WITTIGONIA | Digital Growth, Data Insights, Strategy & Optimization</p><div class="founder-social"><a href="https://www.linkedin.com/in/thomaswittig/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
           </div>
         </div>
       </div>
@@ -753,24 +817,24 @@
     <div class="container partners-header">
       <div class="partners-badge">
         <span class="partners-badge-dot"></span>
-        Trusted by leaders
+        <span data-i18n="partners.badge">Trusted by leaders</span>
       </div>
-      <h2>Our <span class="partners-title-accent">Partners</span></h2>
-      <p class="partner-sub">Organizations supporting BioNova's mission.</p>
+      <h2 data-i18n-html="partners.h2">Our <span class="partners-title-accent">Partners</span></h2>
+      <p class="partner-sub" data-i18n="partners.sub">Organizations supporting BioNova's mission.</p>
       <div class="partners-stats">
         <div class="partners-stat">
           <span class="partners-stat-num">14</span>
-          <span class="partners-stat-label">partner orgs</span>
+          <span class="partners-stat-label" data-i18n="partners.orgs">partner orgs</span>
         </div>
         <div class="partners-stat-divider"></div>
         <div class="partners-stat">
           <span class="partners-stat-num">4+</span>
-          <span class="partners-stat-label">countries</span>
+          <span class="partners-stat-label" data-i18n="partners.countries">countries</span>
         </div>
         <div class="partners-stat-divider"></div>
         <div class="partners-stat">
-          <span class="partners-stat-num">$50K+</span>
-          <span class="partners-stat-label">in grants secured</span>
+          <span class="partners-stat-num">$55K+</span>
+          <span class="partners-stat-label" data-i18n="partners.grants">in grants secured</span>
         </div>
       </div>
     </div>
@@ -815,8 +879,8 @@
   <!-- CONTACT -->
   <section id="contact">
     <div class="container">
-      <h2>Get More Out of Your Manure</h2>
-      <p>We'll help you turn organic waste into energy and new revenue.</p>
+      <h2 data-i18n="contact.h2">Get More Out of Your Manure</h2>
+      <p data-i18n="contact.p">We'll help you turn organic waste into energy and new revenue.</p>
       <div class="contact-details">
         <div class="contact-item"><i class="fas fa-phone-alt" aria-hidden="true"></i><div><p>+995 599 21 88 29</p></div></div>
         <div class="contact-item"><i class="fas fa-envelope" aria-hidden="true"></i><div><p>bionovainfo1@gmail.com</p></div></div>
@@ -831,11 +895,39 @@
   <!-- FOOTER -->
   <footer>
     <div class="container">
-      <p>&copy; 2025 BioNova. All Rights Reserved.</p>
+      <p data-i18n="footer">&copy; 2026 BioNova. All Rights Reserved.</p>
     </div>
   </footer>
 
+  <button id="backToTop" class="back-to-top" aria-label="Back to top">
+    <i class="fas fa-chevron-up" aria-hidden="true"></i>
+  </button>
+
+  <!-- Language switcher — fixed floating buttons -->
+  <div class="lang-switcher" role="group" aria-label="Language selector">
+    <button class="lang-btn" data-lang="ka" aria-label="Georgian-ზე გადართვა">
+      <img src="Images/GEO_Flag_Final.webp" alt="ქართული"/>
+    </button>
+    <button class="lang-btn lang-active" data-lang="en" aria-label="Switch to English">
+      <img src="Images/UK_Flag.webp" alt="English"/>
+    </button>
+  </div>
+
+  <!-- Floating CTA -->
+  <div class="floating-cta" id="floatingCta">
+    <a href="#contact">
+      <i class="fa-solid fa-bolt"></i> Get a Quote
+    </a>
+  </div>
+
+  <script src="language.js" defer></script>
+  <script src="effects.js" defer></script>
   <script src="slider.js" defer></script>
+  <!-- Three.js (global builds — no module needed) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="digester-viewer.js" defer></script>
 
 </body>
 </html>

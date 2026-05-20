@@ -40,15 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isFounders) {
       panelFounders?.removeAttribute('hidden');
       requestAnimationFrame(() => panelFounders?.classList.add('show'));
-      if (teamTitle) teamTitle.textContent = 'Founders';
+      if (teamTitle) teamTitle.textContent = tabFounders?.textContent || 'Founders';
     } else if (isTeam) {
       panelTeam?.removeAttribute('hidden');
       requestAnimationFrame(() => panelTeam?.classList.add('show'));
-      if (teamTitle) teamTitle.textContent = 'Core Team';
+      if (teamTitle) teamTitle.textContent = tabTeam?.textContent || 'Core Team';
     } else if (isAdvisors) {
       panelAdvisors?.removeAttribute('hidden');
       requestAnimationFrame(() => panelAdvisors?.classList.add('show'));
-      if (teamTitle) teamTitle.textContent = 'Advisors';
+      if (teamTitle) teamTitle.textContent = tabAdvisors?.textContent || 'Advisors';
     }
   }
 
@@ -84,9 +84,18 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(step);
   }
 
-  animateValue(document.getElementById('kpi-gas'),  120);
-  animateValue(document.getElementById('kpi-elec'), 240);
-  animateValue(document.getElementById('kpi-fert'), 500);
+  const appSection = document.getElementById('app');
+  if (appSection) {
+    let kpiDone = false;
+    new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !kpiDone) {
+        kpiDone = true;
+        animateValue(document.getElementById('kpi-gas'),  120);
+        animateValue(document.getElementById('kpi-elec'), 240);
+        animateValue(document.getElementById('kpi-fert'), 500);
+      }
+    }, { threshold: 0.35 }).observe(appSection);
+  }
 
   /* ─────────────────────────────────────────────
      See more / show less (Achievements + Blog)
@@ -266,7 +275,9 @@ document.addEventListener('DOMContentLoaded', () => {
     },
   ];
 
-  const sym = { USD: 'USD', GEL: 'GEL', EUR: 'EUR' };
+  const sym   = { USD: 'USD', GEL: 'GEL', EUR: 'EUR' };
+  // Approximate rates relative to USD — used to convert tariff & prices on currency switch
+  const rates = { USD: 1, GEL: 2.75, EUR: 0.92 };
 
   let state = {
     animal: 'cow', model: 'buy', herd: 100,
@@ -308,8 +319,14 @@ document.addEventListener('DOMContentLoaded', () => {
     recalc();
   });
   currencyEl.addEventListener('change', () => {
+    const prevRate = rates[state.currency];
+    const nextRate = rates[currencyEl.value];
+    // Convert the tariff from the old currency to the new one
+    const converted = parseFloat(((state.tariff / prevRate) * nextRate).toFixed(4));
     state.currency = currencyEl.value;
-    saveCur.textContent = ' ' + sym[state.currency];
+    state.tariff   = converted;
+    tariffEl.value = converted;
+    saveCur.textContent  = ' ' + sym[state.currency];
     capexCur.textContent = ' ' + sym[state.currency];
     recalc();
   });
@@ -340,10 +357,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const savingsDay = kwh * state.tariff;
     const d          = recommendDigester(state.herd);
 
-    // Upfront cost calculation
+    // Upfront cost calculation — prices stored in USD, convert to selected currency
+    const rate = rates[state.currency];
     let upfront = null;
     if (d.price !== null) {
-      upfront = state.model === 'partner' ? d.price * 0.5 : d.price;
+      upfront = (state.model === 'partner' ? d.price * 0.5 : d.price) * rate;
     }
     const annual  = savingsDay * 365;
     const payback = (upfront !== null && annual > 0) ? upfront / annual : Infinity;
@@ -654,3 +672,223 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => { resize(); spawnAll(90); });
 
 })(); // end heroParticles
+
+
+/* ══════════════════════════════════════════════════
+   BACK-TO-TOP BUTTON
+══════════════════════════════════════════════════ */
+(() => {
+  const btn = document.getElementById('backToTop');
+  if (!btn) return;
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 420);
+  }, { passive: true });
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+
+
+/* ══════════════════════════════════════════════════
+   SCROLL SPY — highlight active nav link
+══════════════════════════════════════════════════ */
+(() => {
+  const navLinks = Array.from(document.querySelectorAll('nav a[href^="#"]'));
+  const sections = navLinks
+    .map(a => document.getElementById(a.getAttribute('href').slice(1)))
+    .filter(Boolean);
+
+  if (!sections.length) return;
+
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('nav-active'));
+        const link = navLinks.find(a => a.getAttribute('href') === '#' + entry.target.id);
+        if (link) link.classList.add('nav-active');
+      }
+    });
+  }, { rootMargin: '-15% 0px -75% 0px', threshold: 0 });
+
+  sections.forEach(s => spy.observe(s));
+})();
+
+
+/* ══════════════════════════════════════════════════
+   TYPING ANIMATION — hero slogan cycles 4 phrases
+══════════════════════════════════════════════════ */
+(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const el = document.querySelector('.hero-sdgs .slogan');
+  if (!el) return;
+
+  const PHRASE_SETS = window.BIONOVA_PHRASES || {
+    en: [
+      'Farm-ready biodigesters with real-time control.',
+      'Turn waste into clean energy and revenue.',
+      'Up to 3× cheaper than alternatives.',
+      'IoT monitoring from anywhere, anytime.',
+    ],
+    ka: [
+      'ფერმისთვის მზა ბიოდიჟესტერები — რეალურ დროში კონტროლით.',
+      'ნარჩენებიდან სუფთა ენერგია და შემოსავალი.',
+      'კონკურენტებზე 3-ჯერ უფრო ხელმისაწვდომი.',
+      'IoT მონიტორინგი ნებისმიერი ადგილიდან.',
+    ],
+  };
+
+  const TYPE_SPEED   = 48;
+  const DEL_SPEED    = 24;
+  const PAUSE_AFTER  = 2400;
+  const PAUSE_BEFORE = 360;
+
+  let currentLang = localStorage.getItem('bionova-lang') || 'en';
+  let phrases  = PHRASE_SETS[currentLang] || PHRASE_SETS.en;
+  let phraseIdx = 0;
+  let charIdx   = phrases[0].length;
+  let deleting  = false;
+  let gen       = 0; // incremented on every reset; stale timers self-discard
+
+  el.textContent = phrases[0];
+
+  function schedule(g) {
+    setTimeout(() => tick(g), deleting ? DEL_SPEED : TYPE_SPEED);
+  }
+
+  function pause(g) {
+    setTimeout(() => {
+      if (g !== gen) return;
+      deleting = true;
+      schedule(g);
+    }, PAUSE_AFTER);
+  }
+
+  function tick(g) {
+    if (g !== gen) return; // stale — a reset happened, discard
+    const phrase = phrases[phraseIdx];
+    if (!deleting) {
+      charIdx++;
+      el.textContent = phrase.slice(0, charIdx);
+      if (charIdx === phrase.length) { pause(g); return; }
+    } else {
+      charIdx--;
+      el.textContent = phrase.slice(0, charIdx);
+      if (charIdx === 0) {
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        deleting  = false;
+        setTimeout(() => { if (g === gen) schedule(g); }, PAUSE_BEFORE);
+        return;
+      }
+    }
+    schedule(g);
+  }
+
+  // On language switch: bump gen so every queued timer self-discards, then restart cleanly
+  document.addEventListener('langchange', e => {
+    currentLang = e.detail.lang;
+    phrases   = PHRASE_SETS[currentLang] || PHRASE_SETS.en;
+    phraseIdx = 0;
+    charIdx   = 0;
+    deleting  = false;
+    el.textContent = '';
+    gen++;
+    schedule(gen);
+  });
+
+  // Kick off first cycle
+  pause(gen);
+})();
+
+
+/* ══════════════════════════════════════════════════
+   CARBON CREDITS — "Buy now" scrolls to contact
+══════════════════════════════════════════════════ */
+(() => {
+  const contact = document.getElementById('contact');
+  document.querySelectorAll('.carbon-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      contact?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+})();
+
+
+/* ══════════════════════════════════════════════════
+   SCROLL REVEAL — fade-up cards and sections
+══════════════════════════════════════════════════ */
+(() => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const selectors = [
+    '#about .about-text',
+    '#about .about-image',
+    '#why .value-card',
+    '#app .app-text',
+    '#app .app-image',
+    '#setup .step',
+    '#how-it-works .hiw-step',
+    '#pricing .pricing-column',
+    '#carbon-credits .carbon-card',
+    '#founders .founder',
+    '#contact .contact-item',
+  ];
+
+  // Group elements by parent so siblings stagger
+  const byParent = new Map();
+  selectors.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => {
+      const p = el.parentElement;
+      if (!byParent.has(p)) byParent.set(p, []);
+      byParent.get(p).push(el);
+    });
+  });
+
+  byParent.forEach(group => {
+    group.forEach((el, idx) => {
+      el.classList.add('reveal');
+      if (idx > 0) el.style.transitionDelay = `${idx * 0.11}s`;
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
+
+
+/* Digester 3D viewer is handled by digester-viewer.js (ES module) */
+
+/* ══════════════════════════════════════════════════
+   SDG TOOLTIP — screen-space so orbit rotation can't affect it
+══════════════════════════════════════════════════ */
+(() => {
+  const tip = document.createElement('div');
+  tip.className = 'sdg-screen-tip';
+  document.body.appendChild(tip);
+
+  function place(node) {
+    const r = node.getBoundingClientRect();
+    tip.style.left = (r.left + r.width  / 2) + 'px';
+    tip.style.top  = (r.bottom + 10) + 'px';
+  }
+
+  document.querySelectorAll('.sdg-node').forEach(node => {
+    node.addEventListener('mouseenter', () => {
+      const label = node.dataset.sdg;
+      if (!label) return;
+      tip.textContent = label;
+      place(node);
+      tip.classList.add('visible');
+    });
+    node.addEventListener('mousemove', () => place(node));
+    node.addEventListener('mouseleave', () => tip.classList.remove('visible'));
+  });
+})();
