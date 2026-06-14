@@ -204,7 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
 ══════════════════════════════════════════════════ */
 (() => {
   const animalBtns = document.querySelectorAll('.segmented [data-animal]');
-  const modelBtns  = document.querySelectorAll('.segmented [data-model]');
   const herdEl     = document.getElementById('herd');
   const herdOut    = document.getElementById('herdOut');
   const tariffEl   = document.getElementById('tariff');
@@ -249,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       name:       '30-ton',
       label:      '30-ton digester',
-      price:      12500,
+      price:      6250,    // production price (no markup — revenue share covers the rest)
       herdMax:    250,
       comingSoon: false,
       future:     false,
@@ -258,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       name:       '50-ton',
       label:      '50-ton digester',
-      price:      17500,   // estimated
+      price:      8750,    // estimated production price
       herdMax:    450,
       comingSoon: true,
       future:     false,
@@ -280,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const rates = { USD: 1, GEL: 2.75, EUR: 0.92 };
 
   let state = {
-    animal: 'cow', model: 'buy', herd: 100,
+    animal: 'cow', herd: 100,
     currency: 'USD', tariff: 0.20,
     manure: 25, yield: 0.04, kwhPerM3: 2.0, fertPerKg: 0.8,
   };
@@ -296,15 +295,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const y = document.getElementById('yield');
       if (m) m.value = state.manure;
       if (y) y.value = state.yield;
-      recalc();
-    });
-  });
-
-  modelBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      modelBtns.forEach(b => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      state.model = btn.dataset.model;
       recalc();
     });
   });
@@ -357,11 +347,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const savingsDay = kwh * state.tariff;
     const d          = recommendDigester(state.herd);
 
-    // Upfront cost calculation — prices stored in USD, convert to selected currency
+    // Upfront cost calculation — production price in USD, converted to selected currency
     const rate = rates[state.currency];
     let upfront = null;
     if (d.price !== null) {
-      upfront = (state.model === 'partner' ? d.price * 0.5 : d.price) * rate;
+      upfront = d.price * rate;
     }
     const annual  = savingsDay * 365;
     const payback = (upfront !== null && annual > 0) ? upfront / annual : Infinity;

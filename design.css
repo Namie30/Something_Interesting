@@ -1219,16 +1219,7 @@ nav ul li a:hover { color:#28a745; }
 #pricing { background:#fff; padding:80px 0; }
 #pricing h2 { font-size:2.4rem; color:#28a745; text-align:center; margin-bottom:8px; }
 .pricing-sub { text-align:center; color:#475569; margin-bottom:24px; }
-.pricing-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; align-items:start; }
-.pricing-column { background:#f9fcfa; border-radius:18px; box-shadow:0 6px 20px rgba(0,0,0,.06); padding:20px; }
-.pricing-header { border-bottom:1px dashed #cce9d6; padding-bottom:12px; margin-bottom:14px; }
-.pricing-header h3 { font-size:1.6rem; color:#1f2937; }
-.pricing-header p { color:#475569; margin-top:6px; }
-.pricing-header.partner {
-  background:linear-gradient(90deg, #fef2f2, #fff);
-  border-radius:14px; padding:14px; border:1px solid #fecaca;
-}
-.plan-cards { display:grid; grid-template-columns:1fr; gap:14px; }
+.pricing-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:24px; align-items:start; max-width: 920px; margin: 0 auto; }
 .plan {
   background:#fff; border-radius:16px; padding:18px; box-shadow:0 10px 24px rgba(0,0,0,.06);
   position:relative; overflow:hidden; transition:transform .2s, box-shadow .2s;
@@ -1240,22 +1231,51 @@ nav ul li a:hover { color:#28a745; }
 .pill-muted { background:#f1f5f9; color:#64748b; }
 .price-line { display:flex; align-items:baseline; gap:10px; margin:8px 0 12px; flex-wrap: wrap; }
 .price { font-size:1.8rem; font-weight:800; color:#0f7a2a; }
-.price-old { text-decoration:line-through; color:#9ca3af; font-weight:700; }
-.price-now { font-size:1.8rem; font-weight:900; color:#b91c1c; }
 .plan-list { list-style:none; color:#475569; margin:8px 0 14px; }
 .plan-list li { margin:8px 0; display:flex; align-items:center; gap:8px; }
 .plan-list i { color:#28a745; }
 .plan-btn { width:100%; text-align:center; }
-.partner-plan { border:1px solid #fecaca; }
-.popular { box-shadow:0 16px 34px rgba(185,28,28,.18); }
-.discount-ribbon {
-  position: absolute; top: 12px; right: 12px;
-  background: #ef4444; color: #fff; padding: 6px 10px;
-  font-weight: 700; font-size: 0.85rem;
-  box-shadow: 0 3px 8px rgba(239,68,68,.25);
-  z-index: 10; border-radius: 999px;
+.partner-plan { border:1px solid #bbf7d0; }
+.popular { box-shadow:0 16px 34px rgba(15,122,42,.18); }
+
+/* Revenue-sharing banner above the plan cards */
+.pricing-banner {
+  display: flex; align-items: flex-start; gap: 18px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 60%, #ffffff 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin: 10px auto 28px;
+  max-width: 920px;
+  box-shadow: 0 6px 18px rgba(15,122,42,.06);
 }
-.fineprint { color:#6b7280; font-size:.85rem; margin-top:10px; }
+.pricing-banner-icon {
+  flex-shrink: 0;
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  background: #28a745; color: #fff;
+  font-size: 1.2rem;
+  box-shadow: 0 6px 14px rgba(40,167,69,.28);
+}
+.pricing-banner-text h3 {
+  font-size: 1.15rem; color: #0f7a2a; margin: 0 0 4px;
+  letter-spacing: 0.01em;
+}
+.pricing-banner-text p {
+  color: #1f3a2a; font-size: 0.96rem; line-height: 1.55; margin: 0;
+}
+
+/* "production price" pill next to each headline price */
+.price-tag {
+  font-size: 0.72rem; font-weight: 700;
+  color: #0f7a2a; background: #ecfdf5;
+  padding: 4px 10px; border-radius: 999px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border: 1px solid #bbf7d0;
+  align-self: center;
+}
+.fineprint { color:#6b7280; font-size:.85rem; margin: 18px auto 0; max-width: 920px; text-align: center; }
 .plan-coming-soon {
   background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%);
   border: 2px dashed #86efac !important;
@@ -1279,7 +1299,6 @@ nav ul li a:hover { color:#28a745; }
 .plan-list-muted li { color: #94a3b8; }
 .plan-list-muted i { color: #86efac; }
 .price-tbd { color: #64748b !important; }
-.price-tbd-old { color: #cbd5e1 !important; }
 .price-est-label {
   font-size: 0.75rem; font-weight: 600;
   color: #94a3b8; align-self: center;
@@ -1319,8 +1338,8 @@ nav ul li a:hover { color:#28a745; }
 #calculator h2 { font-size:2.4rem; color:#28a745; text-align:center; margin-bottom:10px; }
 .calc-desc { text-align:center; color:#475569; margin-bottom:18px; }
 .simple-grid {
-  display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
-  max-width:1100px; margin:0 auto 16px;
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+  max-width:980px; margin:0 auto 16px;
 }
 .simple-card { background:#f8fafb; border:1px solid #e6eef0; padding:14px; border-radius:14px; }
 .lbl { font-weight:800; display:block; margin-bottom:8px; color:#1f2937; }
@@ -1826,7 +1845,8 @@ button.btn { cursor: pointer; }
   .segmented { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
   /* Pricing: less padding on small cards */
-  .pricing-column { padding: 14px; }
+  .pricing-banner { flex-direction: column; gap: 10px; padding: 16px; }
+  .pricing-banner-icon { width: 40px; height: 40px; font-size: 1rem; }
   .plan { padding: 14px; }
 
   /* Section headings on very small screens */
