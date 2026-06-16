@@ -23,12 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var extra = [
       'section:not(#hero) h2',
       '.blog-card',
-      '.ach-card',
       '.about-stat',
       '.kpi',
       '.about-tagline',
       '.chip',
-      '.result2',
+      '.calc-hero-card',
+      '.substat',
       '.partners-stat',
       '.partners-badge'
     ].join(',');
