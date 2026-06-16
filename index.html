@@ -474,8 +474,8 @@
   <!-- ═══ SAVINGS CALCULATOR ═══ -->
   <section id="calculator" aria-label="Savings estimator">
     <div class="container">
-      <h2 data-i18n="calc.h2">Estimate Your Savings</h2>
-      <p class="calc-desc" data-i18n-html="calc.desc">Pick your herd size and tariff. We'll do the rest. (<a href="#" id="toggleAdvancedLink">Advanced</a> for engineers.)</p>
+      <h2 data-i18n="calc.h2">Estimate Your Returns</h2>
+      <p class="calc-desc" data-i18n-html="calc.desc">Pick your herd size and tariff. We'll show all three of your revenue streams. (<a href="#" id="toggleAdvancedLink">Advanced</a> for engineers.)</p>
 
       <div class="simple-grid" id="simpleGrid">
         <div class="simple-card">
@@ -498,33 +498,105 @@
           <label for="tariff" class="lbl" data-i18n="calc.lbl.tariff">Electricity price</label>
           <div class="inline">
             <select id="currency">
-              <option value="USD" selected>USD</option>
-              <option value="GEL">GEL</option>
+              <option value="GEL" selected>GEL</option>
+              <option value="USD">USD</option>
               <option value="EUR">EUR</option>
             </select>
-            <input type="number" id="tariff" min="0" step="0.01" value="0.20" />
+            <input type="number" id="tariff" min="0" step="0.01" value="0.28" />
             <span class="unit" data-i18n="calc.unit.kwh">per kWh</span>
           </div>
           <small class="hint" data-i18n="calc.hint.tariff">Use your grid tariff or PPA price.</small>
         </div>
       </div>
 
-      <div class="calc-results2" id="calcResults2">
-        <div class="result2"><h4 data-i18n="calc.res.biogas">Daily Biogas</h4><div class="big"><span id="biogasOut">0</span><span class="u"> m³</span></div></div>
-        <div class="result2"><h4 data-i18n="calc.res.elec">Daily Electricity</h4><div class="big"><span id="kwhOut">0</span><span class="u"> kWh</span></div></div>
-        <div class="result2"><h4 data-i18n="calc.res.save">Daily Savings</h4><div class="big"><span id="saveOut">0</span><span class="u" id="saveCur"> USD</span></div></div>
-        <div class="result2"><h4 data-i18n="calc.res.reco">Recommended Digester</h4><div class="big"><span id="recoModel">–</span></div><small class="hint" id="recoHint" data-i18n="calc.reco.hint">We size this from your herd.</small></div>
-        <div class="result2"><h4 data-i18n="calc.res.capex">Upfront Cost</h4><div class="big"><span id="capexOut">–</span><span class="u" id="capexCur"> USD</span></div><small class="hint" data-i18n="calc.capex.hint">Production price for the recommended digester.</small></div>
-        <div class="result2"><h4 data-i18n="calc.res.payback">Payback (simple)</h4><div class="big"><span id="paybackOut">–</span><span class="u"> yrs</span></div><small class="hint" data-i18n="calc.payback.hint">Based on energy savings only.</small></div>
+      <div class="calc-results" id="calcResults2">
+
+        <!-- Hero income numbers -->
+        <div class="calc-hero">
+          <div class="calc-hero-card calc-hero-main">
+            <h4 data-i18n="calc.hero.income">Your estimated yearly income</h4>
+            <div class="calc-hero-num"><span class="cur" id="totalCur">USD</span> <span id="totalOut">0</span></div>
+            <small class="calc-hero-sub" data-i18n="calc.hero.income.sub">Electricity you keep + your fertilizer & carbon share.</small>
+          </div>
+          <div class="calc-hero-card">
+            <h4 data-i18n="calc.hero.payback">Pays for itself in</h4>
+            <div class="calc-hero-num small"><span id="paybackOut">–</span></div>
+            <small class="calc-hero-sub" data-i18n="calc.hero.payback.sub">Combined income vs. upfront price.</small>
+          </div>
+          <div class="calc-hero-card">
+            <h4 data-i18n="calc.hero.lifetime">15-year net value</h4>
+            <div class="calc-hero-num small"><span class="cur" id="lifeCur">USD</span> <span id="lifeOut">0</span></div>
+            <small class="calc-hero-sub" data-i18n="calc.hero.lifetime.sub">After paying back the unit.</small>
+          </div>
+        </div>
+
+        <!-- Revenue streams: donut + animated bars -->
+        <div class="calc-streams">
+          <div class="calc-donut-wrap">
+            <div class="calc-donut" id="calcDonut">
+              <div class="calc-donut-center">
+                <span id="donutMain" class="calc-donut-main">0%</span>
+                <span class="calc-donut-sub" data-i18n="calc.donut.sub">from energy</span>
+              </div>
+            </div>
+            <span class="calc-streams-title" data-i18n="calc.streams.title">3 revenue streams</span>
+          </div>
+          <ul class="calc-stream-list">
+            <li class="stream stream-elec">
+              <div class="stream-top">
+                <span class="stream-dot"></span>
+                <span class="stream-name" data-i18n="calc.stream.elec">Electricity</span>
+                <span class="stream-tag stream-tag-keep" data-i18n="calc.stream.keep">you keep 100%</span>
+                <span class="stream-val"><span id="elecOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
+              </div>
+              <div class="stream-bar"><i id="elecBar"></i></div>
+            </li>
+            <li class="stream stream-fert">
+              <div class="stream-top">
+                <span class="stream-dot"></span>
+                <span class="stream-name" data-i18n="calc.stream.fert">Bio-fertilizer</span>
+                <span class="stream-tag stream-tag-share" data-i18n="calc.stream.share">your share</span>
+                <span class="stream-val"><span id="fertOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
+              </div>
+              <div class="stream-bar"><i id="fertBar"></i></div>
+            </li>
+            <li class="stream stream-carbon">
+              <div class="stream-top">
+                <span class="stream-dot"></span>
+                <span class="stream-name" data-i18n="calc.stream.carbon">Carbon credits</span>
+                <span class="stream-tag stream-tag-soon" data-i18n="calc.stream.future">future bonus</span>
+                <span class="stream-val"><span id="carbonOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
+              </div>
+              <div class="stream-bar"><i id="carbonBar"></i></div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Secondary stat strip -->
+        <div class="calc-substrip">
+          <div class="substat"><span class="substat-num"><span id="biogasOut">0</span> <span class="substat-u">m³</span></span><span class="substat-lbl" data-i18n="calc.res.biogas">Daily biogas</span></div>
+          <div class="substat"><span class="substat-num"><span id="kwhOut">0</span> <span class="substat-u">kWh</span></span><span class="substat-lbl" data-i18n="calc.res.elec">Daily electricity</span></div>
+          <div class="substat"><span class="substat-num"><span id="saveOut">0</span> <span class="substat-u" id="saveCur">USD</span></span><span class="substat-lbl" data-i18n="calc.res.save">Daily savings</span></div>
+          <div class="substat substat-reco"><span class="substat-num" id="recoModel">–</span><span class="substat-lbl" id="recoHint" data-i18n="calc.reco.hint">Sized from your herd.</span></div>
+          <div class="substat"><span class="substat-num"><span id="capexOut">–</span> <span class="substat-u" id="capexCur">USD</span></span><span class="substat-lbl" data-i18n="calc.res.capex">Upfront (production price)</span></div>
+        </div>
+
+        <div class="calc-cta-row">
+          <button type="button" class="btn calc-copy-btn" id="calcCopyBtn"><i class="fa-solid fa-copy"></i> <span id="calcCopyLbl" data-i18n="calc.copy">Copy my estimate</span></button>
+          <a href="#contact" class="btn btn-outline" data-i18n="calc.cta">Talk to us</a>
+        </div>
       </div>
 
       <details id="advancedBox" class="advanced">
         <summary data-i18n="calc.adv.summary">Advanced assumptions</summary>
         <form class="adv-grid" id="advForm">
-          <div class="calc-field"><label for="manure" data-i18n="calc.adv.m.lbl">Manure per animal (kg/day)</label><input type="number" id="manure" min="0" step="0.1" value="25" /><small data-i18n="calc.adv.m.small">Typical cows: 20–30</small></div>
-          <div class="calc-field"><label for="yield" data-i18n="calc.adv.y.lbl">Biogas yield (m³ per kg manure)</label><input type="number" id="yield" min="0" step="0.001" value="0.04" /><small data-i18n="calc.adv.y.small">Rule of thumb: 0.04</small></div>
+          <div class="calc-field"><label for="manure" data-i18n="calc.adv.m.lbl">Manure per animal (kg/day)</label><input type="number" id="manure" min="0" step="0.1" value="20" /><small data-i18n="calc.adv.m.small">Collectable (barn-captured): ~15–25</small></div>
+          <div class="calc-field"><label for="yield" data-i18n="calc.adv.y.lbl">Biogas yield (m³ per kg manure)</label><input type="number" id="yield" min="0" step="0.001" value="0.03" /><small data-i18n="calc.adv.y.small">Cattle slurry: ~0.02–0.04</small></div>
           <div class="calc-field"><label for="kwhPerM3" data-i18n="calc.adv.k.lbl">Electricity (kWh per m³ biogas)</label><input type="number" id="kwhPerM3" min="0" step="0.1" value="2.0" /><small data-i18n="calc.adv.k.small">Engine + conversion efficiency</small></div>
-          <div class="calc-field"><label for="fertilizerPerKg" data-i18n="calc.adv.f.lbl">Liquid fertilizer (L per kg manure)</label><input type="number" id="fertilizerPerKg" min="0" step="0.1" value="0.8" /><small data-i18n="calc.adv.f.small">Rough average; varies by solids.</small></div>
+          <div class="calc-field"><label for="fertYield" data-i18n="calc.adv.fy.lbl">Sellable fertilizer (kg per kg manure)</label><input type="number" id="fertYield" min="0" step="0.01" value="0.04" /><small data-i18n="calc.adv.fy.small">Concentrated product fraction; varies by solids.</small></div>
+          <div class="calc-field"><label for="fertPrice" data-i18n="calc.adv.fp.lbl">Fertilizer price (per kg)</label><input type="number" id="fertPrice" min="0" step="0.01" value="0.75" /><small data-i18n="calc.adv.fp.small">Target sell price: 0.5–1 GEL/kg.</small></div>
+          <div class="calc-field"><label for="fertShare" data-i18n="calc.adv.fs.lbl">Your fertilizer share (%)</label><input type="number" id="fertShare" min="0" max="100" step="1" value="30" /><small data-i18n="calc.adv.fs.small">We collect &amp; sell; you earn a share.</small></div>
+          <div class="calc-field"><label for="carbonPrice" data-i18n="calc.adv.cp.lbl">Carbon credit price (per tonne CO₂)</label><input type="number" id="carbonPrice" min="0" step="1" value="33" /><small data-i18n="calc.adv.cp.small">Voluntary market estimate. Future plan.</small></div>
         </form>
       </details>
       <p class="calc-note" data-i18n="calc.note">*Quick estimate using typical assumptions. Real output depends on diet, temperature, retention time, and engine efficiency.</p>
@@ -593,58 +665,75 @@
     <div class="container">
       <h2 data-i18n-html="ach.h2">Our Wins &amp; Awards</h2>
       <p class="ach-sub" data-i18n="ach.sub">Click any award to see the story.</p>
+
+      <!-- Impact stat bar (numbers count up on scroll) -->
+      <div class="ach-stats" id="achStats">
+        <div class="ach-stat"><span class="ach-stat-num" data-count="13">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.awards">Awards &amp; recognitions</span></div>
+        <div class="ach-stat"><span class="ach-stat-num" data-count="7">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.countries">Countries</span></div>
+        <div class="ach-stat"><span class="ach-stat-num" data-prefix="$" data-count="55" data-suffix="K+">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.secured">Secured in grants</span></div>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="ach-filters" role="tablist" aria-label="Filter awards">
+        <button type="button" class="ach-chip is-active" data-cat="all"><span data-i18n="ach.chip.all">All</span><span class="ach-chip-n" aria-hidden="true"></span></button>
+        <button type="button" class="ach-chip" data-cat="win"><span data-i18n="ach.chip.win">Wins</span><span class="ach-chip-n" aria-hidden="true"></span></button>
+        <button type="button" class="ach-chip" data-cat="grant"><span data-i18n="ach.chip.grant">Grants</span><span class="ach-chip-n" aria-hidden="true"></span></button>
+        <button type="button" class="ach-chip" data-cat="accel"><span data-i18n="ach.chip.accel">Programs</span><span class="ach-chip-n" aria-hidden="true"></span></button>
+        <button type="button" class="ach-chip" data-cat="global"><span data-i18n="ach.chip.global">Global</span><span class="ach-chip-n" aria-hidden="true"></span></button>
+      </div>
+
       <div class="achievement-grid" id="achievementsGrid" aria-label="Awards and achievements">
-        <a class="ach-card" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/cunicorn-tibisi/480650" data-img="Images/CUnicorn-3.jpg" target="_blank" data-title="CUnicorn Batch 3" data-text="BioNova emerged as the winner of CUnicorn Batch 3 at Caucasus University — fueling our drive to expand sustainable AgTech.">
+        <a class="ach-card ach-feat" data-cat="global" data-flag="🌍" data-year="2026" target="_blank" data-img="Images/YES_BioNova.jpg" data-title="Young Entrepreneur Summit 2026 (YES)" data-text="Global winners out of 100+ startups from 29+ countries.">
+          <div class="ach-media"><img src="Images/YES_BioNova.jpg" alt="Young Entrepreneur Summit 2026"/></div>
+          <div class="ach-body"><span class="ach-top-tag">🏆 Top Win</span><h3>Young Entrepreneur Summit (YES)</h3><p>Crowned global winners out of 100+ startups from 29+ countries.</p></div>
+        </a>
+        <a class="ach-card ach-feat" data-cat="global" data-flag="🇬🇪" data-year="2025" target="_blank" data-img="Images/BioNova - Greece4.jpg" data-title="EUROPEN Single Market Expansion Award" data-text="First Georgian startup to win — invited to GEN-E 2025 summit in Greece.">
+          <div class="ach-media"><img src="Images/BioNova - Greece4.jpg" alt="EUROPEN Single Market Expansion Award"/></div>
+          <div class="ach-body"><span class="ach-top-tag">🏆 Top Win</span><h3>EUROPEN Single Market Expansion</h3><p>First Georgian startup ever to win, invited to GEN-E 2025 in Greece.</p></div>
+        </a>
+        <a class="ach-card" data-cat="win" data-flag="🇬🇪" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/cunicorn-tibisi/480650" data-img="Images/CUnicorn-3.jpg" target="_blank" data-title="CUnicorn Batch 3" data-text="BioNova emerged as the winner of CUnicorn Batch 3 at Caucasus University — fueling our drive to expand sustainable AgTech.">
           <div class="ach-media"><img src="Images/CUnicorn-3.jpg" alt="CUnicorn Batch 3 award"/></div>
           <div class="ach-body"><h3>CUnicorn Batch 3</h3><p>Winner at Caucasus University.</p></div>
         </a>
-        <a class="ach-card" href="https://georgia.socialimpactaward.net/project/bionova/" data-img="Images/Social Impact 2024.jpg" target="_blank" data-title="Social Impact Award 2024" data-text="Recognized for sustainability and social innovation. Invitation to the Social Entrepreneurship Summit in Germany.">
+        <a class="ach-card" data-cat="win" data-flag="🇬🇪" data-year="2024" href="https://georgia.socialimpactaward.net/project/bionova/" data-img="Images/Social Impact 2024.jpg" target="_blank" data-title="Social Impact Award 2024" data-text="Recognized for sustainability and social innovation. Invitation to the Social Entrepreneurship Summit in Germany.">
           <div class="ach-media"><img src="Images/Social Impact 2024.jpg" alt="Social Impact Award 2024"/></div>
           <div class="ach-body"><h3>Social Impact Award 2024</h3><p>Recognized for sustainability.</p></div>
         </a>
-        <a class="ach-card" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/gita-s-sagranto/481009" target="_blank" data-img="Images/GITA 25K.jpg" data-title="GITA Regional Grant — 25K" data-text="Key non-dilutive funding helping us scale waste-to-energy technology.">
+        <a class="ach-card" data-cat="grant" data-flag="🇬🇪" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/gita-s-sagranto/481009" target="_blank" data-img="Images/GITA 25K.jpg" data-title="GITA Regional Grant — 25K" data-text="Key non-dilutive funding helping us scale waste-to-energy technology.">
           <div class="ach-media"><img src="Images/GITA 25K.jpg" alt="GITA 25K grant"/></div>
           <div class="ach-body"><h3>GITA Regional Grant — 25K</h3><p>Non-dilutive funding to scale.</p></div>
         </a>
-        <a class="ach-card" href="https://www.parp.gov.pl/component/content/article/87661:boot-camp-2-etapu-projektu-wsparcie-rozwoju-administracji-publicznej-i-przedsiebiorczosci-w-gruzji-realizowanego-przez-parp-wspolnie-z-ministerstwem-funduszy-i-polityki-regionalnej" data-img="Images/Poland.jpg" target="_blank" data-title="Poland AgriTech Acceleration" data-text="Top 3 AgriTech startup from Georgia — taking BioNova to an international stage.">
+        <a class="ach-card" data-cat="accel" data-flag="🇵🇱" href="https://www.parp.gov.pl/component/content/article/87661:boot-camp-2-etapu-projektu-wsparcie-rozwoju-administracji-publicznej-i-przedsiebiorczosci-w-gruzji-realizowanego-przez-parp-wspolnie-z-ministerstwem-funduszy-i-polityki-regionalnej" data-img="Images/Poland.jpg" target="_blank" data-title="Poland AgriTech Acceleration" data-text="Top 3 AgriTech startup from Georgia — taking BioNova to an international stage.">
           <div class="ach-media"><img src="Images/Poland.jpg" alt="Poland AgriTech Program"/></div>
           <div class="ach-body"><h3>Poland AgriTech Acceleration</h3><p>Top 3 AgriTech startup.</p></div>
         </a>
-        <a class="ach-card" target="_blank" data-img="Images/Future Agro Challange.jpg" data-title="Future Agro Challenge 2024" data-text="Agropreneurs of the Year — invited to the Agripreneur World Summit in Greece.">
+        <a class="ach-card" data-cat="win" data-flag="🇬🇪" data-year="2024" target="_blank" data-img="Images/Future Agro Challange.jpg" data-title="Future Agro Challenge 2024" data-text="Agropreneurs of the Year — invited to the Agripreneur World Summit in Greece.">
           <div class="ach-media"><img src="Images/Future Agro Challange.jpg" alt="Future Agro Challenge 2024"/></div>
           <div class="ach-body"><h3>Future Agro Challenge 2024</h3><p>Agropreneurs of the Year.</p></div>
         </a>
-        <a class="ach-card" target="_blank" data-img="Images/Seed Kaspi 7K.jpg" data-title="SEED Kaspi €7,000" data-text="Funding our first MVP and on-farm pilots with interested farmers and factories.">
+        <a class="ach-card" data-cat="grant accel" data-flag="🇬🇪" target="_blank" data-img="Images/Seed Kaspi 7K.jpg" data-title="SEED Kaspi €7,000" data-text="Funding our first MVP and on-farm pilots with interested farmers and factories.">
           <div class="ach-media"><img src="Images/Seed Kaspi 7K.jpg" alt="SEED Kaspi grant"/></div>
           <div class="ach-body"><h3>SEED Kaspi €7,000</h3><p>Funding our first MVP &amp; pilots.</p></div>
         </a>
-        <a class="ach-card" target="_blank" data-img="Images/Junior Achievement .jpg" data-title="Junior Achievement Acceleration X" data-text="€2,000 and strong connections with industry leaders.">
+        <a class="ach-card" data-cat="accel grant" data-flag="🇬🇪" target="_blank" data-img="Images/Junior Achievement .jpg" data-title="Junior Achievement Acceleration X" data-text="€2,000 and strong connections with industry leaders.">
           <div class="ach-media"><img src="Images/Junior Achievement .jpg" alt="Junior Achievement Acceleration X"/></div>
           <div class="ach-body"><h3>Junior Achievement Acceleration X</h3><p>€2,000 + strong connections.</p></div>
         </a>
-        <a class="ach-card" target="_blank" data-img="Images/BioNova - Greece4.jpg" data-title="EUROPEN Single Market Expansion Award" data-text="First Georgian startup to win — invited to GEN-E 2025 summit in Greece.">
-          <div class="ach-media"><img src="Images/BioNova - Greece4.jpg" alt="EUROPEN Single Market Expansion Award"/></div>
-          <div class="ach-body"><h3>EUROPEN Single Market Expansion award: 2025</h3><p>First Georgian startup to win.</p></div>
-        </a>
-        <a class="ach-card" target="_blank" data-img="Images/GIST_Image.jpeg" data-title="U.S. GIST Acceleration Program" data-text="Conducted 59+ customer discovery interviews">
+        <a class="ach-card" data-cat="accel" data-flag="🇺🇸" target="_blank" data-img="Images/GIST_Image.jpeg" data-title="U.S. GIST Acceleration Program" data-text="Conducted 59+ customer discovery interviews">
           <div class="ach-media"><img src="Images/GIST_Image.jpeg" alt="U.S. GIST Program"/></div>
           <div class="ach-body"><h3>U.S. GIST Acceleration Program</h3><p>Conducted 59+ customer discovery interviews</p></div>
         </a>
-        <a class="ach-card" href="https://ituseed.com/cohort-2025/" target="_blank" data-img="Images/ITU_Logo1.png" data-title="ITU SEEDs Portfolio Startup" data-text="Selected as a portfolio startup of ITU SEEDs | Turkey's leading accelerator">
+        <a class="ach-card" data-cat="accel" data-flag="🇹🇷" href="https://ituseed.com/cohort-2025/" target="_blank" data-img="Images/ITU_Logo1.png" data-title="ITU SEEDs Portfolio Startup" data-text="Selected as a portfolio startup of ITU SEEDs | Turkey's leading accelerator">
           <div class="ach-media"><img src="Images/ITU_Logo1.png" alt="ITU SEEDs"/></div>
           <div class="ach-body"><h3>ITU SEEDs Portfolio Startup</h3><p>Selected as a portfolio startup of ITU SEEDs | Turkey's leading accelerator</p></div>
         </a>
-        <a class="ach-card" href="https://www.zerocarbonacademy.com/cleantechawards" target="_blank" data-img="Images/ZCA_logo.png" data-title="ZCA Cleantech Awards 2025 (UK)" data-text="Nominated as Rising Star in cleantech innovation">
+        <a class="ach-card" data-cat="global" data-flag="🇬🇧" data-year="2025" href="https://www.zerocarbonacademy.com/cleantechawards" target="_blank" data-img="Images/ZCA_logo.png" data-title="ZCA Cleantech Awards 2025 (UK)" data-text="Nominated as Rising Star in cleantech innovation">
           <div class="ach-media"><img src="Images/ZCA_logo.png" alt="ZCA Cleantech Awards"/></div>
           <div class="ach-body"><h3>ZCA Cleantech Awards 2025 (UK)</h3><p>Nominated as Rising Star in cleantech innovation</p></div>
         </a>
-        <a class="ach-card" target="_blank" data-img="Images/YES_BioNova.jpg" data-title="Young Entrepreneur Summit 2026 (YES)" data-text="Global winners out of 100+ startups from 29+ countries.">
-          <div class="ach-media"><img src="Images/YES_BioNova.jpg" alt="Young Entrepreneur Summit 2026"/></div>
-          <div class="ach-body"><h3>Young Entrepreneur Summit 2026 (YES)</h3><p>Global winners out of 100+ startups from 29+ countries.</p></div>
-        </a>
-        <a class="ach-card" target="_blank" data-img="Images/SBC_BioNova.jpg" data-title="Startubootcamp Georgia - MVP Program" data-text="Selected among 650+ startups; secured ₾50,000 funding and mentorship to scale our MVP.">
+        <a class="ach-card" data-cat="accel grant" data-flag="🇬🇪" target="_blank" data-img="Images/SBC_BioNova.jpg" data-title="Startubootcamp Georgia - MVP Program" data-text="Selected among 650+ startups; secured ₾50,000 funding and mentorship to scale our MVP.">
           <div class="ach-media"><img src="Images/SBC_BioNova.jpg" alt="Startubootcamp Georgia"/></div>
-          <div class="ach-body"><h3>Startubootcamp Georgia - MVP Program</h3><p>Selected among 650+ startups; secured ₾50,000 funding and mentorship to scale our MVP.</p></div>
+          <div class="ach-body"><h3>Startubootcamp Georgia - MVP Program</h3><p>Selected among 650+ startups; ₾50,000 funding to scale.</p></div>
         </a>
       </div>
       <div class="see-more-wrap">

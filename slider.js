@@ -132,13 +132,157 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   setupSeeMore({
-    gridId: 'achievementsGrid', itemSelector: '.ach-card', buttonId: 'achSeeMore',
-    initialCount: 8, moreText: 'See more awards', lessText: 'Show less'
-  });
-  setupSeeMore({
     gridId: 'blogGrid', itemSelector: '.blog-card', buttonId: 'blogSeeMore',
     initialCount: 3, moreText: 'See more articles', lessText: 'Show less'
   });
+
+  /* ─────────────────────────────────────────────
+     Achievements — Trophy Wall
+     (category badges + filter chips + see-more +
+      animated impact stats + pointer tilt)
+  ───────────────────────────────────────────── */
+  (function setupAchievements() {
+    const grid = document.getElementById('achievementsGrid');
+    if (!grid) return;
+
+    const gridCards = Array.from(grid.querySelectorAll('.ach-card'));
+    const allCards  = Array.from(document.querySelectorAll('#achievements .ach-card'));
+    const chips     = Array.from(document.querySelectorAll('.ach-chip'));
+    const btn       = document.getElementById('achSeeMore');
+    const INITIAL   = 8;
+    let cat = 'all', expanded = false;
+
+    const lang = () => localStorage.getItem('bionova-lang') || document.documentElement.lang || 'en';
+    const dict = () => (window.bionovaI18n && window.bionovaI18n.T[lang()]) || {};
+    const tt   = (key, fb) => dict()[key] || fb;
+
+    const catMeta = {
+      win:    { emoji: '🥇', key: 'ach.cat.win',    fb: 'Win' },
+      grant:  { emoji: '💰', key: 'ach.cat.grant',  fb: 'Grant' },
+      accel:  { emoji: '🚀', key: 'ach.cat.accel',  fb: 'Program' },
+      global: { emoji: '🌍', key: 'ach.cat.global', fb: 'Global' },
+    };
+
+    // A card can belong to several categories, e.g. data-cat="accel grant".
+    const catsOf = (card) => (card.dataset.cat || '').split(/\s+/).filter(Boolean);
+
+    // Inject one category badge per category + a flag chip onto each card's media
+    // (grid cards only — feature cards carry their own "Top Win" ribbon).
+    gridCards.forEach(card => {
+      const media = card.querySelector('.ach-media');
+      if (!media) return;
+      // Featured cards carry their own "Top Win" tag — skip the category badges.
+      if (!card.classList.contains('ach-feat') && !media.querySelector('.ach-badges')) {
+        const wrap = document.createElement('span');
+        wrap.className = 'ach-badges';
+        catsOf(card).forEach(ct => {
+          const meta = catMeta[ct];
+          if (!meta) return;
+          const badge = document.createElement('span');
+          badge.className = 'ach-badge ach-badge-' + ct;
+          // Emoji kept in its own node so applyLang() only swaps the label span.
+          badge.innerHTML = '<i class="ach-badge-ico">' + meta.emoji + '</i> ' +
+                            '<span data-i18n="' + meta.key + '">' + tt(meta.key, meta.fb) + '</span>';
+          wrap.appendChild(badge);
+        });
+        if (wrap.children.length) media.appendChild(wrap);
+      }
+      if (card.dataset.flag && !media.querySelector('.ach-flag')) {
+        const flag = document.createElement('span');
+        flag.className = 'ach-flag';
+        flag.textContent = card.dataset.flag + (card.dataset.year ? ' ' + card.dataset.year : '');
+        media.appendChild(flag);
+      }
+    });
+
+    function pop(card) {
+      card.classList.remove('ach-pop');
+      void card.offsetWidth;          // restart animation
+      card.classList.add('ach-pop');
+      setTimeout(() => card.classList.remove('ach-pop'), 460);
+    }
+
+    function render() {
+      gridCards.forEach((card, idx) => {
+        const match = (cat === 'all') || catsOf(card).includes(cat);
+        const show  = match && (cat !== 'all' || expanded || idx < INITIAL);
+        const wasHidden = card.hidden;
+        card.hidden = !show;
+        if (show && wasHidden) pop(card);
+      });
+      if (btn) {
+        const showBtn = (cat === 'all' && gridCards.length > INITIAL);
+        btn.hidden = !showBtn;
+        if (showBtn) {
+          btn.textContent = expanded ? tt('ach.seeless', 'Show less') : tt('ach.seemore', 'See more awards');
+          btn.setAttribute('aria-expanded', String(expanded));
+        }
+      }
+    }
+
+    // Show how many awards sit behind each filter chip
+    chips.forEach(chip => {
+      const c = chip.dataset.cat;
+      const n = (c === 'all') ? gridCards.length : gridCards.filter(card => catsOf(card).includes(c)).length;
+      const nEl = chip.querySelector('.ach-chip-n');
+      if (nEl) nEl.textContent = n;
+    });
+
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        chips.forEach(c => { c.classList.remove('is-active'); c.setAttribute('aria-selected', 'false'); });
+        chip.classList.add('is-active');
+        chip.setAttribute('aria-selected', 'true');
+        cat = chip.dataset.cat;
+        expanded = false;
+        render();
+      });
+    });
+    btn?.addEventListener('click', () => { expanded = !expanded; render(); });
+    document.addEventListener('langchange', render);   // keep see-more label in sync
+    render();
+
+    // Animated impact stats — fire once when the bar scrolls into view
+    const stats = document.getElementById('achStats');
+    const counters = stats ? Array.from(stats.querySelectorAll('.ach-stat-num')) : [];
+    function runCounters() {
+      counters.forEach(el => {
+        const target = parseFloat(el.dataset.count) || 0;
+        const pre = el.dataset.prefix || '', suf = el.dataset.suffix || '';
+        const dur = 1500, t0 = performance.now();
+        (function frame(now) {
+          const p = Math.min((now - t0) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = pre + Math.round(target * eased) + suf;
+          if (p < 1) requestAnimationFrame(frame);
+        })(t0);
+      });
+    }
+    if (stats && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { runCounters(); io.disconnect(); } });
+      }, { threshold: 0.35 });
+      io.observe(stats);
+    } else { runCounters(); }
+
+    // Pointer tilt (skipped for reduced-motion / touch)
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce && window.matchMedia('(hover: hover)').matches) {
+      allCards.forEach(card => {
+        card.addEventListener('pointermove', (e) => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          card.style.setProperty('--rx', (py * -5).toFixed(2) + 'deg');
+          card.style.setProperty('--ry', (px * 7).toFixed(2) + 'deg');
+        });
+        card.addEventListener('pointerleave', () => {
+          card.style.setProperty('--rx', '0deg');
+          card.style.setProperty('--ry', '0deg');
+        });
+      });
+    }
+  })();
 
   /* ─────────────────────────────────────────────
      Achievements dialog
@@ -195,106 +339,210 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* ══════════════════════════════════════════════════
-   SAVINGS CALCULATOR
+   RETURNS CALCULATOR  (revenue-sharing model)
    ─────────────────────────────────────────────────
-   Digester tiers (no 15-ton — starts at 30-ton):
-     30-ton  → up to ~250 animals  — available now
-     50-ton  → up to ~450 animals  — in development (coming soon)
-     100-ton → 450+ animals        — future roadmap (notify me)
+   Three revenue streams per unit:
+     ⚡ Electricity   — farmer keeps 100% of grid savings
+     🌱 Bio-fertilizer — BioNova collects & sells; farmer earns a share
+     🌍 Carbon credits — future bonus stream
+   Digester tiers (starts at 30-ton):
+     30-ton  → up to ~250 animals  — available now   ($9,000 production price)
+     50-ton  → up to ~450 animals  — in development  (~$15,000 est.)
+     100-ton → 450+ animals        — future roadmap  (custom quote)
 ══════════════════════════════════════════════════ */
 (() => {
+  const $ = (id) => document.getElementById(id);
   const animalBtns = document.querySelectorAll('.segmented [data-animal]');
-  const herdEl     = document.getElementById('herd');
-  const herdOut    = document.getElementById('herdOut');
-  const tariffEl   = document.getElementById('tariff');
-  const currencyEl = document.getElementById('currency');
-  const advBox     = document.getElementById('advancedBox');
-  const advForm    = document.getElementById('advForm');
-  const toggleAdv  = document.getElementById('toggleAdvancedLink');
-  const biogasOut  = document.getElementById('biogasOut');
-  const kwhOut     = document.getElementById('kwhOut');
-  const saveOut    = document.getElementById('saveOut');
-  const saveCur    = document.getElementById('saveCur');
-  const recoModel  = document.getElementById('recoModel');
-  const recoHint   = document.getElementById('recoHint');
-  const capexOut   = document.getElementById('capexOut');
-  const capexCur   = document.getElementById('capexCur');
-  const paybackOut = document.getElementById('paybackOut');
-  const recoResult = document.getElementById('calcResults2')
-    ? document.getElementById('calcResults2').querySelectorAll('.result2')[3]
-    : null;
+  const herdEl     = $('herd');
+  const herdOut    = $('herdOut');
+  const tariffEl   = $('tariff');
+  const currencyEl = $('currency');
+  const advBox     = $('advancedBox');
+  const advForm    = $('advForm');
+  const toggleAdv  = $('toggleAdvancedLink');
+  const root       = $('calcResults2');
 
-  if (!herdEl || !tariffEl) return;
+  if (!herdEl || !tariffEl || !root) return;
 
-  const animalDefaults = {
-    cow:     { manure: 25,  yield: 0.04 },
-    buffalo: { manure: 30,  yield: 0.045 },
-    pig:     { manure: 6,   yield: 0.05 },
-    mixed:   { manure: 20,  yield: 0.038 },
+  // Output handles (guarded — calculator degrades gracefully if markup changes)
+  const out = {
+    biogas:  $('biogasOut'), kwh: $('kwhOut'), save: $('saveOut'), saveCur: $('saveCur'),
+    reco:    $('recoModel'), recoHint: $('recoHint'),
+    capex:   $('capexOut'),  capexCur: $('capexCur'),
+    elec:    $('elecOut'),   fert: $('fertOut'),   carbon: $('carbonOut'),
+    elecBar: $('elecBar'),   fertBar: $('fertBar'), carbonBar: $('carbonBar'),
+    total:   $('totalOut'),  totalCur: $('totalCur'),
+    life:    $('lifeOut'),   lifeCur: $('lifeCur'),
+    payback: $('paybackOut'),
+    donut:   $('calcDonut'), donutMain: $('donutMain'),
   };
 
-  /*
-   * Digester catalogue — only 30-ton is currently available.
-   * 50-ton is in active prototyping (comingSoon: true).
-   * 100-ton is future roadmap (comingSoon: true, future: true).
-   *
-   * herdMin / herdMax define the recommended range for each unit.
-   * For the calculator we size purely on manure load:
-   *   30-ton digester handles ≤ ~250 animals (cows) comfortably.
-   *   50-ton handles ≤ ~450 animals.
-   *   Beyond that we point to future 100-ton option.
-   */
+  // i18n helper — read the current dictionary so dynamic strings translate too
+  const lang = () => localStorage.getItem('bionova-lang') || document.documentElement.lang || 'en';
+  const t = (key, fb) => (window.bionovaI18n?.T?.[lang()]?.[key]) ?? fb;
+
+  // Defaults use *collectable* manure (barn-captured, not total excreted) and
+  // conservative mid-range biogas yields for raw livestock slurry.
+  const animalDefaults = {
+    cow:     { manure: 20, yield: 0.030 },
+    buffalo: { manure: 25, yield: 0.032 },
+    pig:     { manure: 5,  yield: 0.045 },
+    mixed:   { manure: 16, yield: 0.030 },
+  };
+
   const digesters = [
-    {
-      name:       '30-ton',
-      label:      '30-ton digester',
-      price:      6250,    // production price (no markup — revenue share covers the rest)
-      herdMax:    250,
-      comingSoon: false,
-      future:     false,
-      hint:       'Handles up to ~250 animals. Available now.',
-    },
-    {
-      name:       '50-ton',
-      label:      '50-ton digester',
-      price:      8750,    // estimated production price
-      herdMax:    450,
-      comingSoon: true,
-      future:     false,
-      hint:       'In development — estimated launch soon. Contact us to reserve.',
-    },
-    {
-      name:       '100-ton+',
-      label:      '100-ton+ digester',
-      price:      null,    // price TBD
-      herdMax:    Infinity,
-      comingSoon: true,
-      future:     true,
-      hint:       'Large-scale unit on our roadmap. Get in touch for a custom quote.',
-    },
+    { label: '30-ton',   price: 9000,  herdMax: 250,      comingSoon: false, future: false, hintKey: 'calc.d30.hint',  hint: 'Handles up to ~250 animals. Available now.' },
+    { label: '50-ton',   price: 15000, herdMax: 450,      comingSoon: true,  future: false, hintKey: 'calc.d50.hint',  hint: 'In development — contact us to reserve.' },
+    { label: '100-ton+', price: null,  herdMax: Infinity, comingSoon: true,  future: true,  hintKey: 'calc.d100.hint', hint: 'Large-scale unit on our roadmap. Custom quote.' },
   ];
 
   const sym   = { USD: 'USD', GEL: 'GEL', EUR: 'EUR' };
-  // Approximate rates relative to USD — used to convert tariff & prices on currency switch
+  // Approximate rates relative to USD — convert monetary inputs on currency switch
   const rates = { USD: 1, GEL: 2.75, EUR: 0.92 };
+  const LIFESPAN = 15;            // years used for lifetime-value projection
+  const CO2_PER_KWH = 0.5;        // kg CO₂ avoided per kWh (grid offset + manure methane capture)
 
-  let state = {
-    animal: 'cow', herd: 100,
-    currency: 'USD', tariff: 0.20,
-    manure: 25, yield: 0.04, kwhPerM3: 2.0, fertPerKg: 0.8,
+  // Defaults reflect a real Georgian farm: GEL currency, ~0.28 GEL/kWh retail
+  // tariff (GNERC top-tier / small-business rate, 2026), conservative outputs.
+  const state = {
+    animal: 'cow', herd: 100, currency: 'GEL', tariff: 0.28,
+    manure: 20, yield: 0.03, kwhPerM3: 2.0,
+    fertYield: 0.04,   // kg sellable concentrated fertilizer per kg manure
+    fertPrice: 0.75,   // per kg, in selected currency (GEL by default; 0.5–1 GEL/kg target)
+    fertShare: 30,     // % of fertilizer revenue the farmer keeps
+    carbonPrice: 33,   // per tonne CO₂, in selected currency (~$12)
   };
 
+  let hasPrice = true, comingSoon = false, future = false;
+
+  // ── Animated (eased) display values ──────────────
+  const A = { biogas:0, kwh:0, save:0, elec:0, fert:0, carbon:0, total:0, capex:0, life:0, payYrs:0 };
+  let target = { ...A };
+  let raf = null;
+
+  const money = (n) => Math.round(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
+
+  function fmtPayback(yrs) {
+    if (!hasPrice || !isFinite(yrs) || yrs <= 0) return '–';
+    if (yrs < 1) return '≈ ' + Math.max(1, Math.round(yrs * 12)) + ' ' + t('calc.unit.mo', 'mo');
+    return (comingSoon ? '~' : '') + yrs.toFixed(1) + ' ' + t('calc.unit.yrs', 'yrs');
+  }
+
+  function paint() {
+    if (out.biogas) out.biogas.textContent = A.biogas.toFixed(1);
+    if (out.kwh)    out.kwh.textContent    = Math.round(A.kwh).toString();
+    if (out.save)   out.save.textContent   = A.save.toFixed(2);
+    if (out.elec)   out.elec.textContent   = money(A.elec);
+    if (out.fert)   out.fert.textContent   = money(A.fert);
+    if (out.carbon) out.carbon.textContent = money(A.carbon);
+    if (out.total)  out.total.textContent  = money(A.total);
+    if (out.life)   out.life.textContent   = hasPrice ? money(A.life) : '–';
+    if (out.capex)  out.capex.textContent  = hasPrice ? (comingSoon ? '~' : '') + money(A.capex) : 'TBD';
+    if (out.payback) out.payback.textContent = fmtPayback(A.payYrs);
+
+    // Stream bars — scaled to the largest stream so the biggest fills the track
+    const mx = Math.max(A.elec, A.fert, A.carbon, 1);
+    if (out.elecBar)   out.elecBar.style.width   = (A.elec   / mx * 100) + '%';
+    if (out.fertBar)   out.fertBar.style.width   = (A.fert   / mx * 100) + '%';
+    if (out.carbonBar) out.carbonBar.style.width = (A.carbon / mx * 100) + '%';
+
+    // Donut split (energy / fertilizer / carbon)
+    const tot = A.elec + A.fert + A.carbon;
+    const eP = tot > 0 ? A.elec / tot * 100 : 0;
+    const fP = tot > 0 ? A.fert / tot * 100 : 0;
+    const eDeg = eP * 3.6, fDeg = fP * 3.6;
+    if (out.donut) {
+      out.donut.style.background =
+        `conic-gradient(var(--s-elec) 0 ${eDeg}deg,` +
+        ` var(--s-fert) ${eDeg}deg ${eDeg + fDeg}deg,` +
+        ` var(--s-carbon) ${eDeg + fDeg}deg 360deg)`;
+    }
+    if (out.donutMain) out.donutMain.textContent = Math.round(eP) + '%';
+  }
+
+  function tick() {
+    let moving = false;
+    for (const k in target) {
+      const tv = target[k];
+      if (!isFinite(tv)) { A[k] = tv; continue; }
+      const d = tv - A[k];
+      if (Math.abs(d) > Math.abs(tv) * 0.002 + 0.01) { A[k] += d * 0.2; moving = true; }
+      else A[k] = tv;
+    }
+    paint();
+    raf = moving ? requestAnimationFrame(tick) : null;
+  }
+  function startAnim() { if (raf == null) raf = requestAnimationFrame(tick); }
+
+  function recommendDigester(herd) {
+    for (const d of digesters) if (herd <= d.herdMax) return d;
+    return digesters[digesters.length - 1];
+  }
+
+  function updateReco(d) {
+    if (!out.reco) return;
+    out.reco.textContent = d.label;
+    const card = out.reco.closest('.substat');
+    if (card) card.classList.toggle('reco-coming-soon', d.comingSoon);
+    const oldTag = card && card.querySelector('.reco-coming-tag');
+    if (oldTag) oldTag.remove();
+    if (d.comingSoon) {
+      const tag = document.createElement('span');
+      tag.className = 'reco-coming-tag';
+      tag.textContent = d.future ? t('calc.future', '🔮 Future') : t('calc.indev', '🔬 In dev');
+      out.reco.insertAdjacentElement('afterend', tag);
+    }
+    if (out.recoHint) out.recoHint.textContent = t(d.hintKey, d.hint);
+  }
+
+  function setCurrencyLabels() {
+    const c = sym[state.currency];
+    root.querySelectorAll('[data-cur]').forEach(e => { e.textContent = c; });
+    [out.saveCur, out.capexCur, out.totalCur, out.lifeCur].forEach(e => { if (e) e.textContent = c; });
+  }
+
+  function recalc() {
+    const manureIn = state.herd * state.manure;          // kg/day
+    const biogas   = manureIn * state.yield;             // m³/day
+    const kwh      = biogas * state.kwhPerM3;             // kWh/day
+    const saveDay  = kwh * state.tariff;                 // currency/day
+
+    const elecYr   = saveDay * 365;
+    const fertYr   = manureIn * state.fertYield * state.fertPrice * 365 * (state.fertShare / 100);
+    const co2tYr   = kwh * 365 * CO2_PER_KWH / 1000;     // tonnes CO₂/yr
+    const carbonYr = co2tYr * state.carbonPrice;
+    const totalYr  = elecYr + fertYr + carbonYr;
+
+    const d   = recommendDigester(state.herd);
+    hasPrice  = d.price !== null;
+    comingSoon = d.comingSoon;
+    future    = d.future;
+
+    const upfront = hasPrice ? d.price * rates[state.currency] : 0;
+    const payYrs  = (hasPrice && totalYr > 0) ? upfront / totalYr : NaN;
+    const life    = hasPrice ? totalYr * LIFESPAN - upfront : 0;
+
+    updateReco(d);
+
+    target = {
+      biogas, kwh, save: saveDay,
+      elec: elecYr, fert: fertYr, carbon: carbonYr, total: totalYr,
+      capex: upfront, life, payYrs,
+    };
+    startAnim();
+  }
+
+  // ── Input wiring ─────────────────────────────────
   animalBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      animalBtns.forEach(b => b.classList.remove('is-active'));
+      animalBtns.forEach(b => { b.classList.remove('is-active'); b.setAttribute('aria-selected', 'false'); });
       btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
       state.animal = btn.dataset.animal;
       state.manure = animalDefaults[state.animal].manure;
       state.yield  = animalDefaults[state.animal].yield;
-      const m = document.getElementById('manure');
-      const y = document.getElementById('yield');
-      if (m) m.value = state.manure;
-      if (y) y.value = state.yield;
+      if ($('manure')) $('manure').value = state.manure;
+      if ($('yield'))  $('yield').value  = state.yield;
       recalc();
     });
   });
@@ -309,22 +557,28 @@ document.addEventListener('DOMContentLoaded', () => {
     recalc();
   });
   currencyEl.addEventListener('change', () => {
-    const prevRate = rates[state.currency];
-    const nextRate = rates[currencyEl.value];
-    // Convert the tariff from the old currency to the new one
-    const converted = parseFloat(((state.tariff / prevRate) * nextRate).toFixed(4));
-    state.currency = currencyEl.value;
-    state.tariff   = converted;
-    tariffEl.value = converted;
-    saveCur.textContent  = ' ' + sym[state.currency];
-    capexCur.textContent = ' ' + sym[state.currency];
+    const prev = rates[state.currency];
+    const next = rates[currencyEl.value];
+    const conv = (v, dp) => parseFloat(((v / prev) * next).toFixed(dp));
+    state.tariff      = conv(state.tariff, 4);
+    state.fertPrice   = conv(state.fertPrice, 4);
+    state.carbonPrice = conv(state.carbonPrice, 2);
+    state.currency    = currencyEl.value;
+    tariffEl.value = state.tariff;
+    if ($('fertPrice'))   $('fertPrice').value   = state.fertPrice;
+    if ($('carbonPrice')) $('carbonPrice').value = state.carbonPrice;
+    setCurrencyLabels();
     recalc();
   });
   advForm?.addEventListener('input', () => {
-    state.manure   = parseFloat(document.getElementById('manure').value    || state.manure);
-    state.yield    = parseFloat(document.getElementById('yield').value     || state.yield);
-    state.kwhPerM3 = parseFloat(document.getElementById('kwhPerM3').value  || state.kwhPerM3);
-    state.fertPerKg= parseFloat(document.getElementById('fertilizerPerKg').value || state.fertPerKg);
+    const num = (id, fb) => { const el = $(id); const v = parseFloat(el && el.value); return isFinite(v) ? v : fb; };
+    state.manure      = num('manure', state.manure);
+    state.yield       = num('yield', state.yield);
+    state.kwhPerM3    = num('kwhPerM3', state.kwhPerM3);
+    state.fertYield   = num('fertYield', state.fertYield);
+    state.fertPrice   = num('fertPrice', state.fertPrice);
+    state.fertShare   = num('fertShare', state.fertShare);
+    state.carbonPrice = num('carbonPrice', state.carbonPrice);
     recalc();
   });
   toggleAdv?.addEventListener('click', (e) => {
@@ -333,93 +587,41 @@ document.addEventListener('DOMContentLoaded', () => {
     advBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 
-  function recommendDigester(herd) {
-    for (const d of digesters) {
-      if (herd <= d.herdMax) return d;
+  // Copy-my-estimate
+  const copyBtn = $('calcCopyBtn');
+  const copyLbl = $('calcCopyLbl');
+  copyBtn?.addEventListener('click', async () => {
+    const c = sym[state.currency];
+    const d = recommendDigester(state.herd);
+    const txt =
+      `BioNova estimate — ${state.herd} ${state.animal}\n` +
+      `⚡ Electricity (you keep 100%): ${money(target.elec)} ${c}/yr\n` +
+      `🌱 Bio-fertilizer (your share): ${money(target.fert)} ${c}/yr\n` +
+      `🌍 Carbon credits (future):     ${money(target.carbon)} ${c}/yr\n` +
+      `─ Total yearly income: ${money(target.total)} ${c}/yr\n` +
+      `Recommended unit: ${d.label}\n` +
+      `Upfront (production price): ${hasPrice ? money(target.capex) + ' ' + c : 'TBD'}\n` +
+      `Pays for itself in: ${fmtPayback(target.payYrs)}`;
+    try { await navigator.clipboard.writeText(txt); } catch (_) { /* clipboard blocked — still flash */ }
+    if (copyLbl) {
+      const prev = copyLbl.textContent;
+      copyLbl.textContent = t('calc.copied', 'Copied!');
+      copyBtn.classList.add('is-copied');
+      setTimeout(() => { copyLbl.textContent = prev; copyBtn.classList.remove('is-copied'); }, 1600);
     }
-    return digesters[digesters.length - 1];
-  }
+  });
 
-  function recalc() {
-    const manureIn   = state.herd * state.manure;
-    const biogas     = manureIn * state.yield;
-    const kwh        = biogas * state.kwhPerM3;
-    const savingsDay = kwh * state.tariff;
-    const d          = recommendDigester(state.herd);
+  // Re-render dynamic (translated) strings when language changes
+  document.addEventListener('langchange', () => { setCurrencyLabels(); recalc(); });
 
-    // Upfront cost calculation — production price in USD, converted to selected currency
-    const rate = rates[state.currency];
-    let upfront = null;
-    if (d.price !== null) {
-      upfront = d.price * rate;
-    }
-    const annual  = savingsDay * 365;
-    const payback = (upfront !== null && annual > 0) ? upfront / annual : Infinity;
+  // ── Seed advanced fields + first paint ───────────
+  const seed = { manure: state.manure, yield: state.yield, kwhPerM3: state.kwhPerM3,
+                 fertYield: state.fertYield, fertPrice: state.fertPrice,
+                 fertShare: state.fertShare, carbonPrice: state.carbonPrice };
+  for (const id in seed) { if ($(id)) $(id).value = seed[id]; }
 
-    // Output fields
-    biogasOut.textContent  = biogas.toFixed(1);
-    kwhOut.textContent     = Math.round(kwh).toString();
-    saveOut.textContent    = savingsDay.toFixed(2);
-    saveCur.textContent    = ' ' + sym[state.currency];
-
-    // Recommended digester box — apply coming-soon styling if needed
-    if (recoResult) {
-      recoResult.classList.toggle('reco-coming-soon', d.comingSoon);
-
-      // Remove old tag if any
-      const oldTag = recoResult.querySelector('.reco-coming-tag');
-      if (oldTag) oldTag.remove();
-
-      recoModel.textContent = d.label;
-
-      if (d.comingSoon) {
-        const tag = document.createElement('span');
-        tag.className = 'reco-coming-tag';
-        tag.textContent = d.future ? '🔮 Future roadmap' : '🔬 In development';
-        recoModel.insertAdjacentElement('afterend', tag);
-      }
-    } else {
-      recoModel.textContent = d.label;
-    }
-
-    recoHint.textContent = d.hint;
-
-    // Upfront cost
-    if (upfront !== null) {
-      capexOut.textContent = upfront.toLocaleString(undefined, { maximumFractionDigits: 0 });
-      capexCur.textContent = ' ' + sym[state.currency];
-      if (d.comingSoon) {
-        capexOut.textContent = '~' + upfront.toLocaleString(undefined, { maximumFractionDigits: 0 });
-        capexCur.textContent = ' ' + sym[state.currency] + ' (est.)';
-      }
-    } else {
-      capexOut.textContent = 'TBD';
-      capexCur.textContent = '';
-    }
-
-    // Payback
-    if (!isFinite(payback) || upfront === null) {
-      paybackOut.textContent = '–';
-    } else if (d.comingSoon) {
-      paybackOut.textContent = '~' + payback.toFixed(1);
-    } else {
-      paybackOut.textContent = payback.toFixed(1);
-    }
-  }
-
-  // Seed advanced fields
-  const m = document.getElementById('manure');
-  const y = document.getElementById('yield');
-  const k = document.getElementById('kwhPerM3');
-  const f = document.getElementById('fertilizerPerKg');
-  if (m) m.value = state.manure;
-  if (y) y.value = state.yield;
-  if (k) k.value = state.kwhPerM3;
-  if (f) f.value = state.fertPerKg;
-
-  herdOut.textContent  = herdEl.value;
-  saveCur.textContent  = ' ' + sym[state.currency];
-  capexCur.textContent = ' ' + sym[state.currency];
+  herdOut.textContent = herdEl.value;
+  setCurrencyLabels();
   recalc();
 })();
 
