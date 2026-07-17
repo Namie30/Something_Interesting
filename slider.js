@@ -294,11 +294,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const achDialogOpen = document.getElementById('achDialogOpen');
   const achClose      = document.querySelector('.ach-close');
 
+  // Hide the dialog image gracefully if the award photo isn't uploaded yet
+  if (achDialogImg) achDialogImg.addEventListener('error', () => { achDialogImg.style.display = 'none'; });
+
   document.querySelectorAll('.ach-card').forEach(card => {
     card.addEventListener('click', (e) => {
       const href = card.getAttribute('href');
       if (href && href !== '#') return; // let external links through
       e.preventDefault();
+      if (achDialogImg)   achDialogImg.style.display = '';
       if (achDialogImg)   achDialogImg.src    = card.dataset.img   || '';
       if (achDialogImg)   achDialogImg.alt    = card.dataset.title || '';
       if (achDialogTitle) achDialogTitle.textContent = card.dataset.title || '';
