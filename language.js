@@ -249,6 +249,13 @@
       'ach.stat.countries':'Countries',
       'ach.stat.secured':  'Secured in grants',
       'ach.stat.beat':     'Startups outpaced',
+      'ach.spot.tag':      'Biggest win yet · 2026',
+      'ach.spot.h3':       'Blueing the Black Sea — Grand Prize Winner',
+      'ach.spot.p':        'We went up against brilliant startups from 40 countries, through 3 selection stages, intensive bootcamps and elimination rounds, all the way to a "Shark Tank"-style live pitch finale in Chișinău, Moldova, where BioNova was announced the winner.',
+      'ach.spot.s1':       '40 countries',
+      'ach.spot.s2':       '3 selection stages',
+      'ach.spot.s3':       'Live finale in Chișinău 🇲🇩',
+      'ach.spot.backed':   'Backed by',
 
       /* BLOG */
       'blog.h2':     'Blog',
@@ -530,6 +537,13 @@
       'ach.stat.countries':'ქვეყანა',
       'ach.stat.secured':  'მოზიდული დაფინანსება',
       'ach.stat.beat':     'დაჯაბნილი სტარტაპი',
+      'ach.spot.tag':      'ყველაზე დიდი გამარჯვება · 2026',
+      'ach.spot.h3':       'Blueing the Black Sea — მთავარი პრიზის მფლობელი',
+      'ach.spot.p':        '40 ქვეყნის საუკეთესო სტარტაპებს ვეჯიბრებოდით, 3 შესარჩევი ეტაპის, ინტენსიური ბუთქემფებისა და გამოსაშვები რაუნდების გავლით, საბოლოოდ კი კიშინიოვში (მოლდოვა), გამართულ „Shark Tank"-ის სტილის ლაივ ფინალში BioNova გამარჯვებულად დასახელდა.',
+      'ach.spot.s1':       '40 ქვეყანა',
+      'ach.spot.s2':       '3 შესარჩევი ეტაპი',
+      'ach.spot.s3':       'ლაივ ფინალი კიშინიოვში 🇲🇩',
+      'ach.spot.backed':   'მხარდამჭერები',
 
       /* BLOG */
       'blog.h2':     'ბლოგი',

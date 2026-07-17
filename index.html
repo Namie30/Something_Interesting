@@ -23,6 +23,7 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
 
   <!-- FontAwesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer"/>
@@ -34,6 +35,15 @@
 
 </head>
 <body>
+
+  <!-- Page intro — logo curtain, auto-dismisses via CSS, shown once per session -->
+  <div id="pageIntro" aria-hidden="true">
+    <div class="intro-mark">
+      <img src="Images/bionova-logo.png" alt=""/>
+      <span>BioNova</span>
+    </div>
+  </div>
+  <script>try{if(sessionStorage.getItem('bnIntro')){document.getElementById('pageIntro').classList.add('intro-off')}else{sessionStorage.setItem('bnIntro','1')}}catch(e){}</script>
 
   <!-- Scroll progress bar -->
   <div id="scrollProgress" aria-hidden="true"></div>
@@ -115,6 +125,11 @@
         <img src="Images/sdg-14.jpg" alt="SDG 14: Life Below Water"/>
       </li>
     </ul>
+    <div class="hero-wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,62 C280,108 520,18 760,44 C1000,70 1240,24 1440,56 L1440,100 L0,100 Z" fill="#ffffff"/>
+      </svg>
+    </div>
   </section>
 
   <!-- ═══ ABOUT ═══ -->
@@ -666,11 +681,37 @@
       <h2 data-i18n-html="ach.h2">Our Wins &amp; Awards</h2>
       <p class="ach-sub" data-i18n="ach.sub">Click any award to see the story.</p>
 
+      <!-- ★ SPOTLIGHT — Blueing the Black Sea $100,000 Grand Prize ★ -->
+      <div class="ach-spotlight" id="achSpotlight">
+        <div class="ach-spot-content">
+          <span class="ach-spot-tag"><i class="fa-solid fa-trophy"></i> <span data-i18n="ach.spot.tag">Biggest win yet · 2026</span></span>
+          <div class="ach-spot-amount"><span class="spot-num">$100,000</span></div>
+          <h3 data-i18n="ach.spot.h3">Blueing the Black Sea — Grand Prize Winner</h3>
+          <p data-i18n="ach.spot.p">We went up against brilliant startups from 40 countries, through 3 selection stages, intensive bootcamps and elimination rounds, all the way to a "Shark Tank"-style live pitch finale in Chișinău, Moldova, where BioNova was announced the winner.</p>
+          <div class="ach-spot-stats">
+            <span class="ach-spot-stat"><i class="fa-solid fa-earth-europe"></i> <span data-i18n="ach.spot.s1">40 countries</span></span>
+            <span class="ach-spot-stat"><i class="fa-solid fa-layer-group"></i> <span data-i18n="ach.spot.s2">3 selection stages</span></span>
+            <span class="ach-spot-stat"><i class="fa-solid fa-tower-broadcast"></i> <span data-i18n="ach.spot.s3">Live finale in Chișinău 🇲🇩</span></span>
+          </div>
+          <div class="ach-spot-backers">
+            <span class="ach-spot-backed" data-i18n="ach.spot.backed">Backed by</span>
+            <span class="ach-spot-backer">World Bank Group</span>
+            <span class="ach-spot-backer">UNOPS</span>
+            <span class="ach-spot-backer">GEF</span>
+            <span class="ach-spot-backer">Civitta</span>
+          </div>
+        </div>
+        <div class="ach-spot-media">
+          <img src="Images/ECO-WinFlag.jpeg" alt="BioNova announced winner at the Blueing the Black Sea live finale in Chișinău" loading="lazy" onerror="this.closest('.ach-spot-media').classList.add('spot-noimg'); this.remove();"/>
+          <div class="ach-spot-emblem" aria-hidden="true"><i class="fa-solid fa-trophy"></i></div>
+        </div>
+      </div>
+
       <!-- Impact stat bar (numbers count up on scroll) -->
       <div class="ach-stats" id="achStats">
-        <div class="ach-stat"><span class="ach-stat-num" data-count="13">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.awards">Awards &amp; recognitions</span></div>
-        <div class="ach-stat"><span class="ach-stat-num" data-count="7">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.countries">Countries</span></div>
-        <div class="ach-stat"><span class="ach-stat-num" data-prefix="$" data-count="55" data-suffix="K+">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.secured">Secured in grants</span></div>
+        <div class="ach-stat"><span class="ach-stat-num" data-count="15">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.awards">Awards &amp; recognitions</span></div>
+        <div class="ach-stat"><span class="ach-stat-num" data-count="8">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.countries">Countries</span></div>
+        <div class="ach-stat"><span class="ach-stat-num" data-prefix="$" data-count="180" data-suffix="K+">0</span><span class="ach-stat-lbl" data-i18n="ach.stat.secured">Secured in grants</span></div>
       </div>
 
       <!-- Filter chips -->
@@ -683,6 +724,10 @@
       </div>
 
       <div class="achievement-grid" id="achievementsGrid" aria-label="Awards and achievements">
+        <a class="ach-card ach-feat" data-cat="win grant" data-flag="🇬🇪" data-year="2026" target="_blank" data-img="Images/Greennovation.jpg" data-title="GREENNOVATION Challenge — $25,000" data-text="Winner of the GREENNOVATION Challenge Programme, implemented with the support of UNDP in Georgia and the Embassy of Denmark in Georgia — awarded $25,000 to implement our project in Khobi Municipality.">
+          <div class="ach-media"><img src="Images/Greennovation.jpg" alt="BioNova wins the GREENNOVATION Challenge" loading="lazy" onerror="this.closest('.ach-media').classList.add('ach-media-noimg'); this.remove();"/></div>
+          <div class="ach-body"><span class="ach-top-tag">🏆 $25,000 Win</span><h3>GREENNOVATION Challenge</h3><p>Won $25,000 with UNDP Georgia &amp; the Embassy of Denmark to deploy in Khobi Municipality.</p></div>
+        </a>
         <a class="ach-card ach-feat" data-cat="global" data-flag="🌍" data-year="2026" target="_blank" data-img="Images/YES_BioNova.jpg" data-title="Young Entrepreneur Summit 2026 (YES)" data-text="Global winners out of 100+ startups from 29+ countries.">
           <div class="ach-media"><img src="Images/YES_BioNova.jpg" alt="Young Entrepreneur Summit 2026"/></div>
           <div class="ach-body"><span class="ach-top-tag">🏆 Top Win</span><h3>Young Entrepreneur Summit (YES)</h3><p>Crowned global winners out of 100+ startups from 29+ countries.</p></div>
@@ -703,7 +748,7 @@
           <div class="ach-media"><img src="Images/GITA 25K.jpg" alt="GITA 25K grant"/></div>
           <div class="ach-body"><h3>GITA Regional Grant — 25K</h3><p>Non-dilutive funding to scale.</p></div>
         </a>
-        <a class="ach-card" data-cat="accel" data-flag="🇵🇱" href="https://www.parp.gov.pl/component/content/article/87661:boot-camp-2-etapu-projektu-wsparcie-rozwoju-administracji-publicznej-i-przedsiebiorczosci-w-gruzji-realizowanego-przez-parp-wspolnie-z-ministerstwem-funduszy-i-polityki-regionalnej" data-img="Images/Poland.jpg" target="_blank" data-title="Poland AgriTech Acceleration" data-text="Top 3 AgriTech startup from Georgia — taking BioNova to an international stage.">
+        <a class="ach-card" data-cat="accel global" data-flag="🇵🇱" href="https://www.parp.gov.pl/component/content/article/87661:boot-camp-2-etapu-projektu-wsparcie-rozwoju-administracji-publicznej-i-przedsiebiorczosci-w-gruzji-realizowanego-przez-parp-wspolnie-z-ministerstwem-funduszy-i-polityki-regionalnej" data-img="Images/Poland.jpg" target="_blank" data-title="Poland AgriTech Acceleration" data-text="Top 3 AgriTech startup from Georgia — taking BioNova to an international stage.">
           <div class="ach-media"><img src="Images/Poland.jpg" alt="Poland AgriTech Program"/></div>
           <div class="ach-body"><h3>Poland AgriTech Acceleration</h3><p>Top 3 AgriTech startup.</p></div>
         </a>
@@ -723,7 +768,7 @@
           <div class="ach-media"><img src="Images/GIST_Image.jpeg" alt="U.S. GIST Program"/></div>
           <div class="ach-body"><h3>U.S. GIST Acceleration Program</h3><p>Conducted 59+ customer discovery interviews</p></div>
         </a>
-        <a class="ach-card" data-cat="accel" data-flag="🇹🇷" href="https://ituseed.com/cohort-2025/" target="_blank" data-img="Images/ITU_Logo1.png" data-title="ITU SEEDs Portfolio Startup" data-text="Selected as a portfolio startup of ITU SEEDs | Turkey's leading accelerator">
+        <a class="ach-card" data-cat="accel global" data-flag="🇹🇷" href="https://ituseed.com/cohort-2025/" target="_blank" data-img="Images/ITU_Logo1.png" data-title="ITU SEEDs Portfolio Startup" data-text="Selected as a portfolio startup of ITU SEEDs | Turkey's leading accelerator">
           <div class="ach-media"><img src="Images/ITU_Logo1.png" alt="ITU SEEDs"/></div>
           <div class="ach-body"><h3>ITU SEEDs Portfolio Startup</h3><p>Selected as a portfolio startup of ITU SEEDs | Turkey's leading accelerator</p></div>
         </a>
@@ -848,7 +893,7 @@
         </div>
         <div class="panel" id="panel-advisors" role="tabpanel" aria-labelledby="tab-advisors" hidden>
           <div class="founders-container">
-       <!-- <div class="founder"><img src="Images/Advisor - Image.png" alt="Irakli Svanidze"/><h3 data-i18n="team.p6.name">Irakli Svanidze</h3><p data-i18n="team.p6.role">Startup Mentor | Head of Innovation</p><div class="founder-social"><a href="https://www.linkedin.com/in/irakli-svanidze-b3a34914a/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>   -->
+            <div class="founder"><img src="Images/Advisor - Image.png" alt="Irakli Svanidze"/><h3 data-i18n="team.p6.name">Irakli Svanidze</h3><p data-i18n="team.p6.role">Startup Mentor | Head of Innovation</p><div class="founder-social"><a href="https://www.linkedin.com/in/irakli-svanidze-b3a34914a/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>   
             <div class="founder"><img src="Images/Mentor_Cecily Kovatch.jpg" alt="Cecily Kovatch"/><h3 data-i18n="team.p7.name">Cecily Kovatch</h3><p data-i18n="team.p7.role">NJEDA Managing Director | Harvard Business School MBA</p><div class="founder-social"><a href="https://www.linkedin.com/in/cecilykovatch/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
             <div class="founder"><img src="Images/Thomas-Mentor.jpg" alt="Thomas Wittig"/><h3 data-i18n="team.p8.name">Thomas Wittig</h3><p data-i18n="team.p8.role">CEO @ WITTIGONIA | Digital Growth, Data Insights, Strategy & Optimization</p><div class="founder-social"><a href="https://www.linkedin.com/in/thomaswittig/" class="linkedin-btn" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a></div></div>
           </div>
@@ -878,7 +923,7 @@
         </div>
         <div class="partners-stat-divider"></div>
         <div class="partners-stat">
-          <span class="partners-stat-num">$55K+</span>
+          <span class="partners-stat-num">$180K+</span>
           <span class="partners-stat-label" data-i18n="partners.grants">in grants secured</span>
         </div>
       </div>
@@ -923,6 +968,11 @@
 
   <!-- CONTACT -->
   <section id="contact">
+    <div class="contact-wave" aria-hidden="true">
+      <svg viewBox="0 0 1440 90" preserveAspectRatio="none">
+        <path d="M0,44 C240,88 480,4 720,30 C960,56 1200,10 1440,48 L1440,0 L0,0 Z" fill="#e8f5e9"/>
+      </svg>
+    </div>
     <div class="container">
       <h2 data-i18n="contact.h2">Get More Out of Your Manure</h2>
       <p data-i18n="contact.p">We'll help you turn organic waste into energy and new revenue.</p>
