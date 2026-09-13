@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BioNova - From Waste to Energy</title>
-  <meta name="description" content="BioNova builds smart, farm-ready biodigesters that convert manure and food waste into biogas, electricity, and bio-fertilizer — up to 3× more affordable than competitors, with full IoT monitoring." />
+  <meta name="description" content="BioNova builds smart, farm-ready biodigesters that convert manure and food waste into biogas, electricity, and bio-fertilizer, up to 3× more affordable than competitors, with full IoT monitoring." />
   <meta property="og:title" content="BioNova – From Waste to Energy" />
   <meta property="og:description" content="Farm-ready biodigesters with real-time IoT control. Convert organic waste into clean energy, electricity, and bio-fertilizer." />
   <meta property="og:image" content="Images/bionova-logo.png" />
@@ -21,12 +21,23 @@
   gtag('config', 'G-X9Y5JSMLPN');
 </script>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <meta name="theme-color" content="#158551"/>
 
-  <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer"/>
+  <!-- Google Fonts — one request, preconnected, variable axis 400..900.
+       The CSS declares font-weight 800 (36x) and 900 (14x); previously only
+       400/700 were loaded, so those all rendered as synthesized faux-bold. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&family=Space+Grotesk:wght@500..700&display=swap"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400..900&family=Space+Grotesk:wght@500..700&display=swap"/>
+
+  <!-- FontAwesome — loaded non-blocking so it can't hold up first paint -->
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        referrerpolicy="no-referrer" media="print" onload="this.media='all'"/>
+  <noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" referrerpolicy="no-referrer"/>
+  </noscript>
 
   <link rel="icon" type="image/x-icon" href="Images/bionova-logo.png">
 
@@ -238,7 +249,8 @@
   <!-- ═══ WHY BIONOVA ═══ -->
   <section id="why">
     <div class="container">
-      <h2 data-i18n="why.h2">Why BioNova Is Different</h2>
+      <span class="eyebrow"><i class="fa-solid fa-award"></i><span data-i18n="why.eyebrow">The Difference</span></span>
+        <h2 data-i18n="why.h2">Why BioNova Is Different</h2>
       <div class="value-grid">
         <div class="value-card">
           <div class="value-icon"><i class="fa-solid fa-tractor"></i></div>
@@ -274,6 +286,7 @@
   <section id="app">
     <div class="container app-container">
       <div class="app-text">
+        <span class="eyebrow"><i class="fa-solid fa-mobile-screen"></i><span data-i18n="app.eyebrow">Smart Monitoring</span></span>
         <h2 data-i18n="app.h2">The BioNova App</h2>
         <p data-i18n="app.p">Every BioNova unit ships with our monitoring & analytics app. Farmers see real-time production, savings, uptime and can share reports with co-ops, banks, and partners.</p>
         <ul class="app-list">
@@ -298,7 +311,8 @@
   <!-- ═══ SETUP TIMELINE ═══ -->
   <section id="setup">
     <div class="container">
-      <h2 data-i18n="setup.h2">Setup in 4 Steps</h2>
+      <span class="eyebrow"><i class="fa-solid fa-screwdriver-wrench"></i><span data-i18n="setup.eyebrow">Installation</span></span>
+        <h2 data-i18n="setup.h2">Setup in 4 Steps</h2>
       <div class="steps">
         <div class="step">
           <div class="step-icon"><i class="fa-solid fa-box-open"></i></div>
@@ -360,8 +374,8 @@
         <div class="hiw-arrow-wrap" aria-hidden="true">
           <div class="hiw-arrow">
             <svg viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path class="hiw-arrow-path" d="M2 12 H70" stroke="#28a745" stroke-width="2.5" stroke-dasharray="6 4" stroke-linecap="round"/>
-              <path d="M62 5 L76 12 L62 19" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path class="hiw-arrow-path" d="M2 12 H70" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <path d="M62 5 L76 12 L62 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
             </svg>
           </div>
           <span class="hiw-arrow-label" data-i18n="hiw.arrow1">feeds into</span>
@@ -381,7 +395,7 @@
               <h3 data-i18n="hiw.s2.h3">BioNova Digester</h3>
               <p data-i18n="hiw.s2.p">Smart anaerobic digestion installed directly on your farm, which converts waste into energy. Monitored 24/7 via our app</p>
               <div class="hiw-stat-row">
-                <span class="hiw-stat"><i class="fa-solid fa-gauge-high"></i> <span data-i18n="hiw.s2.stat1">30-ton capacity</span></span>
+                <span class="hiw-stat"><i class="fa-solid fa-gauge-high"></i> <span data-i18n="hiw.s2.stat1">BN-108, 108 m³ capacity</span></span>
                 <span class="hiw-stat"><i class="fa-solid fa-mobile-screen"></i> <span data-i18n="hiw.s2.stat2">IoT monitored</span></span>
               </div>
             </div>
@@ -392,8 +406,8 @@
         <div class="hiw-arrow-wrap" aria-hidden="true">
           <div class="hiw-arrow">
             <svg viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path class="hiw-arrow-path" d="M2 12 H70" stroke="#28a745" stroke-width="2.5" stroke-dasharray="6 4" stroke-linecap="round"/>
-              <path d="M62 5 L76 12 L62 19" stroke="#28a745" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path class="hiw-arrow-path" d="M2 12 H70" stroke="currentColor" stroke-width="2.5" stroke-dasharray="6 4" stroke-linecap="round"/>
+              <path d="M62 5 L76 12 L62 19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
             </svg>
           </div>
           <span class="hiw-arrow-label" data-i18n="hiw.arrow2">produces</span>
@@ -435,22 +449,25 @@
   <!-- ═══ PRICING ═══ -->
   <section id="pricing" aria-label="Pricing">
     <div class="container">
-      <h2 data-i18n="price.h2">Pricing</h2>
-      <p class="pricing-sub" data-i18n="price.sub">Hardware at production price. We earn when you earn — not before.</p>
+      <span class="eyebrow"><i class="fa-solid fa-tags"></i><span data-i18n="price.eyebrow">Plans</span></span>
+        <h2 data-i18n="price.h2">Pricing</h2>
+      <p class="pricing-sub" data-i18n="price.sub">Hardware at production price. We earn when you earn, not before.</p>
 
       <div class="pricing-banner">
         <div class="pricing-banner-icon"><i class="fa-solid fa-handshake"></i></div>
         <div class="pricing-banner-text">
           <h3 data-i18n="price.banner.h3">Revenue-Sharing Model</h3>
-          <p data-i18n-html="price.banner.p">We sell every digester <strong>at production price</strong> — no markup. Our income comes from collecting and selling your bio-fertilizer, then sharing the revenue with you. <strong>You keep 100% of your electricity revenue.</strong></p>
+          <p data-i18n-html="price.banner.p">We sell every digester <strong>at production price</strong>, no markup. Our income comes from collecting and selling your bio-fertilizer, then sharing the revenue with you. <strong>You keep 100% of your electricity revenue.</strong></p>
         </div>
       </div>
 
       <div class="pricing-grid">
         <article class="plan partner-plan popular">
-          <div class="plan-title"><h4>30-ton Digester</h4><span class="pill" data-i18n="price.popular">Most popular</span></div>
-          <div class="price-line"><span class="price">$9,000</span><span class="price-tag" data-i18n="price.tag">production price</span></div>
+          <div class="plan-title"><h4>BN-108 Digester</h4><span class="pill" data-i18n="price.popular">Most popular</span></div>
+          <div class="price-line"><span class="price">$27,000</span><span class="price-tag" data-i18n="price.tag">production price</span></div>
           <ul class="plan-list">
+            <li><i class="fa-solid fa-gauge-high"></i> <span data-i18n="price.li.spec108">108 m³ tank · 15 kW genset · 30 m³ gas holder</span></li>
+            <li><i class="fa-solid fa-cow"></i> <span data-i18n="price.li.cap108">Digests 1.42 t manure/day, about 70 cows</span></li>
             <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.same">Full hardware &amp; monitoring app</span></li>
             <li><i class="fa-solid fa-bolt"></i> <span data-i18n="price.li.elec15">Keep 100% of your electricity revenue</span></li>
             <li><i class="fa-solid fa-seedling"></i> <span data-i18n="price.li.fert45">We collect &amp; sell your bio-fertilizer</span></li>
@@ -460,12 +477,14 @@
         </article>
         <article class="plan partner-plan plan-coming-soon">
           <div class="coming-soon-ribbon"><i class="fa-solid fa-flask"></i> <span data-i18n="price.indev">In Development</span></div>
-          <div class="plan-title"><h4>50-ton Digester</h4><span class="pill pill-muted" data-i18n="price.soon">Coming Soon</span></div>
+          <div class="plan-title"><h4>BN-200 Digester</h4><span class="pill pill-muted" data-i18n="price.soon">Coming Soon</span></div>
           <div class="price-line">
-            <span class="price price-tbd">~$15,000</span>
+            <span class="price price-tbd" data-i18n="price.quote">Custom quote</span>
             <span class="price-est-label" data-i18n="price.est">estimated</span>
           </div>
           <ul class="plan-list plan-list-muted">
+            <li><i class="fa-solid fa-gauge-high"></i> <span data-i18n="price.li.spec200">200 m³ tank, same architecture, scaled up</span></li>
+            <li><i class="fa-solid fa-cow"></i> <span data-i18n="price.li.cap200">Digests ~2.62 t manure/day, about 130 cows</span></li>
             <li><i class="fa-solid fa-check"></i> <span data-i18n="price.li.same">Full hardware &amp; monitoring app</span></li>
             <li><i class="fa-solid fa-bolt"></i> <span data-i18n="price.li.elec15">Keep 100% of your electricity revenue</span></li>
             <li><i class="fa-solid fa-seedling"></i> <span data-i18n="price.li.fert45">We collect &amp; sell your bio-fertilizer</span></li>
@@ -480,7 +499,7 @@
 
       <div class="pricing-roadmap-hint">
         <i class="fa-solid fa-road"></i>
-        <span data-i18n-html="price.roadmap">We're scaling up. The 50-ton digester is currently in active prototyping — <a href="#contact">get in touch</a> to stay updated or discuss larger custom installations.</span>
+        <span data-i18n-html="price.roadmap">We're scaling up. The BN-200 is currently in active prototyping, <a href="#contact">get in touch</a> to stay updated or discuss larger custom installations. Bigger farms can also run several BN-108 units today.</span>
       </div>
 
     </div>
@@ -489,8 +508,9 @@
   <!-- ═══ SAVINGS CALCULATOR ═══ -->
   <section id="calculator" aria-label="Savings estimator">
     <div class="container">
-      <h2 data-i18n="calc.h2">Estimate Your Returns</h2>
-      <p class="calc-desc" data-i18n-html="calc.desc">Pick your herd size and tariff. We'll show all three of your revenue streams. (<a href="#" id="toggleAdvancedLink">Advanced</a> for engineers.)</p>
+      <span class="eyebrow"><i class="fa-solid fa-calculator"></i><span data-i18n="calc.eyebrow">ROI Estimator</span></span>
+        <h2 data-i18n="calc.h2">Estimate Your Returns</h2>
+      <p class="calc-desc" data-i18n-html="calc.desc">Pick your herd size and tariff. We size the BN-108 units your farm needs and show what they earn. (<a href="#" id="toggleAdvancedLink">Advanced</a> for engineers.)</p>
 
       <div class="simple-grid" id="simpleGrid">
         <div class="simple-card">
@@ -517,11 +537,23 @@
               <option value="USD">USD</option>
               <option value="EUR">EUR</option>
             </select>
-            <input type="number" id="tariff" min="0" step="0.01" value="0.28" />
+            <input type="number" id="tariff" min="0" step="0.01" value="0.14" />
             <span class="unit" data-i18n="calc.unit.kwh">per kWh</span>
           </div>
           <small class="hint" data-i18n="calc.hint.tariff">Use your grid tariff or PPA price.</small>
         </div>
+      </div>
+
+      <!-- Scenario: conservative by default; upside adds liquid digestate + carbon -->
+      <div class="calc-scenario" id="calcScenario">
+        <div class="calc-scenario-head">
+          <span class="calc-scenario-lbl" data-i18n="calc.scenario.lbl">Revenue case</span>
+          <div class="segmented" role="tablist" aria-label="Revenue scenario">
+            <button class="seg is-active" data-scenario="conservative" role="tab" aria-selected="true"  data-i18n="calc.scenario.cons">Conservative</button>
+            <button class="seg"           data-scenario="upside"       role="tab" aria-selected="false" data-i18n="calc.scenario.up">Conservative + upside</button>
+          </div>
+        </div>
+        <small class="hint" data-i18n="calc.scenario.hint">Conservative counts electricity and solid fertilizer only. Upside adds liquid digestate and carbon credits, both assume you sell everything you produce.</small>
       </div>
 
       <div class="calc-results" id="calcResults2">
@@ -529,9 +561,9 @@
         <!-- Hero income numbers -->
         <div class="calc-hero">
           <div class="calc-hero-card calc-hero-main">
-            <h4 data-i18n="calc.hero.income">Your estimated yearly income</h4>
+            <h4 data-i18n="calc.hero.income">Your estimated yearly net income</h4>
             <div class="calc-hero-num"><span class="cur" id="totalCur">USD</span> <span id="totalOut">0</span></div>
-            <small class="calc-hero-sub" data-i18n="calc.hero.income.sub">Electricity you keep + your fertilizer & carbon share.</small>
+            <small class="calc-hero-sub" id="netBreakdown">&nbsp;</small>
           </div>
           <div class="calc-hero-card">
             <h4 data-i18n="calc.hero.payback">Pays for itself in</h4>
@@ -554,32 +586,41 @@
                 <span class="calc-donut-sub" data-i18n="calc.donut.sub">from energy</span>
               </div>
             </div>
-            <span class="calc-streams-title" data-i18n="calc.streams.title">3 revenue streams</span>
+            <span class="calc-streams-title" data-i18n="calc.streams.title">Revenue streams</span>
           </div>
           <ul class="calc-stream-list">
             <li class="stream stream-elec">
               <div class="stream-top">
                 <span class="stream-dot"></span>
                 <span class="stream-name" data-i18n="calc.stream.elec">Electricity</span>
-                <span class="stream-tag stream-tag-keep" data-i18n="calc.stream.keep">you keep 100%</span>
+                <span class="stream-tag stream-tag-keep" data-i18n="calc.stream.base">counted in base case</span>
                 <span class="stream-val"><span id="elecOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
               </div>
               <div class="stream-bar"><i id="elecBar"></i></div>
             </li>
-            <li class="stream stream-fert">
+            <li class="stream stream-solid">
               <div class="stream-top">
                 <span class="stream-dot"></span>
-                <span class="stream-name" data-i18n="calc.stream.fert">Bio-fertilizer</span>
-                <span class="stream-tag stream-tag-share" data-i18n="calc.stream.share">your share</span>
-                <span class="stream-val"><span id="fertOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
+                <span class="stream-name" data-i18n="calc.stream.solid">Solid fertilizer</span>
+                <span class="stream-tag stream-tag-keep" data-i18n="calc.stream.base">counted in base case</span>
+                <span class="stream-val"><span id="solidOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
               </div>
-              <div class="stream-bar"><i id="fertBar"></i></div>
+              <div class="stream-bar"><i id="solidBar"></i></div>
             </li>
-            <li class="stream stream-carbon">
+            <li class="stream stream-liquid is-upside">
+              <div class="stream-top">
+                <span class="stream-dot"></span>
+                <span class="stream-name" data-i18n="calc.stream.liquid">Liquid digestate</span>
+                <span class="stream-tag stream-tag-up" data-i18n="calc.stream.upside">upside</span>
+                <span class="stream-val"><span id="liquidOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
+              </div>
+              <div class="stream-bar"><i id="liquidBar"></i></div>
+            </li>
+            <li class="stream stream-carbon is-upside">
               <div class="stream-top">
                 <span class="stream-dot"></span>
                 <span class="stream-name" data-i18n="calc.stream.carbon">Carbon credits</span>
-                <span class="stream-tag stream-tag-soon" data-i18n="calc.stream.future">future bonus</span>
+                <span class="stream-tag stream-tag-up" data-i18n="calc.stream.upside">upside</span>
                 <span class="stream-val"><span id="carbonOut">0</span> <span class="stream-cur" data-cur>USD</span>/yr</span>
               </div>
               <div class="stream-bar"><i id="carbonBar"></i></div>
@@ -590,10 +631,11 @@
         <!-- Secondary stat strip -->
         <div class="calc-substrip">
           <div class="substat"><span class="substat-num"><span id="biogasOut">0</span> <span class="substat-u">m³</span></span><span class="substat-lbl" data-i18n="calc.res.biogas">Daily biogas</span></div>
-          <div class="substat"><span class="substat-num"><span id="kwhOut">0</span> <span class="substat-u">kWh</span></span><span class="substat-lbl" data-i18n="calc.res.elec">Daily electricity</span></div>
-          <div class="substat"><span class="substat-num"><span id="saveOut">0</span> <span class="substat-u" id="saveCur">USD</span></span><span class="substat-lbl" data-i18n="calc.res.save">Daily savings</span></div>
+          <div class="substat"><span class="substat-num"><span id="kwhOut">0</span> <span class="substat-u">kWh</span></span><span class="substat-lbl" data-i18n="calc.res.elec">Daily electricity (net)</span></div>
+          <div class="substat"><span class="substat-num"><span id="solidKgOut">0</span> <span class="substat-u">kg</span></span><span class="substat-lbl" data-i18n="calc.res.solid">Daily solid fertilizer</span></div>
+          <div class="substat"><span class="substat-num"><span id="liquidLOut">0</span> <span class="substat-u">L</span></span><span class="substat-lbl" data-i18n="calc.res.liquid">Daily liquid digestate</span></div>
+          <div class="substat"><span class="substat-num"><span id="opexOut">0</span> <span class="substat-u" id="opexCur">USD</span></span><span class="substat-lbl" data-i18n="calc.res.opex">Running costs / yr</span></div>
           <div class="substat substat-reco"><span class="substat-num" id="recoModel">–</span><span class="substat-lbl" id="recoHint" data-i18n="calc.reco.hint">Sized from your herd.</span></div>
-          <div class="substat"><span class="substat-num"><span id="capexOut">–</span> <span class="substat-u" id="capexCur">USD</span></span><span class="substat-lbl" data-i18n="calc.res.capex">Upfront (production price)</span></div>
         </div>
 
         <div class="calc-cta-row">
@@ -606,15 +648,21 @@
         <summary data-i18n="calc.adv.summary">Advanced assumptions</summary>
         <form class="adv-grid" id="advForm">
           <div class="calc-field"><label for="manure" data-i18n="calc.adv.m.lbl">Manure per animal (kg/day)</label><input type="number" id="manure" min="0" step="0.1" value="20" /><small data-i18n="calc.adv.m.small">Collectable (barn-captured): ~15–25</small></div>
-          <div class="calc-field"><label for="yield" data-i18n="calc.adv.y.lbl">Biogas yield (m³ per kg manure)</label><input type="number" id="yield" min="0" step="0.001" value="0.03" /><small data-i18n="calc.adv.y.small">Cattle slurry: ~0.02–0.04</small></div>
-          <div class="calc-field"><label for="kwhPerM3" data-i18n="calc.adv.k.lbl">Electricity (kWh per m³ biogas)</label><input type="number" id="kwhPerM3" min="0" step="0.1" value="2.0" /><small data-i18n="calc.adv.k.small">Engine + conversion efficiency</small></div>
-          <div class="calc-field"><label for="fertYield" data-i18n="calc.adv.fy.lbl">Sellable fertilizer (kg per kg manure)</label><input type="number" id="fertYield" min="0" step="0.01" value="0.04" /><small data-i18n="calc.adv.fy.small">Concentrated product fraction; varies by solids.</small></div>
-          <div class="calc-field"><label for="fertPrice" data-i18n="calc.adv.fp.lbl">Fertilizer price (per kg)</label><input type="number" id="fertPrice" min="0" step="0.01" value="0.75" /><small data-i18n="calc.adv.fp.small">Target sell price: 0.5–1 GEL/kg.</small></div>
-          <div class="calc-field"><label for="fertShare" data-i18n="calc.adv.fs.lbl">Your fertilizer share (%)</label><input type="number" id="fertShare" min="0" max="100" step="1" value="30" /><small data-i18n="calc.adv.fs.small">We collect &amp; sell; you earn a share.</small></div>
-          <div class="calc-field"><label for="carbonPrice" data-i18n="calc.adv.cp.lbl">Carbon credit price (per tonne CO₂)</label><input type="number" id="carbonPrice" min="0" step="1" value="33" /><small data-i18n="calc.adv.cp.small">Voluntary market estimate. Future plan.</small></div>
+          <div class="calc-field"><label for="ts" data-i18n="calc.adv.ts.lbl">Manure total solids TS (%)</label><input type="number" id="ts" min="1" max="100" step="0.5" value="25" /><small data-i18n="calc.adv.ts.small">Fresh cattle manure: ~20–28%</small></div>
+          <div class="calc-field"><label for="vs" data-i18n="calc.adv.vs.lbl">Volatile solids VS (% of TS)</label><input type="number" id="vs" min="1" max="100" step="1" value="80" /><small data-i18n="calc.adv.vs.small">The digestible fraction of the solids.</small></div>
+          <div class="calc-field"><label for="ch4Yield" data-i18n="calc.adv.cy.lbl">CH₄ yield (L per kg VS)</label><input type="number" id="ch4Yield" min="0" step="5" value="225" /><small data-i18n="calc.adv.cy.small">Mesophilic cattle manure: ~200–250</small></div>
+          <div class="calc-field"><label for="ch4Share" data-i18n="calc.adv.cs.lbl">CH₄ share of biogas (%)</label><input type="number" id="ch4Share" min="1" max="100" step="1" value="58" /><small data-i18n="calc.adv.cs.small">Rest is mostly CO₂. Sets biogas volume.</small></div>
+          <div class="calc-field"><label for="gensetEff" data-i18n="calc.adv.ge.lbl">Genset efficiency (%)</label><input type="number" id="gensetEff" min="1" max="100" step="1" value="38" /><small data-i18n="calc.adv.ge.small">15 kW CHP unit, electrical only.</small></div>
+          <div class="calc-field"><label for="parasitic" data-i18n="calc.adv.pl.lbl">Parasitic load (%)</label><input type="number" id="parasitic" min="0" max="90" step="1" value="10" /><small data-i18n="calc.adv.pl.small">Pumps, mixing, heating, controls.</small></div>
+          <div class="calc-field"><label for="hrt" data-i18n="calc.adv.hrt.lbl">Retention time HRT (days)</label><input type="number" id="hrt" min="5" step="1" value="25" /><small data-i18n="calc.adv.hrt.small">Lower HRT = more throughput, less gas.</small></div>
+          <div class="calc-field"><label for="solidPrice" data-i18n="calc.adv.sp.lbl">Solid fertilizer price (per kg)</label><input type="number" id="solidPrice" min="0" step="0.01" value="0.89" /><small data-i18n="calc.adv.sp.small">0.89 GEL/kg in our model.</small></div>
+          <div class="calc-field"><label for="liquidPrice" data-i18n="calc.adv.lp.lbl">Liquid digestate price (per L)</label><input type="number" id="liquidPrice" min="0" step="0.01" value="0.04" /><small data-i18n="calc.adv.lp.small">0.04 GEL/L. Upside case only.</small></div>
+          <div class="calc-field"><label for="carbonPrice" data-i18n="calc.adv.cp.lbl">Carbon credit price (per tonne CO₂e)</label><input type="number" id="carbonPrice" min="0" step="0.5" value="26.3" /><small data-i18n="calc.adv.cp.small">≈ $10/t. Upside case only.</small></div>
+          <div class="calc-field"><label for="opDays" data-i18n="calc.adv.od.lbl">Operating days per year</label><input type="number" id="opDays" min="1" max="365" step="1" value="330" /><small data-i18n="calc.adv.od.small">330 leaves room for service downtime.</small></div>
         </form>
+        <div class="adv-derived" id="advDerived"></div>
       </details>
-      <p class="calc-note" data-i18n="calc.note">*Quick estimate using typical assumptions. Real output depends on diet, temperature, retention time, and engine efficiency.</p>
+      <p class="calc-note" data-i18n="calc.note">*Estimate from our techno-economic model for the BN-108 (108 m³ tank, 15 kW genset). Output is capped by what one unit can physically digest, extra herd adds units, not free gas. Real results depend on diet, temperature, retention time and engine condition.</p>
     </div>
   </section>
 
@@ -678,7 +726,8 @@
   <!-- ACHIEVEMENTS -->
   <section id="achievements">
     <div class="container">
-      <h2 data-i18n-html="ach.h2">Our Wins &amp; Awards</h2>
+      <span class="eyebrow"><i class="fa-solid fa-trophy"></i><span data-i18n="ach.eyebrow">Recognition</span></span>
+        <h2 data-i18n-html="ach.h2">Our Wins &amp; Awards</h2>
       <p class="ach-sub" data-i18n="ach.sub">Click any award to see the story.</p>
 
       <!-- ★ SPOTLIGHT — Blueing the Black Sea $100,000 Grand Prize ★ -->
@@ -686,7 +735,7 @@
         <div class="ach-spot-content">
           <span class="ach-spot-tag"><i class="fa-solid fa-trophy"></i> <span data-i18n="ach.spot.tag">Biggest win yet · 2026</span></span>
           <div class="ach-spot-amount"><span class="spot-num">$100,000</span></div>
-          <h3 data-i18n="ach.spot.h3">Blueing the Black Sea — Grand Prize Winner</h3>
+          <h3 data-i18n="ach.spot.h3">Blueing the Black Sea, Grand Prize Winner</h3>
           <p data-i18n="ach.spot.p">We went up against brilliant startups from 40 countries, through 3 selection stages, intensive bootcamps and elimination rounds, all the way to a "Shark Tank"-style live pitch finale in Chișinău, Moldova, where BioNova was announced the winner.</p>
           <div class="ach-spot-stats">
             <span class="ach-spot-stat"><i class="fa-solid fa-earth-europe"></i> <span data-i18n="ach.spot.s1">40 countries</span></span>
@@ -724,7 +773,7 @@
       </div>
 
       <div class="achievement-grid" id="achievementsGrid" aria-label="Awards and achievements">
-        <a class="ach-card ach-feat" data-cat="win grant" data-flag="🇬🇪" data-year="2026" target="_blank" data-img="Images/Greennovation.jpg" data-title="GREENNOVATION Challenge — $25,000" data-text="Winner of the GREENNOVATION Challenge Programme, implemented with the support of UNDP in Georgia and the Embassy of Denmark in Georgia — awarded $25,000 to implement our project in Khobi Municipality.">
+        <a class="ach-card ach-feat" data-cat="win grant" data-flag="🇬🇪" data-year="2026" target="_blank" data-img="Images/Greennovation.jpg" data-title="GREENNOVATION Challenge, $25,000" data-text="Winner of the GREENNOVATION Challenge Programme, implemented with the support of UNDP in Georgia and the Embassy of Denmark in Georgia, awarded $25,000 to implement our project in Khobi Municipality.">
           <div class="ach-media"><img src="Images/Greennovation.jpg" alt="BioNova wins the GREENNOVATION Challenge" loading="lazy" onerror="this.closest('.ach-media').classList.add('ach-media-noimg'); this.remove();"/></div>
           <div class="ach-body"><span class="ach-top-tag">🏆 $25,000 Win</span><h3>GREENNOVATION Challenge</h3><p>Won $25,000 with UNDP Georgia &amp; the Embassy of Denmark to deploy in Khobi Municipality.</p></div>
         </a>
@@ -732,11 +781,11 @@
           <div class="ach-media"><img src="Images/YES_BioNova.jpg" alt="Young Entrepreneur Summit 2026"/></div>
           <div class="ach-body"><span class="ach-top-tag">🏆 Top Win</span><h3>Young Entrepreneur Summit (YES)</h3><p>Crowned global winners out of 100+ startups from 29+ countries.</p></div>
         </a>
-        <a class="ach-card ach-feat" data-cat="global" data-flag="🇬🇪" data-year="2025" target="_blank" data-img="Images/BioNova - Greece4.jpg" data-title="EUROPEN Single Market Expansion Award" data-text="First Georgian startup to win — invited to GEN-E 2025 summit in Greece.">
+        <a class="ach-card ach-feat" data-cat="global" data-flag="🇬🇪" data-year="2025" target="_blank" data-img="Images/BioNova - Greece4.jpg" data-title="EUROPEN Single Market Expansion Award" data-text="First Georgian startup to win, invited to GEN-E 2025 summit in Greece.">
           <div class="ach-media"><img src="Images/BioNova - Greece4.jpg" alt="EUROPEN Single Market Expansion Award"/></div>
           <div class="ach-body"><span class="ach-top-tag">🏆 Top Win</span><h3>EUROPEN Single Market Expansion</h3><p>First Georgian startup ever to win, invited to GEN-E 2025 in Greece.</p></div>
         </a>
-        <a class="ach-card" data-cat="win" data-flag="🇬🇪" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/cunicorn-tibisi/480650" data-img="Images/CUnicorn-3.jpg" target="_blank" data-title="CUnicorn Batch 3" data-text="BioNova emerged as the winner of CUnicorn Batch 3 at Caucasus University — fueling our drive to expand sustainable AgTech.">
+        <a class="ach-card" data-cat="win" data-flag="🇬🇪" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/cunicorn-tibisi/480650" data-img="Images/CUnicorn-3.jpg" target="_blank" data-title="CUnicorn Batch 3" data-text="BioNova emerged as the winner of CUnicorn Batch 3 at Caucasus University, fueling our drive to expand sustainable AgTech.">
           <div class="ach-media"><img src="Images/CUnicorn-3.jpg" alt="CUnicorn Batch 3 award"/></div>
           <div class="ach-body"><h3>CUnicorn Batch 3</h3><p>Winner at Caucasus University.</p></div>
         </a>
@@ -744,15 +793,15 @@
           <div class="ach-media"><img src="Images/Social Impact 2024.jpg" alt="Social Impact Award 2024"/></div>
           <div class="ach-body"><h3>Social Impact Award 2024</h3><p>Recognized for sustainability.</p></div>
         </a>
-        <a class="ach-card" data-cat="grant" data-flag="🇬🇪" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/gita-s-sagranto/481009" target="_blank" data-img="Images/GITA 25K.jpg" data-title="GITA Regional Grant — 25K" data-text="Key non-dilutive funding helping us scale waste-to-energy technology.">
+        <a class="ach-card" data-cat="grant" data-flag="🇬🇪" href="https://www.entrepreneur.com/ka/siakhleebi-da-tendentsiebi/gita-s-sagranto/481009" target="_blank" data-img="Images/GITA 25K.jpg" data-title="GITA Regional Grant, 25K" data-text="Key non-dilutive funding helping us scale waste-to-energy technology.">
           <div class="ach-media"><img src="Images/GITA 25K.jpg" alt="GITA 25K grant"/></div>
-          <div class="ach-body"><h3>GITA Regional Grant — 25K</h3><p>Non-dilutive funding to scale.</p></div>
+          <div class="ach-body"><h3>GITA Regional Grant, 25K</h3><p>Non-dilutive funding to scale.</p></div>
         </a>
-        <a class="ach-card" data-cat="accel global" data-flag="🇵🇱" href="https://www.parp.gov.pl/component/content/article/87661:boot-camp-2-etapu-projektu-wsparcie-rozwoju-administracji-publicznej-i-przedsiebiorczosci-w-gruzji-realizowanego-przez-parp-wspolnie-z-ministerstwem-funduszy-i-polityki-regionalnej" data-img="Images/Poland.jpg" target="_blank" data-title="Poland AgriTech Acceleration" data-text="Top 3 AgriTech startup from Georgia — taking BioNova to an international stage.">
+        <a class="ach-card" data-cat="accel global" data-flag="🇵🇱" href="https://www.parp.gov.pl/component/content/article/87661:boot-camp-2-etapu-projektu-wsparcie-rozwoju-administracji-publicznej-i-przedsiebiorczosci-w-gruzji-realizowanego-przez-parp-wspolnie-z-ministerstwem-funduszy-i-polityki-regionalnej" data-img="Images/Poland.jpg" target="_blank" data-title="Poland AgriTech Acceleration" data-text="Top 3 AgriTech startup from Georgia, taking BioNova to an international stage.">
           <div class="ach-media"><img src="Images/Poland.jpg" alt="Poland AgriTech Program"/></div>
           <div class="ach-body"><h3>Poland AgriTech Acceleration</h3><p>Top 3 AgriTech startup.</p></div>
         </a>
-        <a class="ach-card" data-cat="win" data-flag="🇬🇪" data-year="2024" target="_blank" data-img="Images/Future Agro Challange.jpg" data-title="Future Agro Challenge 2024" data-text="Agropreneurs of the Year — invited to the Agripreneur World Summit in Greece.">
+        <a class="ach-card" data-cat="win" data-flag="🇬🇪" data-year="2024" target="_blank" data-img="Images/Future Agro Challange.jpg" data-title="Future Agro Challenge 2024" data-text="Agropreneurs of the Year, invited to the Agripreneur World Summit in Greece.">
           <div class="ach-media"><img src="Images/Future Agro Challange.jpg" alt="Future Agro Challenge 2024"/></div>
           <div class="ach-body"><h3>Future Agro Challenge 2024</h3><p>Agropreneurs of the Year.</p></div>
         </a>
@@ -803,7 +852,8 @@
   <!-- BLOG -->
   <section id="blog" aria-label="BioNova blog and articles">
     <div class="container">
-      <h2 data-i18n="blog.h2">Blog</h2>
+      <span class="eyebrow"><i class="fa-solid fa-newspaper"></i><span data-i18n="blog.eyebrow">Insights</span></span>
+        <h2 data-i18n="blog.h2">Blog</h2>
       <p class="blog-sub" data-i18n="blog.sub">Articles, updates, pilots, and behind-the-scenes engineering.</p>
       <div class="blog-grid" id="blogGrid">
         <article class="blog-card">
@@ -871,7 +921,8 @@
   <!-- ═══ TEAM ═══ -->
   <section id="founders">
     <div class="container">
-      <h2><span id="teamTitle">Founders</span></h2>
+      <span class="eyebrow"><i class="fa-solid fa-users"></i><span data-i18n="team.eyebrow">The People</span></span>
+        <h2><span id="teamTitle">Founders</span></h2>
       <div class="team-toggle" role="tablist" aria-label="People tabs">
         <button class="toggle-btn is-active" id="tab-founders"  role="tab" aria-selected="true"  aria-controls="panel-founders" data-i18n="team.founders">Founders</button>
         <button class="toggle-btn"           id="tab-team"      role="tab" aria-selected="false" aria-controls="panel-team"      data-i18n="team.core">Core Team</button>
@@ -909,7 +960,8 @@
         <span class="partners-badge-dot"></span>
         <span data-i18n="partners.badge">Trusted by leaders</span>
       </div>
-      <h2 data-i18n-html="partners.h2">Our <span class="partners-title-accent">Partners</span></h2>
+      <span class="eyebrow"><i class="fa-solid fa-handshake"></i><span data-i18n="partners.eyebrow">Ecosystem</span></span>
+        <h2 data-i18n-html="partners.h2">Our <span class="partners-title-accent">Partners</span></h2>
       <p class="partner-sub" data-i18n="partners.sub">Organizations supporting BioNova's mission.</p>
       <div class="partners-stats">
         <div class="partners-stat">
@@ -974,7 +1026,8 @@
       </svg>
     </div>
     <div class="container">
-      <h2 data-i18n="contact.h2">Get More Out of Your Manure</h2>
+      <span class="eyebrow"><i class="fa-solid fa-envelope"></i><span data-i18n="contact.eyebrow">Get In Touch</span></span>
+        <h2 data-i18n="contact.h2">Get More Out of Your Manure</h2>
       <p data-i18n="contact.p">We'll help you turn organic waste into energy and new revenue.</p>
       <div class="contact-details">
         <div class="contact-item"><i class="fas fa-phone-alt" aria-hidden="true"></i><div><p>+995 599 21 88 29</p></div></div>
