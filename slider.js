@@ -71,28 +71,32 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ─────────────────────────────────────────────
      App KPI counters
   ───────────────────────────────────────────── */
-  function animateValue(el, to, duration = 1200) {
+  function animateValue(el, to, decimals = 0, duration = 1200) {
     if (!el) return;
-    const diff = to;
     let startTs = null;
     const step = (ts) => {
       if (!startTs) startTs = ts;
       const p = Math.min((ts - startTs) / duration, 1);
-      el.textContent = (diff * p).toFixed(0);
+      const v = to * p;
+      el.textContent = decimals > 0
+        ? v.toFixed(decimals)
+        : Math.round(v).toLocaleString(undefined, { maximumFractionDigits: 0 });
       if (p < 1) requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
   }
 
+  // One BN-108 at full load (1.41696 t manure/day) — same model the ROI
+  // calculator runs on, so these numbers and the estimator agree.
   const appSection = document.getElementById('app');
   if (appSection) {
     let kpiDone = false;
     new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !kpiDone) {
         kpiDone = true;
-        animateValue(document.getElementById('kpi-gas'),  120);
-        animateValue(document.getElementById('kpi-elec'), 240);
-        animateValue(document.getElementById('kpi-fert'), 500);
+        animateValue(document.getElementById('kpi-gas'),  109.9, 1);
+        animateValue(document.getElementById('kpi-elec'), 218.1, 1);
+        animateValue(document.getElementById('kpi-fert'), 3404);
       }
     }, { threshold: 0.35 }).observe(appSection);
   }
@@ -343,20 +347,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /* ══════════════════════════════════════════════════
-   RETURNS CALCULATOR  (revenue-sharing model)
+   RETURNS CALCULATOR — BN-108 techno-economic model
    ─────────────────────────────────────────────────
-   Three revenue streams per unit:
-     ⚡ Electricity   — farmer keeps 100% of grid savings
-     🌱 Bio-fertilizer — BioNova collects & sells; farmer earns a share
-     🌍 Carbon credits — future bonus stream
-   Digester tiers (starts at 30-ton):
-     30-ton  → up to ~250 animals  — available now   ($9,000 production price)
-     50-ton  → up to ~450 animals  — in development  (~$15,000 est.)
-     100-ton → 450+ animals        — future roadmap  (custom quote)
+   The old version multiplied herd size by a per-kg gas yield, so output grew
+   without bound and the digester never entered the math. This one starts from
+   what a single BN-108 can physically digest and sizes the farm in whole units.
+
+     working volume = 108 m³ × (1 − 18% freeboard)   = 88.56 m³
+     slurry/day     = working / 25 d HRT             = 3.5424 m³/day
+     TS load        = slurry × 10% target TS         = 0.35424 t/day
+     CAPACITY       = TS load / 25% manure TS        = 1.41696 t manure/day
+
+   Everything downstream runs off *processed* manure (capped at units ×
+   capacity), never off what the herd produces. At 20 kg/cow/day one unit
+   serves ~70 cows.
+
+   Revenue cases:
+     conservative (default) — electricity + solid fertilizer
+     upside                 — adds liquid digestate + carbon credits, both of
+                              which assume 100% sell-through
 ══════════════════════════════════════════════════ */
 (() => {
   const $ = (id) => document.getElementById(id);
-  const animalBtns = document.querySelectorAll('.segmented [data-animal]');
+  const animalBtns   = document.querySelectorAll('.segmented [data-animal]');
+  const scenarioBtns = document.querySelectorAll('.segmented [data-scenario]');
   const herdEl     = $('herd');
   const herdOut    = $('herdOut');
   const tariffEl   = $('tariff');
@@ -370,98 +384,160 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Output handles (guarded — calculator degrades gracefully if markup changes)
   const out = {
-    biogas:  $('biogasOut'), kwh: $('kwhOut'), save: $('saveOut'), saveCur: $('saveCur'),
-    reco:    $('recoModel'), recoHint: $('recoHint'),
-    capex:   $('capexOut'),  capexCur: $('capexCur'),
-    elec:    $('elecOut'),   fert: $('fertOut'),   carbon: $('carbonOut'),
-    elecBar: $('elecBar'),   fertBar: $('fertBar'), carbonBar: $('carbonBar'),
-    total:   $('totalOut'),  totalCur: $('totalCur'),
-    life:    $('lifeOut'),   lifeCur: $('lifeCur'),
+    biogas:  $('biogasOut'),  kwh: $('kwhOut'),
+    solidKg: $('solidKgOut'), liquidL: $('liquidLOut'),
+    opex:    $('opexOut'),    opexCur: $('opexCur'),
+    reco:    $('recoModel'),  recoHint: $('recoHint'),
+    elec:    $('elecOut'),    solid: $('solidOut'),
+    liquid:  $('liquidOut'),  carbon: $('carbonOut'),
+    elecBar: $('elecBar'),    solidBar: $('solidBar'),
+    liquidBar: $('liquidBar'), carbonBar: $('carbonBar'),
+    total:   $('totalOut'),   totalCur: $('totalCur'),
+    life:    $('lifeOut'),    lifeCur: $('lifeCur'),
     payback: $('paybackOut'),
-    donut:   $('calcDonut'), donutMain: $('donutMain'),
+    donut:   $('calcDonut'),  donutMain: $('donutMain'),
+    netSub:  $('netBreakdown'),
+    derived: $('advDerived'),
   };
 
   // i18n helper — read the current dictionary so dynamic strings translate too
   const lang = () => localStorage.getItem('bionova-lang') || document.documentElement.lang || 'en';
   const t = (key, fb) => (window.bionovaI18n?.T?.[lang()]?.[key]) ?? fb;
+  const fill = (str, vars) => str.replace(/\{(\w+)\}/g, (_, k) => (k in vars ? vars[k] : '{' + k + '}'));
 
-  // Defaults use *collectable* manure (barn-captured, not total excreted) and
-  // conservative mid-range biogas yields for raw livestock slurry.
-  const animalDefaults = {
-    cow:     { manure: 20, yield: 0.030 },
-    buffalo: { manure: 25, yield: 0.032 },
-    pig:     { manure: 5,  yield: 0.045 },
-    mixed:   { manure: 16, yield: 0.030 },
+  // ── Fixed plant constants (from the techno-economic model) ──
+  const UNIT = {
+    label:     'BN-108',
+    tankM3:    108,
+    priceUSD:  27000,
+    freeboard: 0.18,
   };
+  const SLURRY_TS        = 0.10;  // target total solids of the feed slurry
+  const VS_DESTRUCTION   = 0.50;  // fraction of volatile solids consumed
+  const SOLID_SELLABLE   = 0.65;  // sellable fraction of the separated solids
+  const CH4_KWH_PER_M3   = 10;    // energy content of methane
+  const CARBON_T_PER_TPD = 80;    // tCO₂e/yr per t/day of manure treated
+  const WATER_USD_M3     = 0.40;  // dilution water
+  const LABOUR_USD       = 2000;  // per unit, per year
+  const ADMIN_USD        = 1000;  // per farm, per year
+  const MAINT_RATE       = 0.025; // of capex, per year
+  const INSURANCE_RATE   = 0.008; // of capex, per year
+  const LIFESPAN         = 15;    // years used for lifetime-value projection
 
-  const digesters = [
-    { label: '30-ton',   price: 9000,  herdMax: 250,      comingSoon: false, future: false, hintKey: 'calc.d30.hint',  hint: 'Handles up to ~250 animals. Available now.' },
-    { label: '50-ton',   price: 15000, herdMax: 450,      comingSoon: true,  future: false, hintKey: 'calc.d50.hint',  hint: 'In development — contact us to reserve.' },
-    { label: '100-ton+', price: null,  herdMax: Infinity, comingSoon: true,  future: true,  hintKey: 'calc.d100.hint', hint: 'Large-scale unit on our roadmap. Custom quote.' },
-  ];
+  // Collectable (barn-captured) manure per animal, kg/day
+  const animalManure = { cow: 20, buffalo: 25, pig: 5, mixed: 16 };
 
   const sym   = { USD: 'USD', GEL: 'GEL', EUR: 'EUR' };
-  // Approximate rates relative to USD — convert monetary inputs on currency switch
-  const rates = { USD: 1, GEL: 2.75, EUR: 0.92 };
-  const LIFESPAN = 15;            // years used for lifetime-value projection
-  const CO2_PER_KWH = 0.5;        // kg CO₂ avoided per kWh (grid offset + manure methane capture)
+  // GEL rate is the model's FX assumption; monetary inputs convert on switch.
+  const rates = { USD: 1, GEL: 2.63, EUR: 0.92 };
 
-  // Defaults reflect a real Georgian farm: GEL currency, ~0.28 GEL/kWh retail
-  // tariff (GNERC top-tier / small-business rate, 2026), conservative outputs.
+  // Money inputs are held in the *selected* currency; the model runs in USD.
   const state = {
-    animal: 'cow', herd: 100, currency: 'GEL', tariff: 0.28,
-    manure: 20, yield: 0.03, kwhPerM3: 2.0,
-    fertYield: 0.04,   // kg sellable concentrated fertilizer per kg manure
-    fertPrice: 0.75,   // per kg, in selected currency (GEL by default; 0.5–1 GEL/kg target)
-    fertShare: 30,     // % of fertilizer revenue the farmer keeps
-    carbonPrice: 33,   // per tonne CO₂, in selected currency (~$12)
+    animal: 'cow', herd: 100, currency: 'GEL', scenario: 'conservative',
+    tariff: 0.14,        // per kWh
+    manure: 20,          // kg/animal/day
+    ts: 25,              // manure total solids, %
+    vs: 80,              // volatile solids, % of TS
+    ch4Yield: 225,       // L CH₄ per kg VS
+    ch4Share: 58,        // CH₄ share of raw biogas, %
+    gensetEff: 38,       // electrical efficiency, %
+    parasitic: 10,       // own consumption, %
+    hrt: 25,             // hydraulic retention time, days
+    solidPrice: 0.89,    // per kg
+    liquidPrice: 0.04,   // per L
+    carbonPrice: 26.3,   // per tCO₂e (≈ $10)
+    opDays: 330,
   };
 
-  let hasPrice = true, comingSoon = false, future = false;
-
   // ── Animated (eased) display values ──────────────
-  const A = { biogas:0, kwh:0, save:0, elec:0, fert:0, carbon:0, total:0, capex:0, life:0, payYrs:0 };
+  const A = { biogas:0, kwh:0, solidKg:0, liquidL:0, elec:0, solid:0, liquid:0,
+              carbon:0, revenue:0, opex:0, net:0, capex:0, life:0, payYrs:0 };
   let target = { ...A };
   let raf = null;
 
   const money = (n) => Math.round(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
 
   function fmtPayback(yrs) {
-    if (!hasPrice || !isFinite(yrs) || yrs <= 0) return '–';
+    if (!isFinite(yrs) || yrs <= 0) return '—';
     if (yrs < 1) return '≈ ' + Math.max(1, Math.round(yrs * 12)) + ' ' + t('calc.unit.mo', 'mo');
-    return (comingSoon ? '~' : '') + yrs.toFixed(1) + ' ' + t('calc.unit.yrs', 'yrs');
+    return yrs.toFixed(2) + ' ' + t('calc.unit.yrs', 'yrs');
+  }
+
+  /* Physical model — one unit's ceiling plus the per-tonne conversion factors.
+     With the defaults this returns capacity 1.41696 t/day, 77.5862 m³ biogas,
+     153.9 net kWh, 97.5 kg solids, 2.4025 m³ liquid and 1.5 m³ water per tonne. */
+  function model() {
+    const ts       = state.ts / 100;
+    const vs       = state.vs / 100;
+    const ch4Share = state.ch4Share / 100;
+    const eff      = state.gensetEff / 100;
+    const keep     = 1 - state.parasitic / 100;
+
+    const workingM3    = UNIT.tankM3 * (1 - UNIT.freeboard);
+    const slurryPerDay = workingM3 / Math.max(1, state.hrt);
+    const tsLoad       = slurryPerDay * SLURRY_TS;
+    const capTpd       = ts > 0 ? tsLoad / ts : 0;
+
+    const vsPerT     = 1000 * ts * vs;                                        // kg VS per t manure
+    const ch4PerT    = vsPerT * state.ch4Yield / 1000;                        // m³ CH₄ per t
+    const biogasPerT = ch4Share > 0 ? ch4PerT / ch4Share : 0;                 // m³ biogas per t
+    const kwhPerT    = ch4PerT * CH4_KWH_PER_M3 * eff * keep;                 // net kWh per t
+    const solidPerT  = (1000 * ts - vsPerT * VS_DESTRUCTION) * SOLID_SELLABLE;// kg per t
+    const slurryPerT = SLURRY_TS > 0 ? ts / SLURRY_TS : 0;                    // m³ per t
+    const liquidPerT = Math.max(0, slurryPerT - solidPerT / 1000);            // m³ per t
+    const waterPerT  = Math.max(0, slurryPerT - 1);                           // m³ per t
+
+    return { workingM3, slurryPerDay, capTpd, biogasPerT, kwhPerT,
+             solidPerT, liquidPerT, waterPerT };
   }
 
   function paint() {
-    if (out.biogas) out.biogas.textContent = A.biogas.toFixed(1);
-    if (out.kwh)    out.kwh.textContent    = Math.round(A.kwh).toString();
-    if (out.save)   out.save.textContent   = A.save.toFixed(2);
-    if (out.elec)   out.elec.textContent   = money(A.elec);
-    if (out.fert)   out.fert.textContent   = money(A.fert);
-    if (out.carbon) out.carbon.textContent = money(A.carbon);
-    if (out.total)  out.total.textContent  = money(A.total);
-    if (out.life)   out.life.textContent   = hasPrice ? money(A.life) : '–';
-    if (out.capex)  out.capex.textContent  = hasPrice ? (comingSoon ? '~' : '') + money(A.capex) : 'TBD';
+    const upside = state.scenario === 'upside';
+
+    if (out.biogas)  out.biogas.textContent  = A.biogas.toFixed(1);
+    if (out.kwh)     out.kwh.textContent     = A.kwh.toFixed(1);
+    if (out.solidKg) out.solidKg.textContent = A.solidKg.toFixed(1);
+    if (out.liquidL) out.liquidL.textContent = money(A.liquidL);
+    if (out.opex)    out.opex.textContent    = money(A.opex);
+    if (out.elec)    out.elec.textContent    = money(A.elec);
+    if (out.solid)   out.solid.textContent   = money(A.solid);
+    if (out.liquid)  out.liquid.textContent  = money(A.liquid);
+    if (out.carbon)  out.carbon.textContent  = money(A.carbon);
+    if (out.total)   out.total.textContent   = money(A.net);
+    if (out.life)    out.life.textContent    = money(A.life);
     if (out.payback) out.payback.textContent = fmtPayback(A.payYrs);
 
+    if (out.netSub) {
+      const c = sym[state.currency];
+      out.netSub.textContent = fill(
+        t('calc.net.sub', '{cur} {rev} revenue − {cur} {opex} running costs'),
+        { cur: c, rev: money(A.revenue), opex: money(A.opex) }
+      );
+    }
+
     // Stream bars — scaled to the largest stream so the biggest fills the track
-    const mx = Math.max(A.elec, A.fert, A.carbon, 1);
+    const mx = Math.max(A.elec, A.solid, A.liquid, A.carbon, 1);
     if (out.elecBar)   out.elecBar.style.width   = (A.elec   / mx * 100) + '%';
-    if (out.fertBar)   out.fertBar.style.width   = (A.fert   / mx * 100) + '%';
+    if (out.solidBar)  out.solidBar.style.width  = (A.solid  / mx * 100) + '%';
+    if (out.liquidBar) out.liquidBar.style.width = (A.liquid / mx * 100) + '%';
     if (out.carbonBar) out.carbonBar.style.width = (A.carbon / mx * 100) + '%';
 
-    // Donut split (energy / fertilizer / carbon)
-    const tot = A.elec + A.fert + A.carbon;
-    const eP = tot > 0 ? A.elec / tot * 100 : 0;
-    const fP = tot > 0 ? A.fert / tot * 100 : 0;
-    const eDeg = eP * 3.6, fDeg = fP * 3.6;
+    // Donut splits only the streams the selected case actually counts
+    const parts = upside
+      ? [[A.elec, '--s-elec'], [A.solid, '--s-solid'], [A.liquid, '--s-liquid'], [A.carbon, '--s-carbon']]
+      : [[A.elec, '--s-elec'], [A.solid, '--s-solid']];
+    const tot = parts.reduce((s, p) => s + p[0], 0);
     if (out.donut) {
-      out.donut.style.background =
-        `conic-gradient(var(--s-elec) 0 ${eDeg}deg,` +
-        ` var(--s-fert) ${eDeg}deg ${eDeg + fDeg}deg,` +
-        ` var(--s-carbon) ${eDeg + fDeg}deg 360deg)`;
+      let deg = 0;
+      const stops = parts.map(([v, cssVar]) => {
+        const from = deg;
+        deg += tot > 0 ? (v / tot) * 360 : 0;
+        return `var(${cssVar}) ${from}deg ${deg}deg`;
+      });
+      stops.push(`var(--s-elec) ${deg}deg 360deg`);   // guard against rounding gaps
+      out.donut.style.background = `conic-gradient(${stops.join(',')})`;
     }
-    if (out.donutMain) out.donutMain.textContent = Math.round(eP) + '%';
+    if (out.donutMain) out.donutMain.textContent = Math.round(tot > 0 ? A.elec / tot * 100 : 0) + '%';
   }
 
   function tick() {
@@ -478,60 +554,96 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function startAnim() { if (raf == null) raf = requestAnimationFrame(tick); }
 
-  function recommendDigester(herd) {
-    for (const d of digesters) if (herd <= d.herdMax) return d;
-    return digesters[digesters.length - 1];
+  function updateReco(units, processed, available, util) {
+    if (out.reco) out.reco.textContent = units + ' × ' + UNIT.label;
+    if (out.recoHint) {
+      out.recoHint.textContent = fill(
+        t('calc.reco.dyn', 'Digesting {proc} of {avail} t/day · {util}% utilisation'),
+        { proc: processed.toFixed(2), avail: available.toFixed(2), util: Math.round(util * 100) }
+      );
+    }
+    const card = out.reco && out.reco.closest('.substat');
+    // Flag a badly under-fed unit so a 10-cow farm doesn't read as a good fit
+    if (card) card.classList.toggle('reco-underused', util < 0.6);
   }
 
-  function updateReco(d) {
-    if (!out.reco) return;
-    out.reco.textContent = d.label;
-    const card = out.reco.closest('.substat');
-    if (card) card.classList.toggle('reco-coming-soon', d.comingSoon);
-    const oldTag = card && card.querySelector('.reco-coming-tag');
-    if (oldTag) oldTag.remove();
-    if (d.comingSoon) {
-      const tag = document.createElement('span');
-      tag.className = 'reco-coming-tag';
-      tag.textContent = d.future ? t('calc.future', '🔮 Future') : t('calc.indev', '🔬 In dev');
-      out.reco.insertAdjacentElement('afterend', tag);
-    }
-    if (out.recoHint) out.recoHint.textContent = t(d.hintKey, d.hint);
+  function updateDerived(m) {
+    if (!out.derived) return;
+    const rows = [
+      [t('calc.dv.work',   'Working volume'),      m.workingM3.toFixed(2) + ' m³'],
+      [t('calc.dv.slurry', 'Slurry fed'),          m.slurryPerDay.toFixed(4) + ' m³/day'],
+      [t('calc.dv.cap',    'Capacity per unit'),   m.capTpd.toFixed(5) + ' t manure/day'],
+      [t('calc.dv.water',  'Dilution water'),      (m.capTpd * m.waterPerT).toFixed(5) + ' m³/day'],
+      [t('calc.dv.gas',    'Biogas per t manure'), m.biogasPerT.toFixed(4) + ' m³'],
+      [t('calc.dv.kwh',    'Net power per t'),     m.kwhPerT.toFixed(2) + ' kWh'],
+      [t('calc.dv.solid',  'Solid fert. per t'),   m.solidPerT.toFixed(2) + ' kg'],
+      [t('calc.dv.liquid', 'Liquid per t'),        m.liquidPerT.toFixed(4) + ' m³'],
+    ];
+    out.derived.innerHTML =
+      '<span class="adv-derived-title">' + t('calc.dv.title', 'Derived from the values above') + '</span>' +
+      rows.map(([k, v]) => `<span class="adv-derived-row"><b>${k}</b><i>${v}</i></span>`).join('');
   }
 
   function setCurrencyLabels() {
     const c = sym[state.currency];
     root.querySelectorAll('[data-cur]').forEach(e => { e.textContent = c; });
-    [out.saveCur, out.capexCur, out.totalCur, out.lifeCur].forEach(e => { if (e) e.textContent = c; });
+    [out.opexCur, out.totalCur, out.lifeCur].forEach(e => { if (e) e.textContent = c; });
   }
 
   function recalc() {
-    const manureIn = state.herd * state.manure;          // kg/day
-    const biogas   = manureIn * state.yield;             // m³/day
-    const kwh      = biogas * state.kwhPerM3;             // kWh/day
-    const saveDay  = kwh * state.tariff;                 // currency/day
+    const m    = model();
+    const rate = rates[state.currency] || 1;
+    const usd  = (v) => v / rate;                 // selected-currency input → USD
 
-    const elecYr   = saveDay * 365;
-    const fertYr   = manureIn * state.fertYield * state.fertPrice * 365 * (state.fertShare / 100);
-    const co2tYr   = kwh * 365 * CO2_PER_KWH / 1000;     // tonnes CO₂/yr
-    const carbonYr = co2tYr * state.carbonPrice;
-    const totalYr  = elecYr + fertYr + carbonYr;
+    // ── Sizing: whole units, and only what they can actually swallow ──
+    const available = state.herd * state.manure / 1000;              // t/day
+    const units     = m.capTpd > 0 ? Math.max(1, Math.ceil(available / m.capTpd)) : 1;
+    const processed = m.capTpd > 0 ? Math.min(available, units * m.capTpd) : 0;
+    const util      = m.capTpd > 0 ? processed / (units * m.capTpd) : 0;
+    const capexUSD  = units * UNIT.priceUSD;
 
-    const d   = recommendDigester(state.herd);
-    hasPrice  = d.price !== null;
-    comingSoon = d.comingSoon;
-    future    = d.future;
+    // ── Daily outputs, all linear in processed manure ──
+    const biogas   = processed * m.biogasPerT;    // m³/day
+    const netKWh   = processed * m.kwhPerT;       // kWh/day
+    const solidKg  = processed * m.solidPerT;     // kg/day
+    const liquidM3 = processed * m.liquidPerT;    // m³/day
+    const waterM3  = processed * m.waterPerT;     // m³/day
 
-    const upfront = hasPrice ? d.price * rates[state.currency] : 0;
-    const payYrs  = (hasPrice && totalYr > 0) ? upfront / totalYr : NaN;
-    const life    = hasPrice ? totalYr * LIFESPAN - upfront : 0;
+    // ── Annual revenue, USD ──
+    const D = state.opDays;
+    const elecUSD   = netKWh   * D * usd(state.tariff);
+    const solidUSD  = solidKg  * D * usd(state.solidPrice);
+    const liquidUSD = liquidM3 * 1000 * D * usd(state.liquidPrice);
+    const carbonUSD = processed * CARBON_T_PER_TPD * usd(state.carbonPrice);
 
-    updateReco(d);
+    const upside  = state.scenario === 'upside';
+    const revUSD  = elecUSD + solidUSD + (upside ? liquidUSD + carbonUSD : 0);
+
+    // ── Annual OPEX, USD (labour scales per unit; admin is per farm) ──
+    const opexUSD = capexUSD * (MAINT_RATE + INSURANCE_RATE)
+                  + waterM3 * D * WATER_USD_M3
+                  + LABOUR_USD * units + ADMIN_USD;
+
+    const netUSD  = revUSD - opexUSD;
+    const payYrs  = netUSD > 0 ? capexUSD / netUSD : NaN;
+    const lifeUSD = netUSD * LIFESPAN - capexUSD;
+
+    updateReco(units, processed, available, util);
+    updateDerived(m);
+    root.querySelectorAll('.stream.is-upside').forEach(li => li.classList.toggle('is-off', !upside));
 
     target = {
-      biogas, kwh, save: saveDay,
-      elec: elecYr, fert: fertYr, carbon: carbonYr, total: totalYr,
-      capex: upfront, life, payYrs,
+      biogas, kwh: netKWh, solidKg, liquidL: liquidM3 * 1000,
+      elec:   elecUSD   * rate,
+      solid:  solidUSD  * rate,
+      liquid: liquidUSD * rate,
+      carbon: carbonUSD * rate,
+      revenue: revUSD  * rate,
+      opex:    opexUSD * rate,
+      net:     netUSD  * rate,
+      capex:   capexUSD * rate,
+      life:    lifeUSD  * rate,
+      payYrs,
     };
     startAnim();
   }
@@ -543,10 +655,18 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.classList.add('is-active');
       btn.setAttribute('aria-selected', 'true');
       state.animal = btn.dataset.animal;
-      state.manure = animalDefaults[state.animal].manure;
-      state.yield  = animalDefaults[state.animal].yield;
+      state.manure = animalManure[state.animal];
       if ($('manure')) $('manure').value = state.manure;
-      if ($('yield'))  $('yield').value  = state.yield;
+      recalc();
+    });
+  });
+
+  scenarioBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      scenarioBtns.forEach(b => { b.classList.remove('is-active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-selected', 'true');
+      state.scenario = btn.dataset.scenario;
       recalc();
     });
   });
@@ -563,13 +683,17 @@ document.addEventListener('DOMContentLoaded', () => {
   currencyEl.addEventListener('change', () => {
     const prev = rates[state.currency];
     const next = rates[currencyEl.value];
+    // 5 dp on the per-kWh / per-litre fields: at 4 dp a GEL→USD switch rounds
+    // 0.05323 to 0.0532 and quietly shaves ~0.06% off the revenue lines.
     const conv = (v, dp) => parseFloat(((v / prev) * next).toFixed(dp));
-    state.tariff      = conv(state.tariff, 4);
-    state.fertPrice   = conv(state.fertPrice, 4);
+    state.tariff      = conv(state.tariff, 5);
+    state.solidPrice  = conv(state.solidPrice, 4);
+    state.liquidPrice = conv(state.liquidPrice, 5);
     state.carbonPrice = conv(state.carbonPrice, 2);
     state.currency    = currencyEl.value;
     tariffEl.value = state.tariff;
-    if ($('fertPrice'))   $('fertPrice').value   = state.fertPrice;
+    if ($('solidPrice'))  $('solidPrice').value  = state.solidPrice;
+    if ($('liquidPrice')) $('liquidPrice').value = state.liquidPrice;
     if ($('carbonPrice')) $('carbonPrice').value = state.carbonPrice;
     setCurrencyLabels();
     recalc();
@@ -577,12 +701,17 @@ document.addEventListener('DOMContentLoaded', () => {
   advForm?.addEventListener('input', () => {
     const num = (id, fb) => { const el = $(id); const v = parseFloat(el && el.value); return isFinite(v) ? v : fb; };
     state.manure      = num('manure', state.manure);
-    state.yield       = num('yield', state.yield);
-    state.kwhPerM3    = num('kwhPerM3', state.kwhPerM3);
-    state.fertYield   = num('fertYield', state.fertYield);
-    state.fertPrice   = num('fertPrice', state.fertPrice);
-    state.fertShare   = num('fertShare', state.fertShare);
+    state.ts          = num('ts', state.ts);
+    state.vs          = num('vs', state.vs);
+    state.ch4Yield    = num('ch4Yield', state.ch4Yield);
+    state.ch4Share    = num('ch4Share', state.ch4Share);
+    state.gensetEff   = num('gensetEff', state.gensetEff);
+    state.parasitic   = num('parasitic', state.parasitic);
+    state.hrt         = num('hrt', state.hrt);
+    state.solidPrice  = num('solidPrice', state.solidPrice);
+    state.liquidPrice = num('liquidPrice', state.liquidPrice);
     state.carbonPrice = num('carbonPrice', state.carbonPrice);
+    state.opDays      = num('opDays', state.opDays);
     recalc();
   });
   toggleAdv?.addEventListener('click', (e) => {
@@ -596,17 +725,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const copyLbl = $('calcCopyLbl');
   copyBtn?.addEventListener('click', async () => {
     const c = sym[state.currency];
-    const d = recommendDigester(state.herd);
-    const txt =
-      `BioNova estimate — ${state.herd} ${state.animal}\n` +
-      `⚡ Electricity (you keep 100%): ${money(target.elec)} ${c}/yr\n` +
-      `🌱 Bio-fertilizer (your share): ${money(target.fert)} ${c}/yr\n` +
-      `🌍 Carbon credits (future):     ${money(target.carbon)} ${c}/yr\n` +
-      `─ Total yearly income: ${money(target.total)} ${c}/yr\n` +
-      `Recommended unit: ${d.label}\n` +
-      `Upfront (production price): ${hasPrice ? money(target.capex) + ' ' + c : 'TBD'}\n` +
-      `Pays for itself in: ${fmtPayback(target.payYrs)}`;
-    try { await navigator.clipboard.writeText(txt); } catch (_) { /* clipboard blocked — still flash */ }
+    const upside = state.scenario === 'upside';
+    const units  = out.reco ? out.reco.textContent : UNIT.label;
+    const lines = [
+      `BioNova estimate, ${state.herd} ${state.animal}`,
+      `Sizing: ${units}`,
+      `⚡ Electricity:      ${money(target.elec)} ${c}/yr`,
+      `🌱 Solid fertilizer: ${money(target.solid)} ${c}/yr`,
+    ];
+    if (upside) {
+      lines.push(`💧 Liquid digestate: ${money(target.liquid)} ${c}/yr  (upside)`);
+      lines.push(`🌍 Carbon credits:   ${money(target.carbon)} ${c}/yr  (upside)`);
+    }
+    lines.push(
+      `─ Revenue:       ${money(target.revenue)} ${c}/yr`,
+      `─ Running costs: ${money(target.opex)} ${c}/yr`,
+      `─ Net income:    ${money(target.net)} ${c}/yr`,
+      `Upfront (production price): ${money(target.capex)} ${c}`,
+      `Pays for itself in: ${fmtPayback(target.payYrs)}`,
+      `Case: ${upside ? 'conservative + upside' : 'conservative'}`
+    );
+    try { await navigator.clipboard.writeText(lines.join('\n')); } catch (_) { /* clipboard blocked — still flash */ }
     if (copyLbl) {
       const prev = copyLbl.textContent;
       copyLbl.textContent = t('calc.copied', 'Copied!');
@@ -619,9 +758,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('langchange', () => { setCurrencyLabels(); recalc(); });
 
   // ── Seed advanced fields + first paint ───────────
-  const seed = { manure: state.manure, yield: state.yield, kwhPerM3: state.kwhPerM3,
-                 fertYield: state.fertYield, fertPrice: state.fertPrice,
-                 fertShare: state.fertShare, carbonPrice: state.carbonPrice };
+  const seed = {
+    manure: state.manure, ts: state.ts, vs: state.vs,
+    ch4Yield: state.ch4Yield, ch4Share: state.ch4Share,
+    gensetEff: state.gensetEff, parasitic: state.parasitic, hrt: state.hrt,
+    solidPrice: state.solidPrice, liquidPrice: state.liquidPrice,
+    carbonPrice: state.carbonPrice, opDays: state.opDays,
+  };
   for (const id in seed) { if ($(id)) $(id).value = seed[id]; }
 
   herdOut.textContent = herdEl.value;
@@ -927,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', () => {
       'IoT monitoring from anywhere, anytime.',
     ],
     ka: [
-      'ფერმისთვის მზა ბიოდიჟესტერები — რეალურ დროში კონტროლით.',
+      'ფერმისთვის მზა ბიოდიჟესტერები, რეალურ დროში კონტროლით.',
       'ნარჩენებიდან სუფთა ენერგია და შემოსავალი.',
       'კონკურენტებზე 3-ჯერ უფრო ხელმისაწვდომი.',
       'IoT მონიტორინგი ნებისმიერი ადგილიდან.',

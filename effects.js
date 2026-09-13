@@ -21,6 +21,19 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ══════════════════════════════════════
+     1b. STICKY HEADER — compact scrolled state
+  ══════════════════════════════════════ */
+  var siteHeader = document.querySelector('header');
+  if (siteHeader) {
+    function updateHeader() {
+      var y = window.pageYOffset || document.documentElement.scrollTop;
+      siteHeader.classList.toggle('is-scrolled', y > 24);
+    }
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader();
+  }
+
+  /* ══════════════════════════════════════
      2. EXTEND SCROLL-REVEAL
   ══════════════════════════════════════ */
   if (!reducedMotion && typeof IntersectionObserver !== 'undefined') {
