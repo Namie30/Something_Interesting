@@ -295,6 +295,8 @@
       'team.p7.role': 'NJEDA Managing Director | Harvard Business School MBA',
       'team.p8.name': 'Thomas Wittig',
       'team.p8.role': 'CEO @ WITTIGONIA | Digital Growth, Data Insights, Strategy & Optimization',
+      'team.p9.name': 'Tamta Mamulaidze',
+      'team.p9.role': 'Head of Innovation & AgriTech | Georgian Farmers\' Association (GFA)',
 
       /* PARTNERS */
       'partners.badge':     'Trusted by leaders',
@@ -598,6 +600,8 @@
       'team.p7.role': 'NJEDA-ს მართველი დირექტორი | ჰარვარდის სკოლის MBA',
       'team.p8.name': 'ტომას ვიტიგი',
       'team.p8.role': 'CEO @ WITTIGONIA | ციფრული ზრდა, მონაცემთა ანალიზი, სტრატეგია და ოპტიმიზაცია',
+      'team.p9.name': 'თამთა მამულაიძე',
+      'team.p9.role': 'ინოვაციებისა და აგროტექნოლოგიების ხელმძღვანელი | საქართველოს ფერმერთა ასოციაცია (GFA)',
 
       /* PARTNERS */
       'partners.badge':     'გვანდობენ ლიდერები',
